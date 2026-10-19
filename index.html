@@ -147,6 +147,29 @@ body.bgcard #bgCard{display:block}body.bgcard #bgArt{filter:blur(16px) saturate(
 .gal .tb{position:absolute;top:5px;left:5px}
 .gal .no{position:absolute;top:5px;right:5px;font-size:11px;background:rgba(9,14,26,.8);color:#FFE55C;border-radius:6px;padding:1px 6px}
 </style></head><body>
+<div id="pwLock" style="position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;background:radial-gradient(ellipse at top,#1b2640 0%,#0b1220 70%);color:#e9edf4;font-family:-apple-system,'Hiragino Sans',sans-serif">
+<img src="icon-180.png" alt="" style="width:104px;height:104px;border-radius:24px;box-shadow:0 0 0 2px #FFD70088,0 8px 28px #FFD70044">
+<div style="margin:18px 0 4px;font-size:24px;font-weight:800;letter-spacing:.04em;color:#FFD700">🧭 人生設計ノート</div>
+<div style="margin:4px 0 20px;font-size:15px;opacity:.85;line-height:1.6">エイジだけのノートだよ🔒<br>パスワードを入れてね（このiPhoneで1回だけ）</div>
+<input id="pwIn" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="パスワード" style="width:100%;max-width:320px;font-size:22px;padding:14px 16px;border-radius:16px;border:2px solid #FFD700;text-align:center;letter-spacing:.12em;background:#151e31;color:#FFE55C;outline:none;box-sizing:border-box">
+<button id="pwGo" style="margin-top:14px;width:100%;max-width:320px;padding:14px;border:0;border-radius:16px;background:linear-gradient(135deg,#FFC300,#FFE55C);color:#0b1220;font-weight:800;font-size:18px">ひらく✨</button>
+<div id="pwMsg" style="min-height:24px;margin-top:12px;font-size:14px;color:#FFE55C"></div></div>
+<script>/* screen lock (PBKDF2-SHA256 hash only; data is never touched) */
+(function(){var H={"s": "OfUBznz8yIvY5UcoJwH1qA==", "i": 250000, "h": "TiV4DANONrPFRdzWLfl131zlG8zgYDR9ZXUQBFr0qW8="},LK="lp_lock_v1",el=document.getElementById("pwLock");
+function done(){el.parentNode&&el.parentNode.removeChild(el)}
+window.pwLogout=function(){if(!confirm("ログアウトする？\n（記録や画像は消えないよ。次にひらくときパスワードを入れてね）"))return;try{localStorage.removeItem(LK)}catch(e){}location.reload()};
+try{if(localStorage.getItem(LK)===H.h){done();return}}catch(e){}
+document.documentElement.style.overflow="hidden";
+var inp=document.getElementById("pwIn"),msg=document.getElementById("pwMsg");
+function ub(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})}
+function b64(a){return btoa(String.fromCharCode.apply(null,new Uint8Array(a)))}
+async function go(){var v=(inp.value||"").trim().toLowerCase().replace(/[\s\-ー－]/g,"");if(!v)return;msg.textContent="ひらいてるよ…🔑";
+ try{var k=await crypto.subtle.importKey("raw",new TextEncoder().encode(v),"PBKDF2",false,["deriveBits"]);
+ var b=await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:ub(H.s),iterations:H.i},k,256);
+ if(b64(b)===H.h){try{localStorage.setItem(LK,H.h)}catch(e){}document.documentElement.style.overflow="";done()}else msg.textContent="パスワードがちがうみたい…もう一回ためしてね🥺"}catch(e){msg.textContent="ごめんね、ここではひらけないみたい（Safariでひらいてね）"}}
+document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",function(e){if(e.key==="Enter")go()});
+})();</script>
+
 <div id="bgArt"></div><div id="bgCard"></div><div id="bgShade"></div>
 <header><img src="icon-180.png" alt=""><h1>人生設計ノート</h1><div class="sub" id="hdrSub"></div></header>
 <main>
@@ -236,6 +259,7 @@ body.bgcard #bgCard{display:block}body.bgcard #bgArt{filter:blur(16px) saturate(
 </section>
 <!-- 設定 -->
 <section class="tab" id="t-set">
+ <div class="card"><h2>🔑 ロック</h2><div class="hint" style="margin-top:-6px">ログアウトしても、記録・画像・設定は消えません。次にひらくときにパスワードを入れてね。</div><button class="btn" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #FFD700;background:transparent;color:#FFD700;font-weight:700;font-size:15px" onclick="pwLogout()">🔑 パスワードを変更/ログアウト</button></div>
  <div class="card"><h2>🏷 カテゴリの編集</h2><div class="hint" style="margin-top:-6px">名前を変えると過去の記録にも反映されます。</div>
   <div class="list" id="catList"></div>
   <div class="row" style="margin-top:8px"><input id="catNew" placeholder="新しいカテゴリ名"><button class="sm gold" id="catAdd" style="flex:none">追加</button></div>
@@ -286,7 +310,7 @@ body.bgcard #bgCard{display:block}body.bgcard #bgArt{filter:blur(16px) saturate(
 <div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
 <script>
 "use strict";
-const VER="v5";
+const VER="v6";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
