@@ -107,6 +107,16 @@ body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
 .gal button{padding:0;border:1px solid rgba(255,215,0,.35);border-radius:10px;overflow:hidden;background:#0b1220;aspect-ratio:3/4;position:relative}
 .gal img{width:100%;height:100%;object-fit:cover;display:block}
 .gal span{position:absolute;left:0;right:0;bottom:0;font-size:11px;padding:3px 2px;background:rgba(9,14,26,.8);color:#FFE55C}
+.ua{display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line)}.ua:first-child{border-top:0}
+.ua img{width:58px;height:58px;object-fit:cover;border-radius:9px;border:1px solid rgba(255,215,0,.4);flex:none}
+.ua .m{flex:1;min-width:0}.ua .m input{padding:7px 9px;font-size:16px}
+.ua .m .s{font-size:12px;color:var(--mute);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ua .bt{display:flex;flex-direction:column;gap:4px;flex:none}.ua .bt button{padding:4px 9px;font-size:14px;border-radius:8px}
+.ua.today{background:linear-gradient(90deg,rgba(255,215,0,.12),transparent);border-radius:10px}
+.tbadge{display:inline-block;font-size:11px;font-weight:800;color:#0b1220;background:linear-gradient(180deg,#FFE55C,#FFC300);border-radius:6px;padding:1px 6px;margin-right:4px}
+.gal button.today{outline:2.5px solid #FFD700;outline-offset:1px}
+.gal .tb{position:absolute;top:5px;left:5px}
+.gal .no{position:absolute;top:5px;right:5px;font-size:11px;background:rgba(9,14,26,.8);color:#FFE55C;border-radius:6px;padding:1px 6px}
 </style></head><body>
 <div id="bgArt"></div><div id="bgShade"></div>
 <header><img src="icon-180.png" alt=""><h1>人生設計ノート</h1><div class="sub" id="hdrSub"></div></header>
@@ -206,18 +216,27 @@ body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
   <div class="row" style="margin-top:8px"><input id="stNew" placeholder="新しい種類名"><button class="sm gold" id="stAdd" style="flex:none">追加</button></div>
  </div>
  <div class="card"><h2>🎨 今日のアート</h2>
-  <div class="hint" style="margin-top:-6px">タブごとにちがうカードが、日付で自動に入れかわります。</div>
+  <div class="hint" style="margin-top:-6px">画像は「あなたの画像 → 内蔵カード」の順番で並び、毎月<b>1日は1枚目、2日は2枚目…</b>と日付で入れかわります。タブごとに1枚ずつずらして表示します。</div>
   <label class="f">入れかわり</label><div class="chips" id="artMode"><button class="chip" data-am="day">毎日</button><button class="chip" data-am="week">毎週</button></div>
   <label class="f">背景の明るさ <b id="artDimV"></b></label><input type="range" id="artDim" min="20" max="75" step="5">
   <label class="row" style="margin-top:10px;font-size:15px"><input type="checkbox" id="artOn"><span style="flex:1">アートを表示する</span></label>
-  <button class="gold full" id="artShuffle">✨ 今すぐシャッフル</button>
-  <label class="f" style="margin-top:14px">カードのコレクション</label><div class="gal" id="artGal"></div>
+  <button class="full" id="artShuffle">✨ 今すぐシャッフル（今日だけ）</button>
+  <div class="hint" id="artToday"></div>
  </div>
+ <div class="card"><h2>🖼 あなたの画像<span class="r mute" id="uaCount" style="font-weight:400"></span></h2>
+  <button class="gold full" id="uaAdd" style="margin-top:0">＋ 画像を追加</button><input type="file" id="uaFile" accept="image/*" multiple style="display:none">
+  <div class="hint" id="uaMsg">写真アプリから選べます（一度に何枚でもOK・最大31枚）。画像はこのiPhoneの中だけに保存され、どこにもアップロードされません。</div>
+  <div class="list" id="uaList" style="margin-top:6px"></div>
+ </div>
+ <div class="card"><h2>💎 内蔵カード</h2><div class="gal" id="artGal"></div></div>
  <div class="card"><h2>👤 プロフィール</h2><label class="f">生年月日（目標の年齢計算に使います）</label><input type="date" id="birth"></div>
  <div class="card"><h2>💾 バックアップ</h2>
   <div class="hint" style="margin-top:-6px">データはこのiPhoneの中（localStorage＋IndexedDB）に保存されています。ときどき書き出して「ファイル」に保存しておくと安心です。</div>
   <button class="gold full" id="expBtn">JSONで書き出し</button>
   <button class="full" id="impBtn">JSONを読み込み</button><input type="file" id="impFile" accept=".json,application/json" style="display:none">
+  <div class="hint">※「JSONで書き出し」には、追加した画像は入りません（容量が大きいため）。画像は下のボタンで別に保存できます。</div>
+  <button class="full" id="uaExp">🖼 画像もバックアップ</button>
+  <button class="full" id="uaImpBtn">🖼 画像のバックアップを読み込み</button><input type="file" id="uaImp" accept=".json,application/json" style="display:none">
   <div class="hint" id="lastSaved"></div>
  </div>
  <div class="card"><h2>⚠️ データ</h2><button class="danger full" id="wipe">すべてのデータを削除</button><div class="hint">バージョン <span id="ver"></span></div></div>
@@ -235,7 +254,7 @@ body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
 <div class="toast" id="toast"></div>
 <script>
 "use strict";
-const VER="v3";
+const VER="v4";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
@@ -289,24 +308,73 @@ function applyFixed(){const cur=ymOf(today());let ch=false;
 /* ===== アート（日替わりカード） ===== */
 const ART=[["whale","鯨と月"],["owl","宝石のフクロウ"],["phoenix","不死鳥"],["dragon","金の龍"],["crab","蟹と真珠"]];
 const TABS=["money","sav","sum","goal","memo","set"],TABN={money:"お金",sav:"貯金",sum:"集計",goal:"目標",memo:"メモ",set:"設定"};
-const AK="lp_art";let AS={mode:"day",salt:0,dim:50,on:true};try{Object.assign(AS,JSON.parse(localStorage.getItem(AK)||"{}"))}catch(e){}
+const AK="lp_art",UMAX=31;let AS={mode:"day",salt:0,dim:50,on:true};try{Object.assign(AS,JSON.parse(localStorage.getItem(AK)||"{}"))}catch(e){}
 const saveAS=()=>{try{localStorage.setItem(AK,JSON.stringify(AS))}catch(e){}};
-const artSrc=i=>"art/"+ART[i][0]+".webp";
-function hashStr(k){let h=2166136261;for(const c of k){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h}
-function artPeriod(){const d=new Date();if(AS.mode==="week"){const m=new Date(d);m.setDate(d.getDate()-((d.getDay()+6)%7));return"w"+ds(m)}return"d"+ds(d)}
-function artPerm(){let x=hashStr(artPeriod()+"#"+AS.salt)||1;const a=ART.map((_,i)=>i);for(let i=a.length-1;i>0;i--){x^=x<<13;x>>>=0;x^=x>>>17;x^=x<<5;x>>>=0;const j=x%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+/* user images: separate IndexedDB "lifeplan_art" (never touches lp_data / lifeplan_db) */
+let UA=[],UAREADY=false;
+let _adb;function adb(){return _adb||(_adb=new Promise((ok,ng)=>{try{const r=indexedDB.open("lifeplan_art",1);r.onupgradeneeded=()=>r.result.createObjectStore("imgs",{keyPath:"id"});r.onsuccess=()=>ok(r.result);r.onerror=()=>ng(r.error)}catch(e){ng(e)}}))}
+function aTx(mode,fn){return adb().then(d=>new Promise((ok,ng)=>{const t=d.transaction("imgs",mode),st=t.objectStore("imgs");const r=fn(st);t.oncomplete=()=>ok(r&&r.result);t.onerror=()=>ng(t.error);t.onabort=()=>ng(t.error)}))}
+const aAll=()=>aTx("readonly",st=>st.getAll());
+const aPut=o=>aTx("readwrite",st=>st.put(o));
+const aDel=id=>aTx("readwrite",st=>st.delete(id));
+function uaRec(o){return{id:o.id,name:o.name||"",ord:o.ord||0,added:o.added||0,url:URL.createObjectURL(new Blob([o.img],{type:o.type||"image/jpeg"})),turl:URL.createObjectURL(new Blob([o.thumb||o.img],{type:"image/jpeg"}))}}
+async function uaLoad(){try{const all=await aAll();UA.forEach(u=>{URL.revokeObjectURL(u.url);URL.revokeObjectURL(u.turl)});UA=(all||[]).sort((a,b)=>a.ord-b.ord||a.added-b.added).map(uaRec)}catch(e){UA=[]}UAREADY=true;_artKey="";artApply();if(TAB==="set")rArtSet()}
+async function uaSaveOrder(){const all=await aAll();const m={};all.forEach(o=>m[o.id]=o);for(let i=0;i<UA.length;i++){const o=m[UA[i].id];if(o&&o.ord!==i){o.ord=i;o.name=UA[i].name;await aPut(o)}UA[i].ord=i}}
+function loadImg(file){return new Promise((ok,ng)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>ok({im,u});im.onerror=()=>{URL.revokeObjectURL(u);ng(new Error("読み込めない画像です"))};im.src=u})}
+function toJpeg(im,max,q){const w0=im.naturalWidth,h0=im.naturalHeight,s=Math.min(1,max/Math.max(w0,h0)),w=Math.max(1,Math.round(w0*s)),h=Math.max(1,Math.round(h0*s));const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.fillStyle="#0b1220";x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);
+ return new Promise(ok=>{if(c.toBlob)c.toBlob(b=>ok(b),"image/jpeg",q);else{const d=c.toDataURL("image/jpeg",q),bin=atob(d.split(",")[1]),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);ok(new Blob([a],{type:"image/jpeg"}))}})}
+async function uaAddFiles(files){let room=UMAX-UA.length,added=0,bad=0;const list=[...files];if(room<=0){uaFullMsg();return}
+ $("uaMsg").textContent="画像を準備中…";
+ for(const f of list){if(room<=0)break;try{const {im,u}=await loadImg(f);const big=await toJpeg(im,1080,.85),th=await toJpeg(im,240,.8);URL.revokeObjectURL(u);
+   const o={id:"u"+uid(),name:(f.name||"").replace(/\.[^.]+$/,"").replace(/^IMG_\d+$/i,"").slice(0,30),ord:UA.length+added,added:Date.now(),type:"image/jpeg",img:await big.arrayBuffer(),thumb:await th.arrayBuffer()};
+   await aPut(o);added++;room--}catch(e){bad++}}
+ await uaLoad();const skipped=list.length-added-bad;
+ $("uaMsg").textContent=(added?`${added}枚 追加しました ✨`:"")+(bad?` ${bad}枚は読み込めませんでした。`:"")+(skipped>0?` 上限の${UMAX}枚に達したため、${skipped}枚は追加できませんでした。`:"");
+ if(UA.length>=UMAX&&!(skipped>0))uaFullMsg(true);toast(added?`${added}枚 追加しました`:"追加できませんでした")}
+function uaFullMsg(keep){const m=`画像は最大${UMAX}枚までです。新しく追加するには、先にどれかを削除してください。`;if(keep)$("uaMsg").textContent+=" "+m;else{$("uaMsg").textContent=m;alert(m)}}
+/* combined ordered list: user images (his order) then built-ins */
+function artList(){return[...UA.map((u,i)=>({k:"u",id:u.id,name:u.name||("画像"+(i+1)),src:u.url,th:u.turl})),...ART.map(a=>({k:"b",id:a[0],name:a[1],src:"art/"+a[0]+".webp",th:"art/"+a[0]+".webp"}))]}
+function artPeriodKey(){const d=new Date();if(AS.mode==="week"){const m=new Date(d);m.setDate(d.getDate()-((d.getDay()+6)%7));return"w"+ds(m)}return"d"+ds(d)}
+function artBase(N){const d=new Date();let b;if(AS.mode==="week"){const m=new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7));b=Math.floor(Math.round(m.getTime()/864e5-m.getTimezoneOffset()/1440)/7)}else b=d.getDate()-1;
+ const sh=(AS.saltP===artPeriodKey())?(AS.salt||0):0;return((b+sh)%N+N)%N}
 let _artKey="";
-function artApply(){document.body.classList.toggle("noart",!AS.on);document.documentElement.style.setProperty("--artdim",(AS.dim/100).toFixed(2));if(!AS.on)return;
- const P=artPerm(),N=P.length,ti=Math.max(0,TABS.indexOf(TAB)),hb=P[ti%N],bg=P[(ti+2)%N],key=hb+"/"+bg;
- $("heroName").textContent=ART[hb][1];$("heroTab").textContent=TABN[TAB];$("heroLbl").textContent=AS.mode==="week"?"THIS WEEK'S CARD":"TODAY'S CARD";
- if(key!==_artKey){_artKey=key;$("heroImg").style.backgroundImage=`url(${artSrc(hb)})`;$("bgArt").style.backgroundImage=`url(${artSrc(bg)})`}}
+function artPick(){const L=artList(),N=L.length,base=artBase(N),ti=Math.max(0,TABS.indexOf(TAB)),hb=(base+ti)%N,bg=(hb+Math.max(1,Math.floor(N/2)))%N;return{L,N,base,hb,bg}}
+function artApply(){document.body.classList.toggle("noart",!AS.on);document.documentElement.style.setProperty("--artdim",(AS.dim/100).toFixed(2));if(!AS.on||!UAREADY)return;
+ const {L,hb,bg}=artPick(),key=L[hb].src+"|"+L[bg].src;
+ $("heroName").textContent=L[hb].name;$("heroTab").textContent=TABN[TAB];$("heroLbl").textContent=AS.mode==="week"?"THIS WEEK'S CARD":"TODAY'S CARD";
+ if(key!==_artKey){_artKey=key;$("heroImg").style.backgroundImage=`url("${L[hb].src}")`;$("bgArt").style.backgroundImage=`url("${L[bg].src}")`}}
+function daysFor(pos,N){const o=[];for(let d=1;d<=31;d++)if((d-1)%N===pos)o.push(d);return o}
 function rArtSet(){$("artMode").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.am===AS.mode));$("artDim").value=AS.dim;$("artDimV").textContent=AS.dim+"%";$("artOn").checked=AS.on;
- if(!$("artGal").children.length)$("artGal").innerHTML=ART.map((a,i)=>`<button data-art="${i}"><img loading="lazy" src="${artSrc(i)}" alt="${a[1]}"><span>${a[1]}</span></button>`).join("")}
+ const {L,N,base}=artPick(),sh=AS.saltP===artPeriodKey()&&AS.salt;
+ $("artToday").innerHTML=`${AS.mode==="week"?"今週":"今日"}の1枚目：<b style="color:var(--gold2)">${esc(L[base].name)}</b>（全${N}枚中 ${base+1}番目）${sh?" ・ シャッフル中（明日にはもどります）":""}`;
+ $("uaCount").textContent=`${UA.length} / ${UMAX}枚`;$("uaAdd").disabled=UA.length>=UMAX;$("uaAdd").textContent=UA.length>=UMAX?`上限（${UMAX}枚）に達しました`:"＋ 画像を追加";
+ const dl=pos=>AS.mode==="week"?"":`毎月 ${daysFor(pos,N).join("・")}日`;
+ $("uaList").innerHTML=UA.length?UA.map((u,i)=>`<div class="ua${i===base?" today":""}"><img src="${u.turl}" alt="" data-uaview="${i}"><div class="m"><input value="${esc(u.name)}" placeholder="名前（任意）" data-uaname="${u.id}"><div class="s">${i===base?'<span class="tbadge">今日</span>':""}#${i+1} ${dl(i)}</div></div><div class="bt"><button data-uaup="${i}" ${i?"":"disabled"} aria-label="上へ">↑</button><button data-uadn="${i}" ${i<UA.length-1?"":"disabled"} aria-label="下へ">↓</button></div><button class="sm danger" data-uadel="${u.id}" style="flex:none">削除</button></div>`).join(""):'<div class="empty">まだ画像はありません。「＋ 画像を追加」から好きな写真を選んでね</div>';
+ $("artGal").innerHTML=ART.map((a,i)=>{const pos=UA.length+i;return`<button data-art="${i}" class="${pos===base?"today":""}"><img loading="lazy" src="art/${a[0]}.webp" alt="${a[1]}">${pos===base?'<span class="tbadge tb">今日</span>':""}<span class="no">#${pos+1}</span><span>${a[1]}</span></button>`}).join("")}
 $("artMode").onclick=e=>{const b=e.target.closest("[data-am]");if(!b)return;AS.mode=b.dataset.am;saveAS();rArtSet();artApply()};
 $("artDim").oninput=()=>{AS.dim=+$("artDim").value;$("artDimV").textContent=AS.dim+"%";saveAS();artApply()};
 $("artOn").onchange=()=>{AS.on=$("artOn").checked;saveAS();artApply()};
-$("artShuffle").onclick=()=>{AS.salt=(AS.salt||0)+1;saveAS();artApply();toast("カードを入れかえました ✨")};
-$("artGal").onclick=e=>{const b=e.target.closest("[data-art]");if(!b)return;const a=ART[+b.dataset.art];sheet({title:a[1],body:`<img src="${artSrc(+b.dataset.art)}" alt="" style="width:100%;border-radius:12px;border:1px solid rgba(255,215,0,.5)">`,okText:"閉じる",onOk(){}})};
+$("artShuffle").onclick=()=>{const N=artList().length;if(N<2)return;const p=artPeriodKey(),cur=AS.saltP===p?(AS.salt||0):0;let n;do n=1+Math.floor(Math.random()*(N-1));while(N>2&&n===cur);AS.salt=n;AS.saltP=p;saveAS();artApply();rArtSet();toast("カードを入れかえました ✨")};
+const viewImg=(t,src)=>sheet({title:t,body:`<img src="${src}" alt="" style="width:100%;border-radius:12px;border:1px solid rgba(255,215,0,.5)">`,okText:"閉じる",onOk(){}});
+$("artGal").onclick=e=>{const b=e.target.closest("[data-art]");if(!b)return;const a=ART[+b.dataset.art];viewImg(a[1],"art/"+a[0]+".webp")};
+$("uaAdd").onclick=()=>{if(UA.length>=UMAX){uaFullMsg();return}$("uaFile").click()};
+$("uaFile").onchange=e=>{const f=e.target.files;if(f&&f.length)uaAddFiles(f);e.target.value=""};
+$("uaList").addEventListener("click",async e=>{const t=e.target;let el;
+ if(el=t.closest("[data-uaview]")){const u=UA[+el.dataset.uaview];return viewImg(u.name||"画像",u.url)}
+ if(el=t.closest("[data-uaup]")){const i=+el.dataset.uaup;if(i>0){[UA[i-1],UA[i]]=[UA[i],UA[i-1]];rArtSet();await uaSaveOrder();_artKey="";artApply()}return}
+ if(el=t.closest("[data-uadn]")){const i=+el.dataset.uadn;if(i<UA.length-1){[UA[i+1],UA[i]]=[UA[i],UA[i+1]];rArtSet();await uaSaveOrder();_artKey="";artApply()}return}
+ if(el=t.closest("[data-uadel]")){const u=UA.find(x=>x.id===el.dataset.uadel);if(!u)return;if(!confirm(`「${u.name||"この画像"}」を削除しますか？`))return;await aDel(u.id);UA=UA.filter(x=>x!==u);URL.revokeObjectURL(u.url);URL.revokeObjectURL(u.turl);await uaSaveOrder();_artKey="";artApply();rArtSet();$("uaMsg").textContent="削除しました";toast("削除しました")}});
+$("uaList").addEventListener("change",async e=>{const el=e.target.closest("[data-uaname]");if(!el)return;const u=UA.find(x=>x.id===el.dataset.uaname);if(!u)return;u.name=el.value.trim().slice(0,30);const all=await aAll(),o=all.find(x=>x.id===u.id);if(o){o.name=u.name;await aPut(o)}_artKey="";artApply();toast("名前を保存しました")});
+const ab2b64=b=>{const a=new Uint8Array(b);let s="";for(let i=0;i<a.length;i+=0x8000)s+=String.fromCharCode.apply(null,a.subarray(i,i+0x8000));return btoa(s)};
+const b642ab=s=>{const bin=atob(s),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a.buffer};
+$("uaExp").onclick=async()=>{const all=(await aAll()||[]).sort((a,b)=>a.ord-b.ord);if(!all.length){toast("追加した画像がありません");return}
+ const s=JSON.stringify({app:"life-plan-note-art",exported:new Date().toISOString(),images:all.map(o=>({name:o.name,ord:o.ord,type:o.type,img:ab2b64(o.img),thumb:o.thumb?ab2b64(o.thumb):null}))});const name="jinsei_sekkei_images_"+today()+".json";
+ try{const f=new File([s],name,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});return}}catch(e){if(e&&e.name==="AbortError")return}
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([s],{type:"application/json"}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)};
+$("uaImpBtn").onclick=()=>$("uaImp").click();
+$("uaImp").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const r=new FileReader();r.onload=async()=>{try{const j=JSON.parse(r.result);if(!j||j.app!=="life-plan-note-art"||!Array.isArray(j.images))throw 0;
+ let room=UMAX-UA.length,n=0;for(const im of j.images.sort((a,b)=>(a.ord||0)-(b.ord||0))){if(room<=0)break;await aPut({id:"u"+uid(),name:im.name||"",ord:UA.length+n,added:Date.now()+n,type:im.type||"image/jpeg",img:b642ab(im.img),thumb:im.thumb?b642ab(im.thumb):null});n++;room--}
+ await uaLoad();const sk=j.images.length-n;toast(`${n}枚 読み込みました`);$("uaMsg").textContent=`${n}枚 読み込みました。`+(sk>0?` 上限の${UMAX}枚のため ${sk}枚は追加できませんでした。`:"")}catch(x){alert("画像のバックアップファイルではないようです")}};r.readAsText(f)};
 /* tabs */
 let TAB="money";
 $("nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;TAB=b.dataset.t;document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".tab").forEach(s=>s.classList.toggle("on",s.id==="t-"+TAB));scrollTo(0,0);render()};
@@ -551,8 +619,8 @@ $("wipe").onclick=()=>{if(confirm("すべてのデータを削除します。よ
 /* init */
 $("balDate").value=today();$("exDate").value=today();$("svDate").value=today();
 idbGet().then(s=>{if(!localStorage.getItem(K)&&s){try{const j=JSON.parse(s);if(j&&j.cats){D=norm(j);localStorage.setItem(K,s);render();toast("バックアップから復元しました")}}catch(e){}}});
-document.addEventListener("visibilitychange",()=>{if(!document.hidden){$("balDate").value=$("balDate").value||today();render()}});
-render();
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){_artKey="";$("balDate").value=$("balDate").value||today();render()}});
+render();uaLoad();
 </script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));</script>
 </body></html>
