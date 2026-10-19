@@ -146,6 +146,15 @@ body.bgcard #bgCard{display:block}body.bgcard #bgArt{filter:blur(16px) saturate(
 .gal button.today{outline:2.5px solid #FFD700;outline-offset:1px}
 .gal .tb{position:absolute;top:5px;left:5px}
 .gal .no{position:absolute;top:5px;right:5px;font-size:11px;background:rgba(9,14,26,.8);color:#FFE55C;border-radius:6px;padding:1px 6px}
+.seg{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:6px;background:rgba(11,18,32,.7);border:1px solid rgba(255,215,0,.35);border-radius:14px;padding:5px;margin:0 0 12px;position:sticky;top:calc(env(safe-area-inset-top) + 58px);z-index:5;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.seg button{border:0;background:transparent;color:var(--mute);font-size:13.5px;font-weight:700;padding:9px 2px;border-radius:10px;white-space:nowrap}
+.seg button.on{background:linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%);color:#0b1220;box-shadow:0 0 10px rgba(255,208,0,.3)}
+.hkc{border:1px solid rgba(255,215,0,.55);box-shadow:0 0 22px rgba(255,208,0,.14)}
+.kpi.k3{grid-template-columns:1fr 1fr 1fr}.kpi.k3 b{font-size:15px}
+.qa{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}.qa button{padding:12px 4px;border-radius:12px;font-size:14px;font-weight:700;border:1px solid rgba(255,215,0,.5);background:var(--bg2);color:var(--t)}.qa button b{display:block;font-size:20px;line-height:1.1;color:var(--gold)}.qa button.gold b{color:#0b1220}
+.wt{display:block!important}.wt .bar{height:8px;margin-top:6px}.wt .wa{display:flex;gap:6px;margin-top:8px}.wt .wa button{flex:1;padding:7px 4px;font-size:13px}
+.fxtot{display:flex;justify-content:space-between;align-items:baseline;margin:-4px 0 6px}.fxtot b{font-size:24px;font-weight:800}
+.fxc .it{padding:7px 0}.fxc .it b{font-size:15px}
 </style></head><body>
 <div id="pwLock" style="position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;background:radial-gradient(ellipse at top,#1b2640 0%,#0b1220 70%);color:#e9edf4;font-family:-apple-system,'Hiragino Sans',sans-serif">
 <img src="icon-180.png" alt="" style="width:104px;height:104px;border-radius:24px;box-shadow:0 0 0 2px #FFD70088,0 8px 28px #FFD70044">
@@ -176,34 +185,57 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 <div class="artban" id="hero"><div class="ab-blur" id="heroBlur"></div><div class="ab-stage"><div class="ab-card" id="heroCard" role="button" aria-label="カードを全画面で見る"><img id="heroImg" alt=""><i></i><i></i><i></i><i></i><span class="gem"></span></div></div><div class="ab-cap"><div class="nm"><small><span id="heroLbl">TODAY'S CARD</span><span class="zh"> 🔍</span></small><b class="shine" id="heroName"></b></div><span class="tabn" id="heroTab"></span><button class="tg" id="heroTg"></button></div></div>
 <!-- お金 -->
 <section class="tab on" id="t-money">
- <div class="card"><h2>🐷 今月のまとめ<span class="r mute" id="topYm" style="font-weight:400"></span></h2>
-  <div class="mute">貯金・へそくりの合計</div><div class="big hero num shine" id="topSav">¥0</div>
-  <div class="list flow" style="margin-top:6px"><div class="it"><div class="m">今月の支出（本来の支出）</div><b class="num up" id="topEx"></b></div><div class="it"><div class="m">今月の貯金・へそくり</div><b class="num plus" id="topSm"></b></div><div class="it"><div class="m mute">いまの残高</div><b class="num" id="topBal"></b></div></div>
+ <div class="seg" id="mSeg"><button data-mv="hk" class="on">👛 へそくり</button><button data-mv="pay">💼 給料・固定費</button><button data-mv="life">🧾 生活費</button></div>
+ <div class="mv" id="mv-hk">
+ <div class="card hkc"><h2>👛 へそくり<span class="r mute" id="hkYm" style="font-weight:400"></span></h2>
+  <div class="mute">いまのへそくり</div><div class="big hero num shine" id="hkBal">¥0</div>
+  <div class="kpi"><div><small>🛒 買いたいもの用</small><b class="num" id="hkRes"></b></div><div><small>✨ 自由に使える</small><b class="num" id="hkFree"></b></div></div>
+  <div class="kpi k3"><div><small>今月 入った</small><b class="num plus" id="hkIn"></b></div><div><small>今月 使った</small><b class="num up" id="hkOut"></b></div><div><small>今月 貯金へ</small><b class="num" id="hkMv" style="color:var(--gold2)"></b></div></div>
+  <div class="qa"><button data-hq="in"><b>＋</b>入れる</button><button data-hq="out"><b>−</b>使った</button><button data-hq="mv" class="gold"><b>🐷</b>貯金へ</button></div>
  </div>
- <div class="card"><h2>💴 今日の残高</h2>
+ <div class="card"><h2>🛒 買いたいもの<span class="r"><button class="sm" id="wtAdd">＋ 追加</button></span></h2>
+  <div class="mute" id="wtSum"></div>
+  <div class="list" id="wtList"></div>
+  <div class="hint">「取り分け」でへそくりの中から予約しておけるよ。「👛 買った」でへそくりから支払い、買えたものになります。</div>
+ </div>
+ <div class="card"><h2>🐷 貯金へ回した分</h2>
+  <div class="kpi" style="margin-top:0"><div><small>今月</small><b class="num" id="mvMon"></b></div><div><small>これまでの合計</small><b class="num" id="mvAll"></b></div></div>
+  <div class="list" id="mvList" style="margin-top:8px"></div>
+ </div>
+ <div class="card"><h2>📒 へそくりの記録<span class="r mute" style="font-weight:400;font-size:13px">タップで編集</span></h2><div class="list" id="hkList"></div></div>
+ </div>
+ <div class="mv" id="mv-pay" hidden>
+ <div class="card pay"><h2>💼 給料のお金<span class="r mute" id="payYm" style="font-weight:400"></span></h2>
+  <div class="kpi" style="margin-top:0"><div><small>🔁 今月の固定費</small><b class="num" id="payFix"></b></div><div><small>🧾 今月の生活費</small><b class="num" id="payLife"></b></div></div>
+  <div class="list flow" style="margin-top:6px"><div class="it"><div class="m">給料からの支出 合計</div><b class="num up" id="payTot"></b></div><div class="it"><div class="m mute">口座の残高</div><b class="num" id="topBal"></b></div></div>
+  <div class="hint">へそくりは別の財布として「👛 へそくり」で管理しています。</div>
+ </div>
+ <div class="card"><h2>🔁 毎月の固定費<span class="r"><button class="sm" id="fxAdd">＋ 追加</button></span></h2>
+  <div class="fxtot"><span class="mute">毎月ひかれる合計</span><b class="num shine" id="fxTot">¥0</b></div>
+  <div class="list fxc" id="fxList"></div>
+  <div class="hint">給料から自動でひかれるもの。登録すると毎月、自動で記録されます（タップで金額・日付を変更）。</div>
+ </div>
+ <div class="card"><h2>💴 口座の残高</h2>
   <div class="big num" id="balNow">¥0</div><div class="mute" id="balNowSub">まだ記録がありません</div>
   <div class="row"><div><label class="f">日付</label><input type="date" id="balDate"></div><div><label class="f">残高（円）</label><input class="yen neg" inputmode="numeric" id="balAmt" placeholder="0"></div></div>
   <label class="f">メモ（任意）</label><input id="balMemo" placeholder="例：給料日後">
   <button class="gold full" id="balAdd">残高を記録</button>
   <div class="list" id="balList" style="margin-top:8px"></div>
  </div>
- <div class="card"><h2>🧾 経費を記録</h2>
+ </div>
+ <div class="mv" id="mv-life" hidden>
+ <div class="card"><h2>🧾 生活費を記録</h2>
   <div class="row"><div><label class="f">日付</label><input type="date" id="exDate"></div><div><label class="f">金額（円）</label><input class="yen" inputmode="numeric" id="exAmt" placeholder="0"></div></div>
   <label class="f">カテゴリ</label><div class="chips" id="exCats"></div>
   <label class="f">メモ（任意）</label><input id="exMemo" placeholder="例：ガソリン">
-  <button class="gold full" id="exAdd">経費を記録</button>
+  <button class="gold full" id="exAdd">生活費を記録</button>
  </div>
  <div class="card"><div class="msw"><button class="icon" data-mm="-1">‹</button><b id="mmLbl"></b><button class="icon" data-mm="1">›</button></div>
-  <div class="row" style="align-items:baseline"><span class="mute">この月の支出</span><span class="num" style="text-align:right;font-size:22px;font-weight:800" id="mmTot"></span></div>
+  <div class="row" style="align-items:baseline"><span class="mute">この月の生活費</span><span class="num" style="text-align:right;font-size:22px;font-weight:800" id="mmTot"></span></div>
+  <div class="list legend" id="lfCats" style="margin-top:6px"></div>
   <div class="list" id="exList" style="margin-top:6px"></div>
+  <div class="hint" id="mmFix"></div>
  </div>
- <div class="card"><h2>🔁 毎月の固定費<span class="r"><button class="sm" id="fxAdd">＋ 追加</button></span></h2>
-  <div class="hint" style="margin:-6px 0 6px">登録すると毎月、自動で経費に入ります（通信料・家賃・保険など）。</div>
-  <div class="list" id="fxList"></div>
- </div>
- <div class="card"><h2>🛒 買いたいもの<span class="r"><button class="sm" id="wtAdd">＋ 追加</button></span></h2>
-  <div class="mute" id="wtSum"></div>
-  <div class="list" id="wtList"></div>
  </div>
 </section>
 <!-- 貯金 -->
@@ -312,7 +344,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 <div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
 <script>
 "use strict";
-const VER="v7";
+const VER="v8";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
@@ -466,30 +498,85 @@ function render(){applyFixed();try{artApply()}catch(e){}$("hdrSub").innerHTML=es
 /* ===== お金 ===== */
 let MM=ymOf(today()),exCat=null;
 function latestBal(upTo){const b=D.balances.filter(x=>!upTo||x.date<=upTo).sort((a,b)=>a.date<b.date?1:-1);return b[0]}
+/* ===== へそくり (v8): へそくり = savings of type へそくり; moves = paired -へそくり/+貯金 records (hk:"mv",pair) ===== */
+let MV=(()=>{try{return sessionStorage.getItem("lp_mv")||"hk"}catch(e){return"hk"}})();
+const hkType=()=>{const t=D.savTypes.find(x=>/へそくり/.test(x.name));return t?t.id:null};
+const hkTypeEnsure=()=>{let id=hkType();if(!id){id="s"+uid();D.savTypes.push({id,name:"へそくり"})}return id};
+const hkRecs=()=>{const id=hkType();return id?D.savings.filter(e=>e.type===id):[]};
+const hkBal=()=>hkRecs().reduce((s,e)=>s+(+e.amount||0),0);
+const isMv=e=>e.hk==="mv";
+const wSaved=w=>w.done?0:Math.max(0,+w.saved||0);
 function rMoney(){
- {const ym=ymOf(today());$("topYm").textContent=ymLbl(ym);$("topSav").textContent=yen(savTotal());$("topEx").textContent="−"+yen(sumOf(monthEx(ym)));const sm=sumOf(monthSv(ym));$("topSm").textContent=(sm>=0?"+":"")+yen(sm);const b=latestBal();$("topBal").textContent=b?yen(b.amount)+"（"+fmtD(b.date)+"）":"未記録"}
+ document.querySelectorAll("#mSeg button").forEach(b=>b.classList.toggle("on",b.dataset.mv===MV));
+ ["hk","pay","life"].forEach(v=>$("mv-"+v).hidden=v!==MV);
+ const ym=ymOf(today());
+ /* へそくり */
+ const hb=hkBal(),res=D.wants.reduce((s,w)=>s+wSaved(w),0),hm=hkRecs().filter(e=>ymOf(e.date)===ym);
+ $("hkYm").textContent=ymLbl(ym);$("hkBal").textContent=yen(hb);$("hkRes").textContent=yen(res);$("hkFree").textContent=yen(hb-res);$("hkFree").style.color=hb-res<0?"var(--red)":"";
+ $("hkIn").textContent="+"+yen(hm.filter(e=>e.amount>0).reduce((s,e)=>s+e.amount,0));
+ $("hkOut").textContent="−"+yen(-hm.filter(e=>e.amount<0&&!isMv(e)).reduce((s,e)=>s+e.amount,0));
+ const mvs=hkRecs().filter(e=>isMv(e)&&e.amount<0);$("hkMv").textContent=yen(-mvs.filter(e=>ymOf(e.date)===ym).reduce((s,e)=>s+e.amount,0));
+ $("mvMon").textContent=$("hkMv").textContent;$("mvAll").textContent=yen(-mvs.reduce((s,e)=>s+e.amount,0));
+ $("mvList").innerHTML=mvs.length?mvs.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,5).map(e=>{const p=D.savings.find(x=>x.id===e.pair);return`<div class="it" data-editsv="${e.id}"><span class="dot" style="background:${p?stCol(p.type):"#FFD700"}"></span><div class="m"><b>${esc(p?stName(p.type):"貯金")}へ</b><div class="s">${fmtD(e.date)}${e.memo?" ・ "+esc(e.memo):""}</div></div><b class="num" style="color:var(--gold2)">${yen(-e.amount)}</b></div>`}).join(""):'<div class="empty">「🐷 貯金へ」でへそくりから貯金に回せるよ</div>';
+ const hl=hkRecs().slice().sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0).slice(0,10);
+ $("hkList").innerHTML=hl.length?hl.map(e=>{const w=e.wantId&&D.wants.find(x=>x.id===e.wantId);const lb=isMv(e)?"🐷 貯金へ":w?"🛒 "+esc(w.name):e.amount<0?"使った":"入れた";return`<div class="it" data-editsv="${e.id}"><div class="m"><b>${lb}</b><div class="s">${fmtD(e.date)}${e.memo&&!w?" ・ "+esc(e.memo):""}${e.purpose?" ・ "+esc(e.purpose):""}</div></div><b class="num ${e.amount<0?"up":"plus"}">${e.amount>=0?"+":""}${yen(e.amount)}</b></div>`}).join(""):'<div class="empty">まだ記録がありません。「＋ 入れる」から始めよう</div>';
+ const w=D.wants.slice().sort((a,b)=>(a.done-b.done)||(b.prio-a.prio)||((a.target||"9999")<(b.target||"9999")?-1:1));
+ const rest=D.wants.filter(x=>!x.done);
+ $("wtSum").textContent=D.wants.length?`未購入 ${rest.length}件・合計 ${yen(rest.reduce((s,x)=>s+x.price,0))}・取り分け ${yen(res)}`:"";
+ $("wtList").innerHTML=w.length?w.map(x=>{const dd=x.target?daysTo(x.target):null,sv=wSaved(x),pc=x.price>0?Math.min(100,Math.round(sv/x.price*100)):0;
+  return`<div class="it wt${x.done?" done-it":""}"><div class="row" style="align-items:center"><input type="checkbox" data-wtchk="${x.id}"${x.done?" checked":""}><div class="m" data-editwt="${x.id}" style="flex:1"><b>${esc(x.name)}</b> <span class="prio p${x.prio}">${PRIO[x.prio]}</span><div class="s">${x.target?"目標 "+fmtD(x.target)+(x.done?"":dd<0?"（"+(-dd)+"日過ぎ）":"（あと"+dd+"日）"):"目標日なし"}${x.done&&x.doneDate?" ・ 購入 "+fmtD(x.doneDate):""}</div></div><b class="num" style="flex:none">${yen(x.price)}</b></div>
+  ${x.done?"":`<div class="row" style="margin-top:2px"><div class="bar" style="flex:1"><i style="width:${pc}%;background:linear-gradient(90deg,#FFC300,#FFE55C)"></i></div><span class="num mute" style="flex:none;font-size:13px">${yen(sv)}（${pc}%）</span></div><div class="wa"><button class="sm" data-wsave="${x.id}">＋ 取り分け</button><button class="sm gold" data-wbuy="${x.id}">👛 買った</button></div>`}</div>`}).join(""):'<div class="empty">ほしいものを登録しておこう</div>';
+ /* 給料・固定費 */
+ const fxM=sumOf(monthEx(ym).filter(e=>e.fixedId)),lfM=sumOf(monthEx(ym).filter(e=>!e.fixedId));
+ $("payYm").textContent=ymLbl(ym);$("payFix").textContent=yen(fxM);$("payLife").textContent=yen(lfM);$("payTot").textContent="−"+yen(fxM+lfM);
+ {const b=latestBal();$("topBal").textContent=b?yen(b.amount)+"（"+fmtD(b.date)+"）":"未記録"}
  const lb=latestBal();$("balNow").textContent=lb?yen(lb.amount):"¥0";$("balNow").style.color=lb&&lb.amount<0?"var(--red)":"";
  $("balNowSub").textContent=lb?fmtD(lb.date)+" 時点"+(lb.memo?"・"+lb.memo:""):"まだ記録がありません";
  const bl=D.balances.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,5);
  $("balList").innerHTML=bl.map((b,i)=>{const prev=D.balances.filter(x=>x.date<b.date).sort((a,c)=>a.date<c.date?1:-1)[0];const df=prev?b.amount-prev.amount:null;
   return`<div class="it"><div class="m"><b class="num">${yen(b.amount)}</b>${df!=null?` <span class="num ${df<0?"up":"down"}" style="font-size:13px">${df>=0?"+":""}${yen(df)}</span>`:""}<div class="s">${fmtD(b.date)}${b.memo?" ・ "+esc(b.memo):""}</div></div><button class="sm danger" data-delbal="${b.id}">削除</button></div>`}).join("");
+ const act=D.fixed.filter(f=>!f.end||f.end>=ym);
+ $("fxTot").textContent=yen(act.reduce((s,f)=>s+f.amount,0));
+ $("fxList").innerHTML=D.fixed.length?D.fixed.slice().sort((a,b)=>(a.day||1)-(b.day||1)).map(f=>`<div class="it${f.end&&f.end<ym?" done-it":""}" data-editfx="${f.id}"><span class="dot" style="background:${catCol(f.cat)}"></span><div class="m"><b>${esc(f.name)}</b><div class="s">毎月${f.day}日 ・ ${esc(catName(f.cat))}${f.end?" ・ "+ymLbl(f.end)+"まで":""}</div></div><b class="num">${yen(f.amount)}</b></div>`).join(""):'<div class="empty">まだ登録がありません（通信料・家賃・保険など）</div>';
+ /* 生活費 */
  if(!exCat||!D.cats.some(c=>c.id===exCat))exCat=D.cats[0]&&D.cats[0].id;
  $("exCats").innerHTML=D.cats.map(c=>`<button class="chip${c.id===exCat?" on":""}" data-excat="${c.id}">${esc(c.name)}</button>`).join("");
  $("mmLbl").textContent=ymLbl(MM);
- const ex=D.expenses.filter(e=>ymOf(e.date)===MM).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
- $("mmTot").textContent=yen(ex.reduce((s,e)=>s+e.amount,0));
- $("exList").innerHTML=ex.length?ex.map(e=>`<div class="it" data-editex="${e.id}"><span class="dot" style="background:${catCol(e.cat)}"></span><div class="m"><b>${esc(catName(e.cat))}</b>${e.fixedId?' <span class="tag">固定費</span>':""}${e.wantId?' <span class="tag">買いたいもの</span>':""}<div class="s">${fmtD(e.date)}${e.memo?" ・ "+esc(e.memo):""}</div></div><b class="num">${yen(e.amount)}</b></div>`).join(""):'<div class="empty">この月の経費はまだありません</div>';
- $("fxList").innerHTML=D.fixed.length?D.fixed.map(f=>`<div class="it" data-editfx="${f.id}"><span class="dot" style="background:${catCol(f.cat)}"></span><div class="m"><b>${esc(f.name)}</b><div class="s">${esc(catName(f.cat))} ・ 毎月${f.day}日${f.end?" ・ "+ymLbl(f.end)+"まで":""}</div></div><b class="num">${yen(f.amount)}</b></div>`).join("")+`<div class="it"><div class="m mute">固定費の合計（毎月）</div><b class="num" style="color:var(--gold2)">${yen(D.fixed.filter(f=>!f.end||f.end>=ymOf(today())).reduce((s,f)=>s+f.amount,0))}</b></div>`:'<div class="empty">まだ登録がありません</div>';
- const w=D.wants.slice().sort((a,b)=>(a.done-b.done)||(b.prio-a.prio)||((a.target||"9999")<(b.target||"9999")?-1:1));
- const rest=D.wants.filter(x=>!x.done);
- $("wtSum").textContent=D.wants.length?`未購入 ${rest.length}件・合計 ${yen(rest.reduce((s,x)=>s+x.price,0))}`:"";
- $("wtList").innerHTML=w.length?w.map(x=>{const dd=x.target?daysTo(x.target):null;return`<div class="it${x.done?" done-it":""}"><input type="checkbox" data-wtchk="${x.id}"${x.done?" checked":""}><div class="m" data-editwt="${x.id}"><b>${esc(x.name)}</b> <span class="prio p${x.prio}">${PRIO[x.prio]}</span><div class="s">${x.target?"目標 "+fmtD(x.target)+(x.done?"":dd<0?"（"+(-dd)+"日過ぎ）":"（あと"+dd+"日）"):"目標日なし"}${x.done&&x.doneDate?" ・ 購入 "+fmtD(x.doneDate):""}</div></div><b class="num">${yen(x.price)}</b></div>`}).join(""):'<div class="empty">ほしいものを登録しておこう</div>'}
+ const all=monthEx(MM),ex=all.filter(e=>!e.fixedId).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0),tot=sumOf(ex);
+ $("mmTot").textContent=yen(tot);
+ const bc=byCat(ex),ent=Object.entries(bc).sort((a,b)=>b[1]-a[1]);
+ $("lfCats").innerHTML=ent.map(([c,v])=>`<div class="it"><span class="dot" style="background:${catCol(c)}"></span><div class="m"><b>${esc(catName(c))}</b><div class="bar" style="margin-top:5px"><i style="width:${ent[0][1]?v/ent[0][1]*100:0}%;background:${catCol(c)}"></i></div></div><b class="num">${yen(v)}</b></div>`).join("");
+ $("exList").innerHTML=ex.length?ex.map(e=>`<div class="it" data-editex="${e.id}"><span class="dot" style="background:${catCol(e.cat)}"></span><div class="m"><b>${esc(catName(e.cat))}</b>${e.wantId?' <span class="tag">買いたいもの</span>':""}<div class="s">${fmtD(e.date)}${e.memo?" ・ "+esc(e.memo):""}</div></div><b class="num">${yen(e.amount)}</b></div>`).join(""):'<div class="empty">この月の生活費はまだありません</div>';
+ const fx=sumOf(all.filter(e=>e.fixedId));$("mmFix").textContent=fx?`※ 固定費 ${yen(fx)} は「💼 給料・固定費」にあります（合計 ${yen(tot+fx)}）`:""}
+function hkSheet(kind,wid){const hk=hkBal(),w=wid&&D.wants.find(x=>x.id===wid);
+ const T={in:"👛 へそくりに入れる",out:"👛 へそくりから使った",mv:"🐷 へそくりを貯金へ回す",save:"🛒 取り分ける",buy:"👛 へそくりで買った"}[kind];
+ const others=D.savTypes.filter(t=>t.id!==hkType());const def=(others.find(t=>t.name==="将来のため")||others[0]||{}).id;
+ const amt0=kind==="buy"?w.price:kind==="save"&&w?Math.max(0,w.price-wSaved(w)):0;
+ sheet({title:T,okText:"記録",body:`${w?`<div class="mute" style="margin-bottom:6px">${esc(w.name)}（${yen(w.price)}）</div>`:""}<div class="mute">いまのへそくり <b class="num" style="color:var(--gold2)">${yen(hk)}</b></div><div class="row"><div><label class="f">日付</label><input type="date" id="hD" value="${today()}"></div><div><label class="f">金額（円）</label><input class="yen" inputmode="numeric" id="hA" value="${amt0?fmtIn(amt0):""}" placeholder="0"></div></div>
+  ${kind==="mv"?`<label class="f">どの貯金へ</label><select id="hT">${others.map(t=>`<option value="${t.id}"${t.id===def?" selected":""}>${esc(t.name)}</option>`).join("")}</select><label class="f">貯金の目標（任意）</label><select id="hG"><option value="">なし</option>${D.savGoals.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join("")}</select>`:""}
+  ${kind==="save"?'<div class="hint">へそくりの中で、この買いものの分として予約します（お金は動きません）。マイナスを入れると取り分けを減らせます。</div>':""}
+  ${kind==="save"?"":`<label class="f">メモ（任意）</label><input id="hM" placeholder="${kind==="in"?"例：今月のお小遣い":kind==="out"?"例：ランチ":""}">`}`,
+  init(){if(kind==="save")$("hA").classList.add("neg")},
+  onOk(){const a=num($("hA").value),d=$("hD").value||today(),m=$("hM")?$("hM").value.trim():"";
+   if(kind==="save"){if(!a){toast("金額を入力してください");return false}w.saved=Math.max(0,(+w.saved||0)+a);save();toast("取り分けました");render();return}
+   if(a<=0){toast("金額を入力してください");return false}
+   const t=hkTypeEnsure();
+   if(kind==="in")D.savings.push({id:uid(),date:d,amount:a,type:t,goalId:null,purpose:"",memo:m,hk:"in"});
+   else if(kind==="out")D.savings.push({id:uid(),date:d,amount:-a,type:t,goalId:null,purpose:"",memo:m,hk:"out"});
+   else if(kind==="mv"){const i1=uid(),i2=uid()+"b";D.savings.push({id:i1,date:d,amount:-a,type:t,goalId:null,purpose:"",memo:m,hk:"mv",pair:i2},{id:i2,date:d,amount:a,type:$("hT").value,goalId:$("hG").value||null,purpose:"",memo:m||"へそくりから",hk:"mv",pair:i1})}
+   else if(kind==="buy"){const id=uid();D.savings.push({id,date:d,amount:-a,type:t,goalId:null,purpose:"",memo:w.name+(m?"・"+m:""),hk:"buy",wantId:w.id});w.done=true;w.doneDate=d;w.hkSvId=id}
+   save();toast({in:"へそくりに入れたよ 👛",out:"使った分を記録したよ",mv:"貯金へ回したよ 🐷",buy:"買えたね！🎉"}[kind]);render()}})}
 $("balAdd").onclick=()=>{const d=$("balDate").value||today(),a=num($("balAmt").value);if(!$("balAmt").value.trim()){toast("残高を入力してください");return}
  const ex=D.balances.find(b=>b.date===d);if(ex){ex.amount=a;ex.memo=$("balMemo").value.trim()}else D.balances.push({id:uid(),date:d,amount:a,memo:$("balMemo").value.trim()});
  save();$("balAmt").value="";$("balMemo").value="";toast(ex?"残高を更新しました":"残高を記録しました");render()};
 $("exAdd").onclick=()=>{const a=num($("exAmt").value);if(a<=0){toast("金額を入力してください");return}
  const d=$("exDate").value||today();D.expenses.push({id:uid(),date:d,amount:a,cat:exCat,memo:$("exMemo").value.trim()});save();$("exAmt").value="";$("exMemo").value="";MM=ymOf(d);toast("経費を記録しました");render()};
 $("t-money").addEventListener("click",e=>{const t=e.target;let el;
+ if(el=t.closest("[data-mv]")){MV=el.dataset.mv;try{sessionStorage.setItem("lp_mv",MV)}catch(x){}scrollTo(0,0);return rMoney()}
+ if(el=t.closest("[data-hq]"))return hkSheet(el.dataset.hq);
+ if(el=t.closest("[data-wsave]"))return hkSheet("save",el.dataset.wsave);
+ if(el=t.closest("[data-wbuy]"))return hkSheet("buy",el.dataset.wbuy);
+ if(el=t.closest("[data-editsv]"))return editSv(el.dataset.editsv);
  if(el=t.closest("[data-mm]")){MM=ymAdd(MM,+el.dataset.mm);return rMoney()}
  if(el=t.closest("[data-excat]")){exCat=el.dataset.excat;return rMoney()}
  if(el=t.closest("[data-delbal]")){if(confirm("この残高の記録を削除しますか？")){D.balances=D.balances.filter(b=>b.id!==el.dataset.delbal);save();rMoney()}return}
@@ -518,8 +605,8 @@ function editWt(id){const w=D.wants.find(x=>x.id===id)||null;const c=w||{name:""
    const o={name:n,price:num($("wP").value),prio:p,target:$("wT").value,cat:$("wC").value,memo:$("wM").value.trim()};if(w)Object.assign(w,o);else D.wants.push(Object.assign({id:uid(),done:false},o));save();render()},
   onDel:w?()=>{D.wants=D.wants.filter(x=>x!==w);save();render()}:null})}
 function toggleWant(id,on){const w=D.wants.find(x=>x.id===id);if(!w)return;w.done=on;
- if(on){w.doneDate=today();if(w.price>0&&confirm(`「${w.name}」を経費（${yen(w.price)}・${catName(w.cat)}）にも記録しますか？`)){const e={id:uid(),date:today(),amount:w.price,cat:w.cat,memo:w.name,wantId:w.id};D.expenses.push(e);w.expId=e.id;toast("経費にも記録しました")}}
- else{w.doneDate=null;if(w.expId&&confirm("経費に記録した分も取り消しますか？"))D.expenses=D.expenses.filter(e=>e.id!==w.expId);w.expId=null}
+ if(on){w.doneDate=today();if(w.price>0&&confirm(`「${w.name}」をへそくりから払いましたか？\n（OK＝へそくりから / キャンセル＝ほかの選択へ）`)){const t=hkTypeEnsure(),id=uid();D.savings.push({id,date:today(),amount:-w.price,type:t,goalId:null,purpose:"",memo:w.name,hk:"buy",wantId:w.id});w.hkSvId=id;toast("へそくりから払ったよ")}else if(w.price>0&&confirm(`「${w.name}」を経費（${yen(w.price)}・${catName(w.cat)}）にも記録しますか？`)){const e={id:uid(),date:today(),amount:w.price,cat:w.cat,memo:w.name,wantId:w.id};D.expenses.push(e);w.expId=e.id;toast("経費にも記録しました")}}
+ else{w.doneDate=null;if(w.hkSvId&&D.savings.some(e=>e.id===w.hkSvId)&&confirm("へそくりから払った分も取り消しますか？"))D.savings=D.savings.filter(e=>e.id!==w.hkSvId);if(w.hkSvId)w.hkSvId=null;if(w.expId&&confirm("経費に記録した分も取り消しますか？"))D.expenses=D.expenses.filter(e=>e.id!==w.expId);w.expId=null}
  save();render()}
 /* ===== 貯金 ===== */
 let SVM=ymOf(today()),svType=null,svDir=1;
@@ -572,7 +659,7 @@ const stOpts=sel=>D.savTypes.map(x=>`<option value="${x.id}"${x.id===sel?" selec
 function editSv(id){const e=D.savings.find(x=>x.id===id);if(!e)return;
  sheet({title:"貯金の記録を編集",body:`<label class="f">区分</label><select id="vDir"><option value="1"${e.amount>=0?" selected":""}>＋ 貯める</option><option value="-1"${e.amount<0?" selected":""}>− 取り崩し</option></select><div class="row"><div><label class="f">日付</label><input type="date" id="vD" value="${e.date}"></div><div><label class="f">金額（円）</label><input class="yen" inputmode="numeric" id="vA" value="${fmtIn(Math.abs(e.amount))}"></div></div><label class="f">種類</label><select id="vT">${stOpts(e.type)}</select><label class="f">貯金の目標</label><select id="vG"><option value="">なし</option>${D.savGoals.map(g=>`<option value="${g.id}"${g.id===e.goalId?" selected":""}>${esc(g.name)}</option>`).join("")}</select><label class="f">目的・夢の名前</label><input id="vP" value="${esc(e.purpose||"")}"><label class="f">メモ</label><input id="vM" value="${esc(e.memo||"")}">`,
   onOk(){const a=num($("vA").value);if(a<=0){toast("金額を入力してください");return false}Object.assign(e,{date:$("vD").value||e.date,amount:a*(+$("vDir").value),type:$("vT").value,goalId:$("vG").value||null,purpose:$("vP").value.trim(),memo:$("vM").value.trim()});save();render()},
-  onDel(){D.savings=D.savings.filter(x=>x!==e);save();render()}})}
+  onDel(){const pr=e.pair&&D.savings.find(x=>x.id===e.pair);D.savings=D.savings.filter(x=>x!==e&&x!==pr);D.wants.forEach(w=>{if(w.hkSvId===e.id)w.hkSvId=null});save();render()}})}
 function editSg(id){const g=D.savGoals.find(x=>x.id===id)||null;const c=g||{name:"",target:0,deadline:"",lifeGoalId:"",memo:""};
  sheet({title:g?"貯金の目標を編集":"貯金の目標を追加",body:`<label class="f">目標の名前</label><input id="qN" value="${esc(c.name)}" placeholder="例：北海道旅行"><label class="f">目標額（円）</label><input class="yen" inputmode="numeric" id="qA" value="${c.target?fmtIn(c.target):""}"><label class="f">いつまでに（任意）</label><input type="date" id="qD" value="${c.deadline||""}"><label class="f">つながる人生の目標（任意）</label><select id="qL"><option value="">なし</option>${D.goals.map(x=>`<option value="${x.id}"${x.id===c.lifeGoalId?" selected":""}>${esc(x.title)}</option>`).join("")}</select><label class="f">メモ</label><input id="qM" value="${esc(c.memo||"")}"><div class="hint">貯金を記録するときに「貯金の目標」でこの目標を選ぶと、進み具合に反映されます。</div>`,
   onOk(){const n=$("qN").value.trim(),a=num($("qA").value);if(!n||a<=0){toast("名前と目標額を入力してください");return false}const o={name:n,target:a,deadline:$("qD").value,lifeGoalId:$("qL").value||null,memo:$("qM").value.trim()};
