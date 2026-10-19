@@ -5,27 +5,6 @@
   "iter": 200000,
   "salt": "ue+CWA+plWy/zlFqbiJBuQ=="
  },
- "items": [
-  {
-   "id": "aebbabbb94d21539",
-   "app": "lifeplan",
-   "added": "2026-10-20T06:16:00+09:00"
-  },
-  {
-   "id": "922816fa273cafa2",
-   "app": "lifeplan",
-   "added": "2026-10-20T06:16:00+09:00"
-  },
-  {
-   "id": "b0292a5b9dfdbe36",
-   "app": "lifeplan",
-   "added": "2026-10-20T06:16:00+09:00"
-  },
-  {
-   "id": "671a837b6d29f584",
-   "app": "lifeplan",
-   "added": "2026-10-20T06:16:00+09:00"
-  }
- ],
- "updated": "2026-10-20T06:16:00+09:00"
+ "items": [],
+ "updated": "2026-10-20T06:18:59+09:00"
 }
