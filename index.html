@@ -8,15 +8,18 @@
 <style>
 :root{--bg:#0b1220;--bg2:#0f1729;--card:#151e31;--card2:#1b2640;--line:#26324c;--gold:#FFD700;--gold2:#FFE55C;--gold3:#FFC300;--t:#e9edf4;--mute:#8e9ab0;--red:#ef7d7d;--grn:#6fcf97;--blue:#6ea8fe}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{background:var(--bg)}
+html{background:var(--bg)}body{background:transparent}
 body{margin:0;font-family:-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans CJK JP",sans-serif;color:var(--t);font-size:17px;line-height:1.5;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
-header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#0b1220 70%,rgba(11,18,32,.92));padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,rgba(9,14,26,.96) 60%,rgba(9,14,26,.86));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
 header img{width:34px;height:34px;border-radius:8px}
 header h1{font-size:20px;margin:0;letter-spacing:.08em;color:var(--gold);font-weight:800;text-shadow:0 0 10px rgba(255,208,0,.3)}
 header .sub{margin-left:auto;font-size:13px;color:var(--mute);text-align:right}
 main{padding:12px 14px;max-width:640px;margin:0 auto}
 .tab{display:none}.tab.on{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card{position:relative;background:rgba(18,27,46,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,215,0,.18);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+.card::before,.card::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none;opacity:.75}
+.card::before{top:6px;left:6px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);border-radius:5px 0 0 0}
+.card::after{bottom:6px;right:6px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);border-radius:0 0 5px 0}
 .card h2{font-size:16px;margin:0 0 12px;color:var(--gold);letter-spacing:.06em;display:flex;align-items:center;gap:8px}
 .card h2 .r{margin-left:auto}
 .big{font-size:34px;font-weight:800;letter-spacing:.01em;font-variant-numeric:tabular-nums}
@@ -66,13 +69,13 @@ button.icon{background:none;border:0;color:var(--gold2);font-size:22px;padding:4
 .p3{background:#5a2730;color:#ffb3b3}.p2{background:#4a3d1c;color:#f6d98b}.p1{background:#22304d;color:#a9c3ef}
 .done-it{opacity:.5}
 .memo .body{font-size:14px;color:#c3cad8;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
-nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:rgba(11,18,32,.97);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:rgba(9,14,26,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(255,215,0,.25);padding-bottom:env(safe-area-inset-bottom)}
 nav button{flex:1;min-width:0;background:none;border:0;border-radius:0;color:var(--mute);padding:8px 0 9px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav button.on{color:var(--gold2)}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:flex;align-items:flex-end;justify-content:center}
 .ov.hide{display:none}
-.sheet{background:var(--card);border-top:2px solid var(--gold);border-radius:18px 18px 0 0;width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+.sheet{background:#141d31;border-top:2px solid var(--gold);border-radius:18px 18px 0 0;width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
 .sheet h3{margin:0 0 6px;color:var(--gold2);font-size:18px}
 .sheet .acts{display:flex;gap:8px;margin-top:16px}.sheet .acts button{flex:1}
 .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:linear-gradient(180deg,#FFE55C,#FFC300);color:#0b1220;padding:10px 18px;border-radius:999px;font-weight:700;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none}
@@ -83,9 +86,32 @@ nav button.on{color:var(--gold2)}
 svg text{font-family:inherit}
 .hint{font-size:13px;color:var(--mute);margin-top:6px}
 button:disabled{opacity:.3}
+#bgArt{position:fixed;inset:-24px;z-index:-2;background:#0b1220 center/cover no-repeat;filter:blur(3px) saturate(1.2) brightness(var(--artdim,.5));transition:background-image .4s}
+#bgShade{position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(9,14,26,.35) 0%,rgba(9,14,26,.62) 35%,rgba(9,14,26,.82) 100%)}
+body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
+.artban{position:relative;height:178px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1.5px solid rgba(255,215,0,.6);box-shadow:0 0 22px rgba(255,200,0,.22),0 8px 26px rgba(0,0,0,.45);background:#0b1220}
+.artban-img{position:absolute;inset:0;background:center 38%/cover no-repeat}
+.artban::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,14,26,0) 30%,rgba(9,14,26,.55) 62%,rgba(9,14,26,.95) 100%),radial-gradient(120% 90% at 50% 0%,rgba(255,229,92,.12),transparent 60%)}
+.artban-cap{position:absolute;left:16px;right:16px;bottom:11px;z-index:2;display:flex;align-items:flex-end;gap:10px}
+.artban-cap>div{background:rgba(9,14,26,.62);border:1px solid rgba(255,215,0,.3);border-radius:12px;padding:4px 12px 5px}
+.artban-cap small{display:block;font-size:11px;letter-spacing:.2em;color:#FFE55C;opacity:.9}
+.artban-cap b{font-size:21px;letter-spacing:.08em;display:block;line-height:1.3}
+.artban-cap .tabn{margin-left:auto;font-size:12px;color:#e9edf4;background:rgba(9,14,26,.7);border:1px solid rgba(255,215,0,.45);border-radius:999px;padding:3px 10px;flex:none}
+.artban i{position:absolute;width:22px;height:22px;z-index:3;border-color:#FFD700;border-style:solid;border-width:0;filter:drop-shadow(0 0 4px rgba(255,215,0,.7))}
+.artban i:nth-of-type(1){top:7px;left:7px;border-top-width:2.5px;border-left-width:2.5px;border-radius:7px 0 0 0}
+.artban i:nth-of-type(2){top:7px;right:7px;border-top-width:2.5px;border-right-width:2.5px;border-radius:0 7px 0 0}
+.artban i:nth-of-type(3){bottom:7px;left:7px;border-bottom-width:2.5px;border-left-width:2.5px;border-radius:0 0 0 7px}
+.artban i:nth-of-type(4){bottom:7px;right:7px;border-bottom-width:2.5px;border-right-width:2.5px;border-radius:0 0 7px 0}
+.artban .gem{position:absolute;top:3px;left:50%;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;background:linear-gradient(135deg,#fff3a0,#FFC300);z-index:3;box-shadow:0 0 8px #FFD700}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gal button{padding:0;border:1px solid rgba(255,215,0,.35);border-radius:10px;overflow:hidden;background:#0b1220;aspect-ratio:3/4;position:relative}
+.gal img{width:100%;height:100%;object-fit:cover;display:block}
+.gal span{position:absolute;left:0;right:0;bottom:0;font-size:11px;padding:3px 2px;background:rgba(9,14,26,.8);color:#FFE55C}
 </style></head><body>
+<div id="bgArt"></div><div id="bgShade"></div>
 <header><img src="icon-180.png" alt=""><h1>人生設計ノート</h1><div class="sub" id="hdrSub"></div></header>
 <main>
+<div class="artban" id="hero"><div class="artban-img" id="heroImg"></div><i></i><i></i><i></i><i></i><span class="gem"></span><div class="artban-cap"><div><small id="heroLbl">TODAY'S CARD</small><b class="shine" id="heroName"></b></div><span class="tabn" id="heroTab"></span></div></div>
 <!-- お金 -->
 <section class="tab on" id="t-money">
  <div class="card"><h2>🐷 今月のまとめ<span class="r mute" id="topYm" style="font-weight:400"></span></h2>
@@ -179,6 +205,14 @@ button:disabled{opacity:.3}
   <div class="list" id="stList"></div>
   <div class="row" style="margin-top:8px"><input id="stNew" placeholder="新しい種類名"><button class="sm gold" id="stAdd" style="flex:none">追加</button></div>
  </div>
+ <div class="card"><h2>🎨 今日のアート</h2>
+  <div class="hint" style="margin-top:-6px">タブごとにちがうカードが、日付で自動に入れかわります。</div>
+  <label class="f">入れかわり</label><div class="chips" id="artMode"><button class="chip" data-am="day">毎日</button><button class="chip" data-am="week">毎週</button></div>
+  <label class="f">背景の明るさ <b id="artDimV"></b></label><input type="range" id="artDim" min="20" max="75" step="5">
+  <label class="row" style="margin-top:10px;font-size:15px"><input type="checkbox" id="artOn"><span style="flex:1">アートを表示する</span></label>
+  <button class="gold full" id="artShuffle">✨ 今すぐシャッフル</button>
+  <label class="f" style="margin-top:14px">カードのコレクション</label><div class="gal" id="artGal"></div>
+ </div>
  <div class="card"><h2>👤 プロフィール</h2><label class="f">生年月日（目標の年齢計算に使います）</label><input type="date" id="birth"></div>
  <div class="card"><h2>💾 バックアップ</h2>
   <div class="hint" style="margin-top:-6px">データはこのiPhoneの中（localStorage＋IndexedDB）に保存されています。ときどき書き出して「ファイル」に保存しておくと安心です。</div>
@@ -201,7 +235,7 @@ button:disabled{opacity:.3}
 <div class="toast" id="toast"></div>
 <script>
 "use strict";
-const VER="v2";
+const VER="v3";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
@@ -252,10 +286,31 @@ const catOpts=sel=>D.cats.map(c=>`<option value="${c.id}"${c.id===sel?" selected
 function applyFixed(){const cur=ymOf(today());let ch=false;
  for(const f of D.fixed){let m=f.start||cur,guard=0;while(m<=cur&&guard++<600){if(!(f.end&&m>f.end)&&!(f.skip||[]).includes(m)&&!D.expenses.some(e=>e.fixedId===f.id&&ymOf(e.date)===m)){D.expenses.push({id:uid(),date:m+"-"+pad(Math.min(f.day||1,dim(m))),amount:f.amount,cat:f.cat,memo:f.name,fixedId:f.id});ch=true}m=ymAdd(m,1)}}
  if(ch)save()}
+/* ===== アート（日替わりカード） ===== */
+const ART=[["whale","鯨と月"],["owl","宝石のフクロウ"],["phoenix","不死鳥"],["dragon","金の龍"],["crab","蟹と真珠"]];
+const TABS=["money","sav","sum","goal","memo","set"],TABN={money:"お金",sav:"貯金",sum:"集計",goal:"目標",memo:"メモ",set:"設定"};
+const AK="lp_art";let AS={mode:"day",salt:0,dim:50,on:true};try{Object.assign(AS,JSON.parse(localStorage.getItem(AK)||"{}"))}catch(e){}
+const saveAS=()=>{try{localStorage.setItem(AK,JSON.stringify(AS))}catch(e){}};
+const artSrc=i=>"art/"+ART[i][0]+".webp";
+function hashStr(k){let h=2166136261;for(const c of k){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return h}
+function artPeriod(){const d=new Date();if(AS.mode==="week"){const m=new Date(d);m.setDate(d.getDate()-((d.getDay()+6)%7));return"w"+ds(m)}return"d"+ds(d)}
+function artPerm(){let x=hashStr(artPeriod()+"#"+AS.salt)||1;const a=ART.map((_,i)=>i);for(let i=a.length-1;i>0;i--){x^=x<<13;x>>>=0;x^=x>>>17;x^=x<<5;x>>>=0;const j=x%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+let _artKey="";
+function artApply(){document.body.classList.toggle("noart",!AS.on);document.documentElement.style.setProperty("--artdim",(AS.dim/100).toFixed(2));if(!AS.on)return;
+ const P=artPerm(),N=P.length,ti=Math.max(0,TABS.indexOf(TAB)),hb=P[ti%N],bg=P[(ti+2)%N],key=hb+"/"+bg;
+ $("heroName").textContent=ART[hb][1];$("heroTab").textContent=TABN[TAB];$("heroLbl").textContent=AS.mode==="week"?"THIS WEEK'S CARD":"TODAY'S CARD";
+ if(key!==_artKey){_artKey=key;$("heroImg").style.backgroundImage=`url(${artSrc(hb)})`;$("bgArt").style.backgroundImage=`url(${artSrc(bg)})`}}
+function rArtSet(){$("artMode").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.am===AS.mode));$("artDim").value=AS.dim;$("artDimV").textContent=AS.dim+"%";$("artOn").checked=AS.on;
+ if(!$("artGal").children.length)$("artGal").innerHTML=ART.map((a,i)=>`<button data-art="${i}"><img loading="lazy" src="${artSrc(i)}" alt="${a[1]}"><span>${a[1]}</span></button>`).join("")}
+$("artMode").onclick=e=>{const b=e.target.closest("[data-am]");if(!b)return;AS.mode=b.dataset.am;saveAS();rArtSet();artApply()};
+$("artDim").oninput=()=>{AS.dim=+$("artDim").value;$("artDimV").textContent=AS.dim+"%";saveAS();artApply()};
+$("artOn").onchange=()=>{AS.on=$("artOn").checked;saveAS();artApply()};
+$("artShuffle").onclick=()=>{AS.salt=(AS.salt||0)+1;saveAS();artApply();toast("カードを入れかえました ✨")};
+$("artGal").onclick=e=>{const b=e.target.closest("[data-art]");if(!b)return;const a=ART[+b.dataset.art];sheet({title:a[1],body:`<img src="${artSrc(+b.dataset.art)}" alt="" style="width:100%;border-radius:12px;border:1px solid rgba(255,215,0,.5)">`,okText:"閉じる",onOk(){}})};
 /* tabs */
 let TAB="money";
 $("nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;TAB=b.dataset.t;document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".tab").forEach(s=>s.classList.toggle("on",s.id==="t-"+TAB));scrollTo(0,0);render()};
-function render(){applyFixed();$("hdrSub").innerHTML=esc(fmtD(today()))+"<br>"+ageOn(today())+"歳";
+function render(){applyFixed();try{artApply()}catch(e){}$("hdrSub").innerHTML=esc(fmtD(today()))+"<br>"+ageOn(today())+"歳";
  ({money:rMoney,sav:rSav,sum:rSum,goal:rGoal,memo:rMemo,set:rSet})[TAB]()}
 /* ===== お金 ===== */
 let MM=ymOf(today()),exCat=null;
@@ -471,7 +526,7 @@ function editMm(id){const m=D.memos.find(x=>x.id===id)||null;const c=m||{title:"
    if(m)Object.assign(m,o);else D.memos.push(Object.assign({id:uid()},o));save();render()},
   onDel:m?()=>{D.memos=D.memos.filter(x=>x!==m);save();render()}:null})}
 /* ===== 設定 ===== */
-function rSet(){$("stList").innerHTML=D.savTypes.map((x,i)=>`<div class="it"><span class="dot" style="background:${SPAL[i%SPAL.length]}"></span><input value="${esc(x.name)}" data-stren="${x.id}" style="flex:1"><button class="sm danger" data-stdel="${x.id}">削除</button></div>`).join("");
+function rSet(){rArtSet();$("stList").innerHTML=D.savTypes.map((x,i)=>`<div class="it"><span class="dot" style="background:${SPAL[i%SPAL.length]}"></span><input value="${esc(x.name)}" data-stren="${x.id}" style="flex:1"><button class="sm danger" data-stdel="${x.id}">削除</button></div>`).join("");
 $("catList").innerHTML=D.cats.map((c,i)=>{const n=D.expenses.filter(e=>e.cat===c.id).length;return`<div class="it"><span class="dot" style="background:${PAL[i%PAL.length]}"></span><input value="${esc(c.name)}" data-catren="${c.id}" style="flex:1"><button class="sm" data-catup="${i}" ${i?"":"disabled"}>↑</button><button class="sm danger" data-catdel="${c.id}" title="${n}件">削除</button></div>`}).join("");
  $("birth").value=D.birth||"1980-03-13";$("ver").textContent=VER;$("lastSaved").textContent=D.saved?"最終保存："+new Date(D.saved).toLocaleString("ja-JP"):""}
 $("t-set").addEventListener("change",e=>{const se=e.target.closest("[data-stren]");if(se){const x=D.savTypes.find(y=>y.id===se.dataset.stren),v=se.value.trim();if(!v){se.value=x.name;return}x.name=v;save();toast("名前を変更しました");return}const el=e.target.closest("[data-catren]");if(!el)return;const c=D.cats.find(x=>x.id===el.dataset.catren),v=el.value.trim();if(!v){el.value=c.name;return}c.name=v;save();toast("名前を変更しました")});

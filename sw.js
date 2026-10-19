@@ -1,5 +1,5 @@
-const C='lifeplan-v2';
-const ASSETS=['./','index.html','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png'];
+const C='lifeplan-v3';
+const ASSETS=['./','index.html','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','art/whale.webp','art/owl.webp','art/phoenix.webp','art/dragon.webp','art/crab.webp'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(ASSETS)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==location.origin)return;
