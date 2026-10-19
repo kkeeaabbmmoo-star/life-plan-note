@@ -89,20 +89,49 @@ button:disabled{opacity:.3}
 #bgArt{position:fixed;inset:-24px;z-index:-2;background:#0b1220 center/cover no-repeat;filter:blur(3px) saturate(1.2) brightness(var(--artdim,.5));transition:background-image .4s}
 #bgShade{position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(9,14,26,.35) 0%,rgba(9,14,26,.62) 35%,rgba(9,14,26,.82) 100%)}
 body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
-.artban{position:relative;height:178px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1.5px solid rgba(255,215,0,.6);box-shadow:0 0 22px rgba(255,200,0,.22),0 8px 26px rgba(0,0,0,.45);background:#0b1220}
-.artban-img{position:absolute;inset:0;background:center 38%/cover no-repeat}
-.artban::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,14,26,0) 30%,rgba(9,14,26,.55) 62%,rgba(9,14,26,.95) 100%),radial-gradient(120% 90% at 50% 0%,rgba(255,229,92,.12),transparent 60%)}
-.artban-cap{position:absolute;left:16px;right:16px;bottom:11px;z-index:2;display:flex;align-items:flex-end;gap:10px}
-.artban-cap>div{background:rgba(9,14,26,.62);border:1px solid rgba(255,215,0,.3);border-radius:12px;padding:4px 12px 5px}
-.artban-cap small{display:block;font-size:11px;letter-spacing:.2em;color:#FFE55C;opacity:.9}
-.artban-cap b{font-size:21px;letter-spacing:.08em;display:block;line-height:1.3}
-.artban-cap .tabn{margin-left:auto;font-size:12px;color:#e9edf4;background:rgba(9,14,26,.7);border:1px solid rgba(255,215,0,.45);border-radius:999px;padding:3px 10px;flex:none}
-.artban i{position:absolute;width:22px;height:22px;z-index:3;border-color:#FFD700;border-style:solid;border-width:0;filter:drop-shadow(0 0 4px rgba(255,215,0,.7))}
-.artban i:nth-of-type(1){top:7px;left:7px;border-top-width:2.5px;border-left-width:2.5px;border-radius:7px 0 0 0}
-.artban i:nth-of-type(2){top:7px;right:7px;border-top-width:2.5px;border-right-width:2.5px;border-radius:0 7px 0 0}
-.artban i:nth-of-type(3){bottom:7px;left:7px;border-bottom-width:2.5px;border-left-width:2.5px;border-radius:0 0 0 7px}
-.artban i:nth-of-type(4){bottom:7px;right:7px;border-bottom-width:2.5px;border-right-width:2.5px;border-radius:0 0 7px 0}
-.artban .gem{position:absolute;top:3px;left:50%;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;background:linear-gradient(135deg,#fff3a0,#FFC300);z-index:3;box-shadow:0 0 8px #FFD700}
+.artban{position:relative;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1.5px solid rgba(255,215,0,.6);box-shadow:0 0 22px rgba(255,200,0,.22),0 8px 26px rgba(0,0,0,.45);background:#0b1220}
+.ab-blur{position:absolute;inset:-30px;background:center/cover no-repeat;filter:blur(18px) saturate(1.25) brightness(.42);transform:scale(1.1)}
+.artban::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 70% at 50% 40%,rgba(255,229,92,.10),transparent 70%),linear-gradient(180deg,rgba(9,14,26,.1),rgba(9,14,26,.55));pointer-events:none}
+.ab-stage{position:relative;display:flex;justify-content:center;padding:18px 16px 8px}
+.ab-card{position:relative;display:inline-block;padding:5px;border-radius:14px;background:linear-gradient(145deg,#FFF3A0,#FFD700 30%,#B8860B 55%,#FFE55C 80%,#FFC300);box-shadow:0 0 18px rgba(255,208,0,.45),0 10px 28px rgba(0,0,0,.6);cursor:zoom-in;transition:transform .15s}
+.ab-card:active{transform:scale(.98)}
+.ab-card img{display:block;border-radius:9px;width:auto;height:auto;max-width:min(62vw,300px);max-height:56vh;background:#0b1220}
+.ab-card.land img{max-width:calc(100vw - 72px);max-width:min(calc(100vw - 72px),560px)}
+.ab-card i{position:absolute;width:20px;height:20px;border-color:#FFE55C;border-style:solid;border-width:0;filter:drop-shadow(0 0 4px rgba(255,215,0,.8));pointer-events:none}
+.ab-card i:nth-of-type(1){top:-9px;left:-9px;border-top-width:2.5px;border-left-width:2.5px;border-radius:8px 0 0 0}
+.ab-card i:nth-of-type(2){top:-9px;right:-9px;border-top-width:2.5px;border-right-width:2.5px;border-radius:0 8px 0 0}
+.ab-card i:nth-of-type(3){bottom:-9px;left:-9px;border-bottom-width:2.5px;border-left-width:2.5px;border-radius:0 0 0 8px}
+.ab-card i:nth-of-type(4){bottom:-9px;right:-9px;border-bottom-width:2.5px;border-right-width:2.5px;border-radius:0 0 8px 0}
+.ab-card .gem{position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:11px;height:11px;background:linear-gradient(135deg,#fff3a0,#FFC300);box-shadow:0 0 9px #FFD700;pointer-events:none}
+.ab-card .zoom{position:absolute;right:10px;bottom:10px;font-size:12px;background:rgba(9,14,26,.72);color:#FFE55C;border:1px solid rgba(255,215,0,.45);border-radius:999px;padding:2px 8px;pointer-events:none}
+.ab-cap{position:relative;display:flex;align-items:center;gap:8px;padding:6px 14px 12px}
+.ab-cap .nm{flex:1;min-width:0;background:rgba(9,14,26,.66);border:1px solid rgba(255,215,0,.3);border-radius:12px;padding:4px 12px 5px}
+.artban.mini .zh{display:none}
+.ab-cap small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;letter-spacing:.2em;color:#FFE55C;opacity:.9}
+.ab-cap b{font-size:19px;letter-spacing:.06em;display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ab-cap .tabn{font-size:12px;color:#e9edf4;background:rgba(9,14,26,.7);border:1px solid rgba(255,215,0,.45);border-radius:999px;padding:3px 10px;flex:none}
+.ab-cap .tg{flex:none;font-size:13px;padding:6px 10px;border-radius:999px;background:rgba(9,14,26,.75);border:1px solid rgba(255,215,0,.55);color:#FFE55C}
+.artban.mini{display:flex;align-items:center}
+.artban.mini .ab-stage{padding:8px 0 8px 10px;flex:none}
+.artban.mini .ab-card{padding:2px;border-radius:8px}
+.artban.mini .ab-card img{max-width:84px;max-height:56px;border-radius:6px}
+.artban.mini .ab-card i,.artban.mini .ab-card .zoom{display:none}
+.artban.mini .ab-card .gem{width:7px;height:7px;top:-4px}
+.artban.mini .ab-cap{flex:1;min-width:0;padding:8px 10px}
+.artban.mini .ab-cap b{font-size:16px}
+#bgCard{position:fixed;inset:0;z-index:-2;background:center/contain no-repeat;filter:brightness(var(--artdim,.5));display:none}
+body.bgcard #bgCard{display:block}body.bgcard #bgArt{filter:blur(16px) saturate(1.2) brightness(calc(var(--artdim,.5)*.6))}
+#vw{position:fixed;inset:0;z-index:40;background:#03060c;display:flex;flex-direction:column;touch-action:none;-webkit-user-select:none;user-select:none}
+#vw.hide{display:none}
+#vw .vt{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top) + 10px) 14px 8px;color:#FFE55C}
+#vw .vt b{flex:1;font-size:17px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#vw .vt span{font-size:13px;color:#c3cad8;flex:none}
+#vw .vx{flex:none;width:44px;height:44px;border-radius:50%;font-size:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,215,0,.5);color:#FFE55C;padding:0}
+#vw .vs{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:0 8px}
+#vw .vs img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;will-change:transform;border-radius:6px;box-shadow:0 0 30px rgba(255,208,0,.18)}
+#vw .vn{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:64px;border-radius:12px;font-size:30px;background:rgba(9,14,26,.55);border:1px solid rgba(255,215,0,.45);color:#FFE55C;padding:0;z-index:2}
+#vw .vn.l{left:6px}#vw .vn.r{right:6px}
+#vw .vh{text-align:center;font-size:12px;color:#8e9ab0;padding:6px 0 calc(env(safe-area-inset-bottom) + 12px)}
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .gal button{padding:0;border:1px solid rgba(255,215,0,.35);border-radius:10px;overflow:hidden;background:#0b1220;aspect-ratio:3/4;position:relative}
 .gal img{width:100%;height:100%;object-fit:cover;display:block}
@@ -118,10 +147,10 @@ body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
 .gal .tb{position:absolute;top:5px;left:5px}
 .gal .no{position:absolute;top:5px;right:5px;font-size:11px;background:rgba(9,14,26,.8);color:#FFE55C;border-radius:6px;padding:1px 6px}
 </style></head><body>
-<div id="bgArt"></div><div id="bgShade"></div>
+<div id="bgArt"></div><div id="bgCard"></div><div id="bgShade"></div>
 <header><img src="icon-180.png" alt=""><h1>人生設計ノート</h1><div class="sub" id="hdrSub"></div></header>
 <main>
-<div class="artban" id="hero"><div class="artban-img" id="heroImg"></div><i></i><i></i><i></i><i></i><span class="gem"></span><div class="artban-cap"><div><small id="heroLbl">TODAY'S CARD</small><b class="shine" id="heroName"></b></div><span class="tabn" id="heroTab"></span></div></div>
+<div class="artban" id="hero"><div class="ab-blur" id="heroBlur"></div><div class="ab-stage"><div class="ab-card" id="heroCard" role="button" aria-label="カードを全画面で見る"><img id="heroImg" alt=""><i></i><i></i><i></i><i></i><span class="gem"></span></div></div><div class="ab-cap"><div class="nm"><small><span id="heroLbl">TODAY'S CARD</span><span class="zh"> 🔍</span></small><b class="shine" id="heroName"></b></div><span class="tabn" id="heroTab"></span><button class="tg" id="heroTg"></button></div></div>
 <!-- お金 -->
 <section class="tab on" id="t-money">
  <div class="card"><h2>🐷 今月のまとめ<span class="r mute" id="topYm" style="font-weight:400"></span></h2>
@@ -219,6 +248,8 @@ body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
   <div class="hint" style="margin-top:-6px">画像は「あなたの画像 → 内蔵カード」の順番で並び、毎月<b>1日は1枚目、2日は2枚目…</b>と日付で入れかわります。タブごとに1枚ずつずらして表示します。</div>
   <label class="f">入れかわり</label><div class="chips" id="artMode"><button class="chip" data-am="day">毎日</button><button class="chip" data-am="week">毎週</button></div>
   <label class="f">背景の明るさ <b id="artDimV"></b></label><input type="range" id="artDim" min="20" max="75" step="5">
+  <label class="f">背景の表示</label><div class="chips" id="artBg"><button class="chip" data-bgm="blur">ぼかし</button><button class="chip" data-bgm="card">カード全体</button></div>
+  <label class="f">タブ上のカード</label><div class="chips" id="artBan"><button class="chip" data-ban="full">大きく</button><button class="chip" data-ban="mini">小さく</button></div>
   <label class="row" style="margin-top:10px;font-size:15px"><input type="checkbox" id="artOn"><span style="flex:1">アートを表示する</span></label>
   <button class="full" id="artShuffle">✨ 今すぐシャッフル（今日だけ）</button>
   <div class="hint" id="artToday"></div>
@@ -252,9 +283,10 @@ body.noart #bgArt,body.noart #bgShade,body.noart .artban{display:none}
 </nav>
 <div class="ov hide" id="ov"><div class="sheet"><h3 id="shT"></h3><div id="shB"></div><div class="acts"><button id="shX">キャンセル</button><button class="danger" id="shDel">削除</button><button class="gold" id="shOk">保存</button></div></div></div>
 <div class="toast" id="toast"></div>
+<div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
 <script>
 "use strict";
-const VER="v4";
+const VER="v5";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
@@ -308,7 +340,7 @@ function applyFixed(){const cur=ymOf(today());let ch=false;
 /* ===== アート（日替わりカード） ===== */
 const ART=[["whale","鯨と月"],["owl","宝石のフクロウ"],["phoenix","不死鳥"],["dragon","金の龍"],["crab","蟹と真珠"]];
 const TABS=["money","sav","sum","goal","memo","set"],TABN={money:"お金",sav:"貯金",sum:"集計",goal:"目標",memo:"メモ",set:"設定"};
-const AK="lp_art",UMAX=31;let AS={mode:"day",salt:0,dim:50,on:true};try{Object.assign(AS,JSON.parse(localStorage.getItem(AK)||"{}"))}catch(e){}
+const AK="lp_art",UMAX=31;let AS={mode:"day",salt:0,dim:50,on:true,ban:"full",bgm:"blur"};try{Object.assign(AS,JSON.parse(localStorage.getItem(AK)||"{}"))}catch(e){}
 const saveAS=()=>{try{localStorage.setItem(AK,JSON.stringify(AS))}catch(e){}};
 /* user images: separate IndexedDB "lifeplan_art" (never touches lp_data / lifeplan_db) */
 let UA=[],UAREADY=false;
@@ -339,12 +371,35 @@ function artBase(N){const d=new Date();let b;if(AS.mode==="week"){const m=new Da
  const sh=(AS.saltP===artPeriodKey())?(AS.salt||0):0;return((b+sh)%N+N)%N}
 let _artKey="";
 function artPick(){const L=artList(),N=L.length,base=artBase(N),ti=Math.max(0,TABS.indexOf(TAB)),hb=(base+ti)%N,bg=(hb+Math.max(1,Math.floor(N/2)))%N;return{L,N,base,hb,bg}}
-function artApply(){document.body.classList.toggle("noart",!AS.on);document.documentElement.style.setProperty("--artdim",(AS.dim/100).toFixed(2));if(!AS.on||!UAREADY)return;
+function artApply(){document.body.classList.toggle("noart",!AS.on);document.body.classList.toggle("bgcard",AS.bgm==="card");document.documentElement.style.setProperty("--artdim",(AS.dim/100).toFixed(2));
+ $("hero").classList.toggle("mini",AS.ban==="mini");$("heroTg").textContent=AS.ban==="mini"?"大きく見る":"小さく";if(!AS.on||!UAREADY)return;
  const {L,hb,bg}=artPick(),key=L[hb].src+"|"+L[bg].src;
  $("heroName").textContent=L[hb].name;$("heroTab").textContent=TABN[TAB];$("heroLbl").textContent=AS.mode==="week"?"THIS WEEK'S CARD":"TODAY'S CARD";
- if(key!==_artKey){_artKey=key;$("heroImg").style.backgroundImage=`url("${L[hb].src}")`;$("bgArt").style.backgroundImage=`url("${L[bg].src}")`}}
+ if(key!==_artKey){_artKey=key;const im=$("heroImg");im.onload=()=>$("heroCard").classList.toggle("land",im.naturalWidth>im.naturalHeight*1.05);im.src=L[hb].src;im.alt=L[hb].name;
+  $("heroBlur").style.backgroundImage=`url("${L[hb].src}")`;$("bgArt").style.backgroundImage=`url("${L[bg].src}")`;$("bgCard").style.backgroundImage=`url("${L[bg].src}")`}}
+$("heroTg").onclick=e=>{e.stopPropagation();AS.ban=AS.ban==="mini"?"full":"mini";saveAS();artApply();if(TAB==="set")rArtSet()};
+$("heroCard").onclick=()=>{const {L,N,base,hb}=artPick();openViewer(L,base,(hb-base+N)%N)};
+/* fullscreen viewer: list starts with today's card */
+const VW={list:[],i:0,s:1,x:0,y:0};
+function openViewer(L,base,idx){const N=L.length;VW.list=L.map((_,k)=>L[(base+k)%N]);VW.i=idx||0;$("vw").classList.remove("hide");vwShow()}
+function vwShow(){const it=VW.list[VW.i];VW.s=1;VW.x=VW.y=0;vwT();$("vwImg").src=it.src;$("vwName").textContent=it.name;$("vwIdx").textContent=`${VW.i+1} / ${VW.list.length}${VW.i===0?"・今日":""}`;const many=VW.list.length>1;$("vwP").style.display=$("vwN").style.display=many?"":"none"}
+function vwT(){$("vwImg").style.transform=`translate(${VW.x}px,${VW.y}px) scale(${VW.s})`}
+function vwGo(d){const n=VW.list.length;if(n<2)return;VW.i=(VW.i+d+n)%n;vwShow()}
+function vwClose(){$("vw").classList.add("hide");$("vwImg").removeAttribute("src")}
+$("vwX").onclick=vwClose;$("vwP").onclick=e=>{e.stopPropagation();vwGo(-1)};$("vwN").onclick=e=>{e.stopPropagation();vwGo(1)};
+$("vwStage").addEventListener("click",e=>{if(e.target===$("vwStage"))vwClose()});
+document.addEventListener("keydown",e=>{if($("vw").classList.contains("hide"))return;if(e.key==="Escape")vwClose();if(e.key==="ArrowLeft")vwGo(-1);if(e.key==="ArrowRight")vwGo(1)});
+(()=>{const st=$("vwStage");let t0=null,pd=0,ps=1,px=0,py=0,lastTap=0,moved=false;
+ const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+ st.addEventListener("touchstart",e=>{moved=false;if(e.touches.length===2){pd=dist(e.touches);ps=VW.s}else if(e.touches.length===1){t0={x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now()};px=VW.x;py=VW.y}},{passive:true});
+ st.addEventListener("touchmove",e=>{e.preventDefault();if(e.touches.length===2&&pd){VW.s=Math.min(4,Math.max(1,ps*dist(e.touches)/pd));if(VW.s===1){VW.x=VW.y=0}vwT();moved=true}
+  else if(e.touches.length===1&&t0){const dx=e.touches[0].clientX-t0.x,dy=e.touches[0].clientY-t0.y;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;if(VW.s>1){VW.x=px+dx;VW.y=py+dy;vwT()}}},{passive:false});
+ st.addEventListener("touchend",e=>{if(e.touches.length)return;pd=0;if(!t0)return;const ch=e.changedTouches[0],dx=ch.clientX-t0.x,dy=ch.clientY-t0.y,dt=Date.now()-t0.t;t0=null;
+  if(VW.s===1&&Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3&&dt<800){vwGo(dx<0?1:-1);return}
+  if(!moved&&e.target===$("vwImg")){const now=Date.now();if(now-lastTap<300){VW.s=VW.s>1?1:2;VW.x=VW.y=0;vwT();lastTap=0}else lastTap=now}});
+ $("vwImg").addEventListener("dblclick",()=>{VW.s=VW.s>1?1:2;VW.x=VW.y=0;vwT()});})();
 function daysFor(pos,N){const o=[];for(let d=1;d<=31;d++)if((d-1)%N===pos)o.push(d);return o}
-function rArtSet(){$("artMode").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.am===AS.mode));$("artDim").value=AS.dim;$("artDimV").textContent=AS.dim+"%";$("artOn").checked=AS.on;
+function rArtSet(){$("artMode").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.am===AS.mode));$("artDim").value=AS.dim;$("artDimV").textContent=AS.dim+"%";$("artOn").checked=AS.on;$("artBg").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.bgm===(AS.bgm||"blur")));$("artBan").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",b.dataset.ban===(AS.ban||"full")));
  const {L,N,base}=artPick(),sh=AS.saltP===artPeriodKey()&&AS.salt;
  $("artToday").innerHTML=`${AS.mode==="week"?"今週":"今日"}の1枚目：<b style="color:var(--gold2)">${esc(L[base].name)}</b>（全${N}枚中 ${base+1}番目）${sh?" ・ シャッフル中（明日にはもどります）":""}`;
  $("uaCount").textContent=`${UA.length} / ${UMAX}枚`;$("uaAdd").disabled=UA.length>=UMAX;$("uaAdd").textContent=UA.length>=UMAX?`上限（${UMAX}枚）に達しました`:"＋ 画像を追加";
@@ -355,12 +410,14 @@ $("artMode").onclick=e=>{const b=e.target.closest("[data-am]");if(!b)return;AS.m
 $("artDim").oninput=()=>{AS.dim=+$("artDim").value;$("artDimV").textContent=AS.dim+"%";saveAS();artApply()};
 $("artOn").onchange=()=>{AS.on=$("artOn").checked;saveAS();artApply()};
 $("artShuffle").onclick=()=>{const N=artList().length;if(N<2)return;const p=artPeriodKey(),cur=AS.saltP===p?(AS.salt||0):0;let n;do n=1+Math.floor(Math.random()*(N-1));while(N>2&&n===cur);AS.salt=n;AS.saltP=p;saveAS();artApply();rArtSet();toast("カードを入れかえました ✨")};
-const viewImg=(t,src)=>sheet({title:t,body:`<img src="${src}" alt="" style="width:100%;border-radius:12px;border:1px solid rgba(255,215,0,.5)">`,okText:"閉じる",onOk(){}});
-$("artGal").onclick=e=>{const b=e.target.closest("[data-art]");if(!b)return;const a=ART[+b.dataset.art];viewImg(a[1],"art/"+a[0]+".webp")};
+const viewAt=pos=>{const {L,N,base}=artPick();openViewer(L,base,(pos-base+N)%N)};
+$("artBg").onclick=e=>{const b=e.target.closest("[data-bgm]");if(!b)return;AS.bgm=b.dataset.bgm;saveAS();rArtSet();artApply()};
+$("artBan").onclick=e=>{const b=e.target.closest("[data-ban]");if(!b)return;AS.ban=b.dataset.ban;saveAS();rArtSet();artApply()};
+$("artGal").onclick=e=>{const b=e.target.closest("[data-art]");if(!b)return;viewAt(UA.length+(+b.dataset.art))};
 $("uaAdd").onclick=()=>{if(UA.length>=UMAX){uaFullMsg();return}$("uaFile").click()};
 $("uaFile").onchange=e=>{const f=e.target.files;if(f&&f.length)uaAddFiles(f);e.target.value=""};
 $("uaList").addEventListener("click",async e=>{const t=e.target;let el;
- if(el=t.closest("[data-uaview]")){const u=UA[+el.dataset.uaview];return viewImg(u.name||"画像",u.url)}
+ if(el=t.closest("[data-uaview]"))return viewAt(+el.dataset.uaview);
  if(el=t.closest("[data-uaup]")){const i=+el.dataset.uaup;if(i>0){[UA[i-1],UA[i]]=[UA[i],UA[i-1]];rArtSet();await uaSaveOrder();_artKey="";artApply()}return}
  if(el=t.closest("[data-uadn]")){const i=+el.dataset.uadn;if(i<UA.length-1){[UA[i+1],UA[i]]=[UA[i],UA[i+1]];rArtSet();await uaSaveOrder();_artKey="";artApply()}return}
  if(el=t.closest("[data-uadel]")){const u=UA.find(x=>x.id===el.dataset.uadel);if(!u)return;if(!confirm(`「${u.name||"この画像"}」を削除しますか？`))return;await aDel(u.id);UA=UA.filter(x=>x!==u);URL.revokeObjectURL(u.url);URL.revokeObjectURL(u.turl);await uaSaveOrder();_artKey="";artApply();rArtSet();$("uaMsg").textContent="削除しました";toast("削除しました")}});
