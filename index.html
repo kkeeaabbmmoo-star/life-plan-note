@@ -240,6 +240,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  <div class="card"><h2>📊 前月との比較</h2><div class="list" id="cmpList"></div></div>
  <div class="card"><h2>📈 残高の推移</h2><div id="balChart"></div></div>
  <div class="card"><h2>🗓 月別の支出と貯金（6か月）</h2><div id="monChart"></div></div>
+ <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
 </section>
 <!-- 目標 -->
 <section class="tab" id="t-goal">
@@ -259,6 +260,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 </section>
 <!-- 設定 -->
 <section class="tab" id="t-set">
+ <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
  <div class="card"><h2>🔑 ロック</h2><div class="hint" style="margin-top:-6px">ログアウトしても、記録・画像・設定は消えません。次にひらくときにパスワードを入れてね。</div><button class="btn" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #FFD700;background:transparent;color:#FFD700;font-weight:700;font-size:15px" onclick="pwLogout()">🔑 パスワードを変更/ログアウト</button></div>
  <div class="card"><h2>🏷 カテゴリの編集</h2><div class="hint" style="margin-top:-6px">名前を変えると過去の記録にも反映されます。</div>
   <div class="list" id="catList"></div>
@@ -303,14 +305,14 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  <button data-t="sum"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>集計</button>
  <button data-t="goal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>目標</button>
  <button data-t="memo"><svg viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M9 11h6M9 15h6"/></svg>メモ</button>
- <button data-t="set"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>設定</button>
+ <button data-t="set" style="position:relative"><i class="yzInDot" style="display:none;position:absolute;top:4px;right:calc(50% - 16px);width:9px;height:9px;border-radius:50%;background:#FFD700;box-shadow:0 0 8px #FFD700"></i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>設定</button>
 </nav>
 <div class="ov hide" id="ov"><div class="sheet"><h3 id="shT"></h3><div id="shB"></div><div class="acts"><button id="shX">キャンセル</button><button class="danger" id="shDel">削除</button><button class="gold" id="shOk">保存</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
 <script>
 "use strict";
-const VER="v6";
+const VER="v7";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
@@ -702,6 +704,33 @@ $("balDate").value=today();$("exDate").value=today();$("svDate").value=today();
 idbGet().then(s=>{if(!localStorage.getItem(K)&&s){try{const j=JSON.parse(s);if(j&&j.cats){D=norm(j);localStorage.setItem(K,s);render();toast("バックアップから復元しました")}}catch(e){}}});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){_artKey="";$("balDate").value=$("balDate").value||today();render()}});
 render();uaLoad();
+</script>
+<script src="yuzu-inbox.js"></script><script>
+/* 人生設計ノート → 💝 ゆずから受け取る adapter (append only; never edits existing records) */
+(function(){
+var SEC={expense:["🧾","経費"],saving:["🐷","貯金"],balance:["💴","残高"],memo:["📝","メモ"],goal:["🧭","目標"],want:["🛒","買いたいもの"]};
+function byName(arr,n,fb){var f=arr.find(function(c){return c.name===n});return f?f.id:(arr.find(function(c){return c.name===fb})||arr[arr.length-1]||{}).id}
+function describe(it){var x=it.data||{},d=it.date,s=SEC[it.kind];if(!s)return{ok:0,icon:"❔",label:it.title||"?",section:"?",why:"人生設計ノートには入れられない内容だよ"};
+ if(!d||!/^\d{4}-\d\d-\d\d$/.test(d))return{ok:0,icon:s[0],label:it.title||s[1],section:s[1],why:"日付がないよ"};
+ var a=Math.round(+x.amount||0),m=String(x.memo||it.title||"");
+ if(it.kind=="expense"){var c=x.cat||"その他";return{ok:a>0,icon:s[0],label:yen(a)+" "+c+(m?"・"+m:""),section:s[1],why:"金額がないよ",same:D.expenses.some(function(e){return e.date==d&&e.amount==a&&(e.memo||"")==m})?"同じ日に同じ金額・メモの経費があるよ":0}}
+ if(it.kind=="saving"){var sv=a*(x.dir==-1?-1:1);return{ok:a>0,icon:s[0],label:(sv<0?"取り崩し ":"")+yen(Math.abs(sv))+" "+(x.type||"その他")+(m?"・"+m:""),section:s[1],why:"金額がないよ",same:D.savings.some(function(e){return e.date==d&&e.amount==sv&&(e.memo||"")==m})?"同じ日に同じ貯金があるよ":0}}
+ if(it.kind=="balance"){return{ok:isFinite(+x.amount),icon:s[0],label:"残高 "+yen(+x.amount)+(m?"・"+m:""),section:s[1],same:D.balances.some(function(e){return e.date==d&&e.amount==+x.amount})?"同じ日に同じ残高があるよ":0}}
+ if(it.kind=="memo"){var t=String(x.title||it.title||"");return{ok:!!(t||x.body),icon:s[0],label:t||"（無題）",section:s[1],same:D.memos.some(function(e){return e.title==t&&e.body==(x.body||"")})?"同じメモがあるよ":0}}
+ if(it.kind=="goal"){var g=String(x.title||it.title||"");return{ok:!!g,icon:s[0],label:g+(x.targetYear?"（"+x.targetYear+"年）":""),section:s[1],same:D.goals.some(function(e){return e.title==g})?"同じ名前の目標があるよ":0}}
+ if(it.kind=="want"){var w=String(x.name||it.title||"");return{ok:!!w,icon:s[0],label:w+(a?" "+yen(a):""),section:s[1],same:D.wants.some(function(e){return e.name==w})?"同じ買いたいものがあるよ":0}}}
+function apply(sel){var n=0;sel.forEach(function(it){var x=it.data||{},d=it.date,a=Math.round(+x.amount||0),m=String(x.memo||it.title||""),ds=it._d||describe(it);if(!ds.ok)return;
+  if(it.kind=="expense")D.expenses.push({id:uid(),date:d,amount:a,cat:byName(D.cats,x.cat,"その他"),memo:m,from:"yuzu"});
+  else if(it.kind=="saving")D.savings.push({id:uid(),date:d,amount:a*(x.dir==-1?-1:1),type:byName(D.savTypes,x.type,"その他"),goalId:null,purpose:String(x.purpose||""),memo:m,from:"yuzu"});
+  else if(it.kind=="balance")D.balances.push({id:uid(),date:d,amount:Math.round(+x.amount),memo:m,from:"yuzu"});
+  else if(it.kind=="memo")D.memos.push({id:uid(),title:String(x.title||it.title||""),date:d,tags:(x.tags||["ゆずから"]).map(String),body:String(x.body||""),updated:Date.now(),from:"yuzu"});
+  else if(it.kind=="goal")D.goals.push({id:uid(),created:today(),title:String(x.title||it.title),cat:GCATS.indexOf(x.cat)>=0?x.cat:"その他",targetYear:+x.targetYear||null,deadline:x.deadline||"",steps:(x.steps||[]).map(function(t){return{t:String(t),d:false}}),autoP:true,progress:0,notes:String(x.notes||""),from:"yuzu"});
+  else if(it.kind=="want")D.wants.push({id:uid(),done:false,name:String(x.name||it.title),price:a,prio:+x.prio||2,target:String(x.target||""),cat:byName(D.cats,x.cat,"その他"),memo:m,from:"yuzu"});
+  else return;n++});
+ if(n){save();render()}return n}
+yzInbox.init({app:"lifeplan",prefix:"lp",base:"data/inbox/",describe:describe,apply:apply,
+ theme:{bg:"#0f1830",fg:"#e8ecf5",acc:"#FFD700",btn:"linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%)",btnfg:"#0b1220",sub:"rgba(255,215,0,.12)",rowbg:"rgba(255,255,255,.06)",warn:"#ffb86b",badge:"#0b1220",badgefg:"#FFD700",badgering:"#FFD700",border:"rgba(255,215,0,.45)"}});
+})();
 </script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));</script>
 </body></html>
