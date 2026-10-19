@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#0b1220"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="icon" href="icon-192.png"><link rel="manifest" href="manifest.webmanifest">
 <title>人生設計ノート</title>
 <style>
-:root{--bg:#0b1220;--bg2:#0f1729;--card:#151e31;--card2:#1b2640;--line:#26324c;--gold:#d4af37;--gold2:#f0d78c;--t:#e9edf4;--mute:#8e9ab0;--red:#ef7d7d;--grn:#6fcf97;--blue:#6ea8fe}
+:root{--bg:#0b1220;--bg2:#0f1729;--card:#151e31;--card2:#1b2640;--line:#26324c;--gold:#FFD700;--gold2:#FFE55C;--gold3:#FFC300;--t:#e9edf4;--mute:#8e9ab0;--red:#ef7d7d;--grn:#6fcf97;--blue:#6ea8fe}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg)}
 body{margin:0;font-family:-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans CJK JP",sans-serif;color:var(--t);font-size:17px;line-height:1.5;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
 header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#0b1220 70%,rgba(11,18,32,.92));padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
 header img{width:34px;height:34px;border-radius:8px}
-header h1{font-size:20px;margin:0;letter-spacing:.08em;color:var(--gold2);font-weight:700}
+header h1{font-size:20px;margin:0;letter-spacing:.08em;color:var(--gold);font-weight:800;text-shadow:0 0 10px rgba(255,208,0,.3)}
 header .sub{margin-left:auto;font-size:13px;color:var(--mute);text-align:right}
 main{padding:12px 14px;max-width:640px;margin:0 auto}
 .tab{display:none}.tab.on{display:block}
@@ -20,6 +20,10 @@ main{padding:12px 14px;max-width:640px;margin:0 auto}
 .card h2{font-size:16px;margin:0 0 12px;color:var(--gold);letter-spacing:.06em;display:flex;align-items:center;gap:8px}
 .card h2 .r{margin-left:auto}
 .big{font-size:34px;font-weight:800;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.shine{background:linear-gradient(180deg,#FFF3A0 0%,#FFE55C 30%,#FFD700 60%,#FFC300 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 8px rgba(255,208,0,.35))}
+.hero{font-size:40px}
+.flow .it{padding:8px 0;font-size:15px}
+.plus{color:var(--grn)}
 .mute{color:var(--mute);font-size:14px}
 .num{font-variant-numeric:tabular-nums;white-space:nowrap}
 label.f{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
@@ -31,14 +35,14 @@ textarea{min-height:110px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:-1px}
 .row{display:flex;gap:10px;align-items:center}.row>*{flex:1}
 button{font-family:inherit;font-size:16px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--t);padding:11px 14px;cursor:pointer}
-button.gold{background:linear-gradient(180deg,#e2c15a,#c49a2c);color:#1a1405;border:0;font-weight:700}
+button.gold{background:linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%);color:#0b1220;border:0;font-weight:800;box-shadow:0 0 12px rgba(255,208,0,.28),inset 0 1px 0 rgba(255,255,255,.55)}
 button.danger{color:var(--red);border-color:#5a2f37}
 button.sm{font-size:14px;padding:7px 11px;border-radius:9px}
 button.full{width:100%;margin-top:12px}
 button.icon{background:none;border:0;color:var(--gold2);font-size:22px;padding:4px 10px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{font-size:14px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--bg2);color:var(--t)}
-.chip.on{background:var(--gold);color:#1a1405;border-color:var(--gold);font-weight:700}
+.chip.on{background:linear-gradient(180deg,#FFE55C,#FFC300);color:#0b1220;border-color:var(--gold);font-weight:700}
 .list{display:flex;flex-direction:column}
 .it{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
 .it:first-child{border-top:0}
@@ -63,7 +67,7 @@ button.icon{background:none;border:0;color:var(--gold2);font-size:22px;padding:4
 .done-it{opacity:.5}
 .memo .body{font-size:14px;color:#c3cad8;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
 nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:rgba(11,18,32,.97);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;background:none;border:0;border-radius:0;color:var(--mute);padding:8px 0 9px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button{flex:1;min-width:0;background:none;border:0;border-radius:0;color:var(--mute);padding:8px 0 9px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav button.on{color:var(--gold2)}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:flex;align-items:flex-end;justify-content:center}
@@ -71,7 +75,7 @@ nav button.on{color:var(--gold2)}
 .sheet{background:var(--card);border-top:2px solid var(--gold);border-radius:18px 18px 0 0;width:100%;max-width:640px;max-height:90vh;overflow:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
 .sheet h3{margin:0 0 6px;color:var(--gold2);font-size:18px}
 .sheet .acts{display:flex;gap:8px;margin-top:16px}.sheet .acts button{flex:1}
-.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--gold);color:#1a1405;padding:10px 18px;border-radius:999px;font-weight:700;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:linear-gradient(180deg,#FFE55C,#FFC300);color:#0b1220;padding:10px 18px;border-radius:999px;font-weight:700;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none}
 .toast.on{opacity:1}
 .legend .it{padding:8px 0}
 .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
@@ -84,6 +88,10 @@ button:disabled{opacity:.3}
 <main>
 <!-- お金 -->
 <section class="tab on" id="t-money">
+ <div class="card"><h2>🐷 今月のまとめ<span class="r mute" id="topYm" style="font-weight:400"></span></h2>
+  <div class="mute">貯金・へそくりの合計</div><div class="big hero num shine" id="topSav">¥0</div>
+  <div class="list flow" style="margin-top:6px"><div class="it"><div class="m">今月の支出（本来の支出）</div><b class="num up" id="topEx"></b></div><div class="it"><div class="m">今月の貯金・へそくり</div><b class="num plus" id="topSm"></b></div><div class="it"><div class="m mute">いまの残高</div><b class="num" id="topBal"></b></div></div>
+ </div>
  <div class="card"><h2>💴 今日の残高</h2>
   <div class="big num" id="balNow">¥0</div><div class="mute" id="balNowSub">まだ記録がありません</div>
   <div class="row"><div><label class="f">日付</label><input type="date" id="balDate"></div><div><label class="f">残高（円）</label><input class="yen neg" inputmode="numeric" id="balAmt" placeholder="0"></div></div>
@@ -110,16 +118,40 @@ button:disabled{opacity:.3}
   <div class="list" id="wtList"></div>
  </div>
 </section>
+<!-- 貯金 -->
+<section class="tab" id="t-sav">
+ <div class="card"><h2>🐷 貯金・へそくり</h2>
+  <div class="mute">今たまっている金額</div><div class="big hero num shine" id="svTot">¥0</div>
+  <div class="kpi"><div><small>今月の貯金</small><b class="num" id="svMon"></b></div><div><small>今日の節約</small><b class="num" id="svDay"></b></div></div>
+ </div>
+ <div class="card"><h2>✍️ 貯金を記録</h2>
+  <div class="chips" id="svDir"><button class="chip on" data-dir="1">＋ 貯める</button><button class="chip" data-dir="-1">− 取り崩し</button></div>
+  <div class="row"><div><label class="f">日付</label><input type="date" id="svDate"></div><div><label class="f">金額（円）</label><input class="yen" inputmode="numeric" id="svAmt" placeholder="0"></div></div>
+  <label class="f">種類</label><div class="chips" id="svTypes"></div>
+  <label class="f">貯金の目標（任意）</label><select id="svGoal"></select>
+  <label class="f">目的・夢の名前（任意）</label><input id="svPur" placeholder="例：北海道旅行">
+  <label class="f">メモ（任意）</label><input id="svMemo" placeholder="例：お昼を弁当にした">
+  <button class="gold full" id="svAdd">貯金を記録</button>
+ </div>
+ <div class="card"><h2>🎯 貯金の目標<span class="r"><button class="sm" id="sgAdd">＋ 追加</button></span></h2><div class="list" id="sgList"></div></div>
+ <div class="card"><h2>🧮 種類別</h2><div class="list legend" id="svByType"></div></div>
+ <div class="card"><h2>📈 たまっていく推移</h2><div id="svChart"></div></div>
+ <div class="card"><div class="msw"><button class="icon" data-svm="-1">‹</button><b id="svmLbl"></b><button class="icon" data-svm="1">›</button></div>
+  <div class="row" style="align-items:baseline"><span class="mute">この月の貯金</span><span class="num" style="text-align:right;font-size:22px;font-weight:800" id="svmTot"></span></div>
+  <div class="list" id="svList" style="margin-top:6px"></div>
+ </div>
+</section>
 <!-- 集計 -->
 <section class="tab" id="t-sum">
  <div class="card"><div class="msw"><button class="icon" data-sm="-1">‹</button><b id="smLbl"></b><button class="icon" data-sm="1">›</button></div>
-  <div class="mute">この月の支出合計</div><div class="big num" id="smTot"></div><div id="smCmp" class="num" style="font-size:15px"></div>
+  <div class="mute">支出を引いたうえでの 貯金・へそくりの合計（月末時点）</div><div class="big hero num shine" id="smSav"></div>
+  <div class="list flow" style="margin-top:6px"><div class="it"><div class="m">この月の支出（本来の支出）<div id="smCmp" class="num" style="font-size:13px"></div></div><b class="num up" id="smTot"></b></div><div class="it"><div class="m">この月の貯金・へそくり<div id="smSCmp" class="num" style="font-size:13px"></div></div><b class="num plus" id="smSm"></b></div></div>
   <div class="kpi"><div><small>固定費</small><b class="num" id="smFix"></b></div><div><small>変動費</small><b class="num" id="smVar"></b></div><div><small>件数</small><b class="num" id="smCnt"></b></div><div><small>月末の残高</small><b class="num" id="smBal"></b></div></div>
  </div>
  <div class="card"><h2>🍩 カテゴリ別</h2><div id="donut" style="display:flex;justify-content:center"></div><div class="list legend" id="legend"></div></div>
  <div class="card"><h2>📊 前月との比較</h2><div class="list" id="cmpList"></div></div>
  <div class="card"><h2>📈 残高の推移</h2><div id="balChart"></div></div>
- <div class="card"><h2>🗓 月別の支出（6か月）</h2><div id="monChart"></div></div>
+ <div class="card"><h2>🗓 月別の支出と貯金（6か月）</h2><div id="monChart"></div></div>
 </section>
 <!-- 目標 -->
 <section class="tab" id="t-goal">
@@ -143,6 +175,10 @@ button:disabled{opacity:.3}
   <div class="list" id="catList"></div>
   <div class="row" style="margin-top:8px"><input id="catNew" placeholder="新しいカテゴリ名"><button class="sm gold" id="catAdd" style="flex:none">追加</button></div>
  </div>
+ <div class="card"><h2>🐷 貯金の種類の編集</h2>
+  <div class="list" id="stList"></div>
+  <div class="row" style="margin-top:8px"><input id="stNew" placeholder="新しい種類名"><button class="sm gold" id="stAdd" style="flex:none">追加</button></div>
+ </div>
  <div class="card"><h2>👤 プロフィール</h2><label class="f">生年月日（目標の年齢計算に使います）</label><input type="date" id="birth"></div>
  <div class="card"><h2>💾 バックアップ</h2>
   <div class="hint" style="margin-top:-6px">データはこのiPhoneの中（localStorage＋IndexedDB）に保存されています。ときどき書き出して「ファイル」に保存しておくと安心です。</div>
@@ -155,6 +191,7 @@ button:disabled{opacity:.3}
 </main>
 <nav id="nav">
  <button class="on" data-t="money"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 15h2"/></svg>お金</button>
+ <button data-t="sav"><svg viewBox="0 0 24 24"><path d="M4 12a7 6 0 0 1 13-3l3-1-1 3a6 6 0 0 1 1 3c0 2-1 3-2 4v3h-3v-2h-5v2H7v-3a6 6 0 0 1-3-6z"/><circle cx="15.5" cy="11" r=".6"/><path d="M9 7.5h4"/></svg>貯金</button>
  <button data-t="sum"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>集計</button>
  <button data-t="goal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>目標</button>
  <button data-t="memo"><svg viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M9 11h6M9 15h6"/></svg>メモ</button>
@@ -164,16 +201,17 @@ button:disabled{opacity:.3}
 <div class="toast" id="toast"></div>
 <script>
 "use strict";
-const VER="v1";
+const VER="v2";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
+const DEF_STYPES=["将来のため","夢のため","今日の節約","へそくり","その他"];
 const GCATS=["お金","仕事","健康","家族","趣味","その他"];
-const GCOL={"お金":"#d4af37","仕事":"#6ea8fe","健康":"#6fcf97","家族":"#f29e6d","趣味":"#b48cf2","その他":"#8e9ab0"};
-const PAL=["#d4af37","#6ea8fe","#6fcf97","#f29e6d","#b48cf2","#ef7d7d","#4fd1c5","#e9c46a","#8e9ab0","#f78fb3","#90be6d","#577590"];
+const GCOL={"お金":"#FFD700","仕事":"#6ea8fe","健康":"#6fcf97","家族":"#f29e6d","趣味":"#b48cf2","その他":"#8e9ab0"};
+const PAL=["#FFD700","#6ea8fe","#6fcf97","#f29e6d","#b48cf2","#ef7d7d","#4fd1c5","#e9c46a","#8e9ab0","#f78fb3","#90be6d","#577590"];
 const PRIO={3:"高",2:"中",1:"低"};
-function blank(){return{v:1,birth:"1980-03-13",cats:DEF_CATS.map((n,i)=>({id:"c"+i,name:n})),balances:[],expenses:[],fixed:[],wants:[],goals:[],memos:[]}}
-function norm(j){const b=blank();for(const k in b)if(j[k]===undefined)j[k]=b[k];return j}
+function blank(){return{v:1,birth:"1980-03-13",cats:DEF_CATS.map((n,i)=>({id:"c"+i,name:n})),balances:[],expenses:[],fixed:[],wants:[],goals:[],memos:[],savings:[],savTypes:DEF_STYPES.map((n,i)=>({id:"s"+i,name:n})),savGoals:[]}}
+function norm(j){const b=blank();for(const k in b)if(j[k]===undefined||j[k]===null)j[k]=b[k];["cats","balances","expenses","fixed","wants","goals","memos","savings","savTypes","savGoals"].forEach(k=>{if(!Array.isArray(j[k]))j[k]=b[k]});if(!j.savTypes.length)j.savTypes=b.savTypes;return j}
 function load(){try{const j=JSON.parse(localStorage.getItem(K)||"null");if(j&&Array.isArray(j.cats))return norm(j)}catch(e){}return blank()}
 let D=load();
 /* IndexedDB mirror */
@@ -218,11 +256,12 @@ function applyFixed(){const cur=ymOf(today());let ch=false;
 let TAB="money";
 $("nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;TAB=b.dataset.t;document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".tab").forEach(s=>s.classList.toggle("on",s.id==="t-"+TAB));scrollTo(0,0);render()};
 function render(){applyFixed();$("hdrSub").innerHTML=esc(fmtD(today()))+"<br>"+ageOn(today())+"歳";
- ({money:rMoney,sum:rSum,goal:rGoal,memo:rMemo,set:rSet})[TAB]()}
+ ({money:rMoney,sav:rSav,sum:rSum,goal:rGoal,memo:rMemo,set:rSet})[TAB]()}
 /* ===== お金 ===== */
 let MM=ymOf(today()),exCat=null;
 function latestBal(upTo){const b=D.balances.filter(x=>!upTo||x.date<=upTo).sort((a,b)=>a.date<b.date?1:-1);return b[0]}
 function rMoney(){
+ {const ym=ymOf(today());$("topYm").textContent=ymLbl(ym);$("topSav").textContent=yen(savTotal());$("topEx").textContent="−"+yen(sumOf(monthEx(ym)));const sm=sumOf(monthSv(ym));$("topSm").textContent=(sm>=0?"+":"")+yen(sm);const b=latestBal();$("topBal").textContent=b?yen(b.amount)+"（"+fmtD(b.date)+"）":"未記録"}
  const lb=latestBal();$("balNow").textContent=lb?yen(lb.amount):"¥0";$("balNow").style.color=lb&&lb.amount<0?"var(--red)":"";
  $("balNowSub").textContent=lb?fmtD(lb.date)+" 時点"+(lb.memo?"・"+lb.memo:""):"まだ記録がありません";
  const bl=D.balances.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,5);
@@ -276,6 +315,63 @@ function toggleWant(id,on){const w=D.wants.find(x=>x.id===id);if(!w)return;w.don
  if(on){w.doneDate=today();if(w.price>0&&confirm(`「${w.name}」を経費（${yen(w.price)}・${catName(w.cat)}）にも記録しますか？`)){const e={id:uid(),date:today(),amount:w.price,cat:w.cat,memo:w.name,wantId:w.id};D.expenses.push(e);w.expId=e.id;toast("経費にも記録しました")}}
  else{w.doneDate=null;if(w.expId&&confirm("経費に記録した分も取り消しますか？"))D.expenses=D.expenses.filter(e=>e.id!==w.expId);w.expId=null}
  save();render()}
+/* ===== 貯金 ===== */
+let SVM=ymOf(today()),svType=null,svDir=1;
+const SPAL=["#FFD700","#6fcf97","#4fd1c5","#f78fb3","#8e9ab0","#6ea8fe","#b48cf2","#f29e6d"];
+const stName=id=>(D.savTypes.find(t=>t.id===id)||{name:"（削除済み）"}).name;
+const stCol=id=>{const i=D.savTypes.findIndex(t=>t.id===id);return i<0?"#555":SPAL[i%SPAL.length]};
+const monthSv=ym=>D.savings.filter(e=>ymOf(e.date)===ym);
+const savTotal=upTo=>D.savings.filter(e=>!upTo||e.date<=upTo).reduce((s,e)=>s+(+e.amount||0),0);
+const isSetsuyaku=id=>id==="s2"||/節約/.test(stName(id));
+const sgSaved=id=>D.savings.filter(e=>e.goalId===id).reduce((s,e)=>s+e.amount,0);
+function rSav(){const t=savTotal();$("svTot").textContent=yen(t);
+ const sm=sumOf(monthSv(ymOf(today())));$("svMon").textContent=(sm>=0?"+":"")+yen(sm);
+ $("svDay").textContent=yen(D.savings.filter(e=>e.date===today()&&isSetsuyaku(e.type)).reduce((s,e)=>s+e.amount,0));
+ if(!svType||!D.savTypes.some(x=>x.id===svType))svType=D.savTypes[0]&&D.savTypes[0].id;
+ $("svDir").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",+b.dataset.dir===svDir));$("svAdd").textContent=svDir>0?"貯金を記録":"取り崩しを記録";
+ $("svTypes").innerHTML=D.savTypes.map(x=>`<button class="chip${x.id===svType?" on":""}" data-svt="${x.id}">${esc(x.name)}</button>`).join("");
+ const gsel=$("svGoal").value;$("svGoal").innerHTML='<option value="">なし</option>'+D.savGoals.map(g=>`<option value="${g.id}"${g.id===gsel?" selected":""}>${esc(g.name)}</option>`).join("");
+ $("sgList").innerHTML=D.savGoals.length?D.savGoals.map(g=>{const v=sgSaved(g.id),p=g.target>0?Math.max(0,Math.min(100,Math.round(v/g.target*100))):0,lg=D.goals.find(x=>x.id===g.lifeGoalId),dd=g.deadline?daysTo(g.deadline):null;
+  return`<div class="it" data-editsg="${g.id}" style="display:block"><div class="row"><b style="flex:1">${esc(g.name)}</b><b class="num" style="flex:none">${yen(v)} <span class="mute">/ ${yen(g.target)}</span></b></div><div class="row" style="margin-top:6px"><div class="bar" style="flex:1"><i style="width:${p}%;background:linear-gradient(90deg,#FFC300,#FFE55C)"></i></div><b class="num" style="flex:none;width:48px;text-align:right">${p}%</b></div><div class="s mute" style="font-size:13px">${g.target>v?"あと "+yen(g.target-v):"🎉 達成！"}${dd!=null?" ・ "+fmtD(g.deadline)+(dd>=0?"まで あと"+dd+"日":"（期限過ぎ）"):""}${lg?" ・ 🧭 "+esc(lg.title):""}</div></div>`}).join(""):'<div class="empty">夢や目標の金額を決めておこう（例：北海道旅行 30万円）</div>';
+ const bt={};D.savings.forEach(e=>bt[e.type]=(bt[e.type]||0)+e.amount);const ent=Object.entries(bt).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]);const mx=Math.max(1,...ent.map(x=>Math.abs(x[1])));
+ $("svByType").innerHTML=ent.length?ent.map(([k,v])=>`<div class="it"><span class="dot" style="background:${stCol(k)}"></span><div class="m"><b>${esc(stName(k))}</b><div class="bar" style="margin-top:5px"><i style="width:${Math.abs(v)/mx*100}%;background:${stCol(k)}"></i></div></div><div style="text-align:right"><b class="num">${yen(v)}</b><div class="mute num">${t>0?Math.round(v/t*100)+"%":""}</div></div></div>`).join(""):'<div class="empty">まだ記録がありません</div>';
+ $("svChart").innerHTML=svChart();
+ $("svmLbl").textContent=ymLbl(SVM);const ls=monthSv(SVM).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);const mt=sumOf(ls);
+ $("svmTot").textContent=(mt>=0?"+":"")+yen(mt);
+ $("svList").innerHTML=ls.length?ls.map(e=>{const g=D.savGoals.find(x=>x.id===e.goalId);return`<div class="it" data-editsv="${e.id}"><span class="dot" style="background:${stCol(e.type)}"></span><div class="m"><b>${esc(stName(e.type))}</b>${e.amount<0?' <span class="tag" style="color:var(--red)">取り崩し</span>':""}<div class="s">${fmtD(e.date)}${g?" ・ 🎯"+esc(g.name):""}${e.purpose?" ・ "+esc(e.purpose):""}${e.memo?" ・ "+esc(e.memo):""}</div></div><b class="num ${e.amount<0?"up":"plus"}">${e.amount>=0?"+":""}${yen(e.amount)}</b></div>`}).join(""):'<div class="empty">この月の貯金はまだありません</div>'}
+function svChart(){const all=D.savings.slice().sort((a,b)=>a.date<b.date?-1:1);if(!all.length)return'<div class="empty">貯金を記録するとグラフが出ます</div>';
+ const endYm=ymOf(today())>ymOf(all[all.length-1].date)?ymOf(today()):ymOf(all[all.length-1].date);let stYm=ymOf(all[0].date);if(stYm<ymAdd(endYm,-11))stYm=ymAdd(endYm,-11);if(stYm>ymAdd(endYm,-2))stYm=ymAdd(endYm,-2);
+ const start=stYm+"-01",end=endYm+"-"+pad(dim(endYm));let cum=all.filter(e=>e.date<start).reduce((s,e)=>s+e.amount,0);const pts=[{date:start,v:cum}];
+ all.filter(e=>e.date>=start&&e.date<=end).forEach(e=>{cum+=e.amount;const l=pts[pts.length-1];if(l.date===e.date)l.v=cum;else pts.push({date:e.date,v:cum})});
+ const td=today()<=end?today():end;if(pts[pts.length-1].date<td)pts.push({date:td,v:cum});
+ const W=360,H=190,L=48,Rr=10,T=14,B=28,t0=new Date(start+"T00:00:00")-0,t1=new Date(end+"T00:00:00")-0;
+ let mn=Math.min(0,...pts.map(p=>p.v)),mx=Math.max(...pts.map(p=>p.v));if(mn===mx)mx=mn+1e4;const pd=(mx-mn)*.1;mx+=pd;if(mn<0)mn-=pd;
+ const X=d=>L+(new Date(d+"T00:00:00")-t0)/(t1-t0)*(W-L-Rr),Y=v=>T+(mx-v)/(mx-mn)*(H-T-B);
+ let g="";for(let i=0;i<=3;i++){const v=mn+(mx-mn)*i/3,y=Y(v);g+=`<line x1="${L}" x2="${W-Rr}" y1="${y}" y2="${y}" stroke="#26324c"/><text x="${L-6}" y="${y+4}" text-anchor="end" fill="#8e9ab0" font-size="10">${axisY(v)}</text>`}
+ let n=0,m=stYm;while(m<=endYm&&n<13){if(n%(m<=ymAdd(stYm,5)&&ymAdd(stYm,5)>=endYm?1:2)===0)g+=`<text x="${X(m+"-01")+2}" y="${H-8}" fill="#8e9ab0" font-size="10">${+m.slice(5)}月</text>`;m=ymAdd(m,1);n++}
+ const path=pts.map((p,i)=>(i?"L":"M")+X(p.date).toFixed(1)+" "+Y(p.v).toFixed(1)).join(" ");
+ const area=path+` L${X(pts[pts.length-1].date).toFixed(1)} ${Y(Math.max(mn,0))} L${X(pts[0].date).toFixed(1)} ${Y(Math.max(mn,0))} Z`;
+ return`<svg width="100%" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="gs" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FFD700" stop-opacity=".4"/><stop offset="1" stop-color="#FFD700" stop-opacity="0"/></linearGradient></defs>${g}<path d="${area}" fill="url(#gs)"/><path d="${path}" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>${pts.slice(1).map(p=>`<circle cx="${X(p.date)}" cy="${Y(p.v)}" r="3" fill="#FFE55C"/>`).join("")}</svg>`}
+$("svAdd").onclick=()=>{const a=num($("svAmt").value);if(a<=0){toast("金額を入力してください");return}const d=$("svDate").value||today();
+ D.savings.push({id:uid(),date:d,amount:a*svDir,type:svType,goalId:$("svGoal").value||null,purpose:$("svPur").value.trim(),memo:$("svMemo").value.trim()});save();
+ $("svAmt").value="";$("svPur").value="";$("svMemo").value="";SVM=ymOf(d);toast(svDir>0?"貯金を記録しました 🐷":"取り崩しを記録しました");svDir=1;render()};
+$("t-sav").addEventListener("click",e=>{const t=e.target;let el;
+ if(el=t.closest("[data-dir]")){svDir=+el.dataset.dir;return rSav()}
+ if(el=t.closest("[data-svt]")){svType=el.dataset.svt;return rSav()}
+ if(el=t.closest("[data-svm]")){SVM=ymAdd(SVM,+el.dataset.svm);return rSav()}
+ if(el=t.closest("[data-editsv]"))return editSv(el.dataset.editsv);
+ if(t.closest("#sgAdd"))return editSg(null);
+ if(el=t.closest("[data-editsg]"))return editSg(el.dataset.editsg)});
+const stOpts=sel=>D.savTypes.map(x=>`<option value="${x.id}"${x.id===sel?" selected":""}>${esc(x.name)}</option>`).join("");
+function editSv(id){const e=D.savings.find(x=>x.id===id);if(!e)return;
+ sheet({title:"貯金の記録を編集",body:`<label class="f">区分</label><select id="vDir"><option value="1"${e.amount>=0?" selected":""}>＋ 貯める</option><option value="-1"${e.amount<0?" selected":""}>− 取り崩し</option></select><div class="row"><div><label class="f">日付</label><input type="date" id="vD" value="${e.date}"></div><div><label class="f">金額（円）</label><input class="yen" inputmode="numeric" id="vA" value="${fmtIn(Math.abs(e.amount))}"></div></div><label class="f">種類</label><select id="vT">${stOpts(e.type)}</select><label class="f">貯金の目標</label><select id="vG"><option value="">なし</option>${D.savGoals.map(g=>`<option value="${g.id}"${g.id===e.goalId?" selected":""}>${esc(g.name)}</option>`).join("")}</select><label class="f">目的・夢の名前</label><input id="vP" value="${esc(e.purpose||"")}"><label class="f">メモ</label><input id="vM" value="${esc(e.memo||"")}">`,
+  onOk(){const a=num($("vA").value);if(a<=0){toast("金額を入力してください");return false}Object.assign(e,{date:$("vD").value||e.date,amount:a*(+$("vDir").value),type:$("vT").value,goalId:$("vG").value||null,purpose:$("vP").value.trim(),memo:$("vM").value.trim()});save();render()},
+  onDel(){D.savings=D.savings.filter(x=>x!==e);save();render()}})}
+function editSg(id){const g=D.savGoals.find(x=>x.id===id)||null;const c=g||{name:"",target:0,deadline:"",lifeGoalId:"",memo:""};
+ sheet({title:g?"貯金の目標を編集":"貯金の目標を追加",body:`<label class="f">目標の名前</label><input id="qN" value="${esc(c.name)}" placeholder="例：北海道旅行"><label class="f">目標額（円）</label><input class="yen" inputmode="numeric" id="qA" value="${c.target?fmtIn(c.target):""}"><label class="f">いつまでに（任意）</label><input type="date" id="qD" value="${c.deadline||""}"><label class="f">つながる人生の目標（任意）</label><select id="qL"><option value="">なし</option>${D.goals.map(x=>`<option value="${x.id}"${x.id===c.lifeGoalId?" selected":""}>${esc(x.title)}</option>`).join("")}</select><label class="f">メモ</label><input id="qM" value="${esc(c.memo||"")}"><div class="hint">貯金を記録するときに「貯金の目標」でこの目標を選ぶと、進み具合に反映されます。</div>`,
+  onOk(){const n=$("qN").value.trim(),a=num($("qA").value);if(!n||a<=0){toast("名前と目標額を入力してください");return false}const o={name:n,target:a,deadline:$("qD").value,lifeGoalId:$("qL").value||null,memo:$("qM").value.trim()};
+   if(g)Object.assign(g,o);else D.savGoals.push(Object.assign({id:uid()},o));save();render()},
+  onDel:g?()=>{D.savings.forEach(e=>{if(e.goalId===g.id)e.goalId=null});D.savGoals=D.savGoals.filter(x=>x!==g);save();render()}:null})}
 /* ===== 集計 ===== */
 let SM=ymOf(today());
 const monthEx=ym=>D.expenses.filter(e=>ymOf(e.date)===ym);
@@ -283,7 +379,9 @@ const sumOf=a=>a.reduce((s,e)=>s+e.amount,0);
 function byCat(a){const m={};a.forEach(e=>m[e.cat]=(m[e.cat]||0)+e.amount);return m}
 function rSum(){$("smLbl").textContent=ymLbl(SM);
  const cur=monthEx(SM),prev=monthEx(ymAdd(SM,-1)),tc=sumOf(cur),tp=sumOf(prev);
- $("smTot").textContent=yen(tc);
+ $("smTot").textContent="−"+yen(tc);
+ {const sc=sumOf(monthSv(SM)),sp=sumOf(monthSv(ymAdd(SM,-1)));$("smSav").textContent=yen(savTotal(SM+"-31"));$("smSm").textContent=(sc>=0?"+":"")+yen(sc);
+  const d=sc-sp;$("smSCmp").innerHTML=(sp||sc)?`前月 ${yen(sp)} から <span class="${d>=0?"down":"up"}">${d>0?"▲ +":d<0?"▼ ":"± "}${yen(Math.abs(d))}</span>`:'<span class="mute">記録なし</span>'}
  if(tp>0){const d=tc-tp,p=Math.round(d/tp*100);$("smCmp").innerHTML=`前月 ${yen(tp)} から <span class="${d>0?"up":"down"}">${d>0?"▲ +":d<0?"▼ ":"± "}${yen(Math.abs(d))}（${d>0?"+":""}${p}%）</span>`}else $("smCmp").innerHTML='<span class="mute">前月の記録なし</span>';
  const fx=sumOf(cur.filter(e=>e.fixedId));$("smFix").textContent=yen(fx);$("smVar").textContent=yen(tc-fx);$("smCnt").textContent=cur.length+"件";
  const lb=latestBal(SM+"-31");$("smBal").textContent=lb?yen(lb.amount):"—";
@@ -292,10 +390,11 @@ function rSum(){$("smLbl").textContent=ymLbl(SM);
  $("legend").innerHTML=ent.length?ent.map(([c,v])=>`<div class="it"><span class="dot" style="background:${catCol(c)}"></span><div class="m"><b>${esc(catName(c))}</b><div class="bar" style="margin-top:5px"><i style="width:${ent[0][1]?v/ent[0][1]*100:0}%;background:${catCol(c)}"></i></div></div><div style="text-align:right"><b class="num">${yen(v)}</b><div class="mute num">${Math.round(v/tc*100)}%</div></div></div>`).join(""):'<div class="empty">この月の経費はまだありません</div>';
  const bp=byCat(prev),ids=[...new Set([...Object.keys(bc),...Object.keys(bp)])].sort((a,b)=>(bc[b]||0)-(bc[a]||0));
  $("cmpList").innerHTML=ids.length?`<div class="it mute" style="font-size:13px"><div class="m" style="white-space:nowrap">分類</div><div style="width:84px;text-align:right">前月</div><div style="width:84px;text-align:right">今月</div><div style="width:84px;text-align:right">差</div></div>`+ids.map(c=>{const a=bp[c]||0,b=bc[c]||0,d=b-a;return`<div class="it" style="font-size:15px"><div class="m"><b>${esc(catName(c))}</b></div><div class="num mute" style="width:84px;text-align:right">${yen(a)}</div><div class="num" style="width:84px;text-align:right">${yen(b)}</div><div class="num ${d>0?"up":d<0?"down":""}" style="width:84px;text-align:right">${d>0?"+":""}${d===0?"±0":yen(d)}</div></div>`}).join(""):'<div class="empty">比較できる記録がありません</div>';
+ {const a=sumOf(monthSv(ymAdd(SM,-1))),b=sumOf(monthSv(SM)),d=b-a;if(a||b)$("cmpList").innerHTML+=`<div class="it" style="font-size:15px;border-top:2px solid var(--line)"><div class="m"><b style="color:var(--gold)">🐷 貯金</b></div><div class="num mute" style="width:84px;text-align:right">${yen(a)}</div><div class="num" style="width:84px;text-align:right">${yen(b)}</div><div class="num ${d>0?"down":d<0?"up":""}" style="width:84px;text-align:right">${d>0?"+":""}${d===0?"±0":yen(d)}</div></div>`}
  $("balChart").innerHTML=balChart();$("monChart").innerHTML=monChart()}
 function donut(ent,tot){if(!tot)return'<svg width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="70" fill="none" stroke="#26324c" stroke-width="28"/><text x="100" y="106" text-anchor="middle" fill="#8e9ab0" font-size="15">記録なし</text></svg>';
  const R=70,C=2*Math.PI*R;let off=0,s="";ent.forEach(([c,v])=>{const L=v/tot*C;s+=`<circle cx="100" cy="100" r="${R}" fill="none" stroke="${catCol(c)}" stroke-width="28" stroke-dasharray="${L} ${C-L}" stroke-dashoffset="${-off}" transform="rotate(-90 100 100)"/>`;off+=L});
- return`<svg width="220" height="220" viewBox="0 0 200 200">${s}<text x="100" y="94" text-anchor="middle" fill="#8e9ab0" font-size="12">合計</text><text x="100" y="116" text-anchor="middle" fill="#f0d78c" font-size="${yen(tot).length>9?15:18}" font-weight="700">${yen(tot)}</text></svg>`}
+ return`<svg width="220" height="220" viewBox="0 0 200 200">${s}<text x="100" y="94" text-anchor="middle" fill="#8e9ab0" font-size="12">合計</text><text x="100" y="116" text-anchor="middle" fill="#FFE55C" font-size="${yen(tot).length>9?15:18}" font-weight="700">${yen(tot)}</text></svg>`}
 function axisY(v){const a=Math.abs(v);return a>=1e8?(v/1e8).toFixed(1)+"億":a>=1e4?Math.round(v/1e4).toLocaleString("ja-JP")+"万":Math.round(v).toLocaleString("ja-JP")}
 function balChart(){const end=SM+"-31",start=ymAdd(SM,-5)+"-01";
  const pts=D.balances.filter(b=>b.date>=start&&b.date<=end).sort((a,b)=>a.date<b.date?-1:1);
@@ -308,9 +407,10 @@ function balChart(){const end=SM+"-31",start=ymAdd(SM,-5)+"-01";
  const path=pts.map((p,i)=>(i?"L":"M")+X(p.date).toFixed(1)+" "+Y(p.amount).toFixed(1)).join(" ");
  const area=path+` L${X(pts[pts.length-1].date).toFixed(1)} ${H-B} L${X(pts[0].date).toFixed(1)} ${H-B} Z`;
  const last=pts[pts.length-1],first=pts[0],d=last.amount-first.amount;
- return`<svg width="100%" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d4af37" stop-opacity=".35"/><stop offset="1" stop-color="#d4af37" stop-opacity="0"/></linearGradient></defs>${g}<path d="${area}" fill="url(#ga)"/><path d="${path}" fill="none" stroke="#d4af37" stroke-width="2.5" stroke-linejoin="round"/>${pts.map(p=>`<circle cx="${X(p.date)}" cy="${Y(p.amount)}" r="3.5" fill="#f0d78c"/>`).join("")}</svg><div class="row mute" style="font-size:14px"><span>最新 <b class="num" style="color:var(--t)">${yen(last.amount)}</b></span><span style="text-align:right">期間の増減 <b class="num ${d<0?"up":"down"}">${d>=0?"+":""}${yen(d)}</b></span></div>`}
-function monChart(){const ms=[...Array(6)].map((_,i)=>ymAdd(SM,i-5)),v=ms.map(m=>sumOf(monthEx(m)));const mx=Math.max(...v,1);
- const W=360,H=170,B=34,bw=36;return`<svg width="100%" viewBox="0 0 ${W} ${H}">${ms.map((m,i)=>{const h=v[i]/mx*(H-B-22),x=20+i*((W-40)/6)+((W-40)/6-bw)/2,y=H-B-h;return`<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(h,1)}" rx="5" fill="${m===SM?"#d4af37":"#3a4a6b"}"/><text x="${x+bw/2}" y="${y-6}" text-anchor="middle" fill="#c3cad8" font-size="10">${v[i]?axisY(v[i]):""}</text><text x="${x+bw/2}" y="${H-14}" text-anchor="middle" fill="${m===SM?"#f0d78c":"#8e9ab0"}" font-size="12">${+m.slice(5)}月</text>`}).join("")}</svg>`}
+ return`<svg width="100%" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FFD700" stop-opacity=".35"/><stop offset="1" stop-color="#FFD700" stop-opacity="0"/></linearGradient></defs>${g}<path d="${area}" fill="url(#ga)"/><path d="${path}" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-linejoin="round"/>${pts.map(p=>`<circle cx="${X(p.date)}" cy="${Y(p.amount)}" r="3.5" fill="#FFE55C"/>`).join("")}</svg><div class="row mute" style="font-size:14px"><span>最新 <b class="num" style="color:var(--t)">${yen(last.amount)}</b></span><span style="text-align:right">期間の増減 <b class="num ${d<0?"up":"down"}">${d>=0?"+":""}${yen(d)}</b></span></div>`}
+function monChart(){const ms=[...Array(6)].map((_,i)=>ymAdd(SM,i-5)),v=ms.map(m=>sumOf(monthEx(m))),sv=ms.map(m=>Math.max(0,sumOf(monthSv(m))));const mx=Math.max(...v,...sv,1);
+ const W=360,H=180,B=34,bw=20,cw=(W-40)/6;const bar=(x,val,col,lc)=>{const h=val/mx*(H-B-24),y=H-B-h;return`<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(h,1)}" rx="4" fill="${col}"/><text x="${x+bw/2}" y="${y-5}" text-anchor="middle" fill="${lc}" font-size="9">${val?axisY(val):""}</text>`};
+ return`<svg width="100%" viewBox="0 0 ${W} ${H}">${ms.map((m,i)=>{const x=20+i*cw+(cw-bw*2-4)/2;return bar(x,v[i],m===SM?"#FFD700":"#3a4a6b","#c3cad8")+bar(x+bw+4,sv[i],m===SM?"#6fcf97":"#2f5a48","#9fe0bb")+`<text x="${20+i*cw+cw/2}" y="${H-14}" text-anchor="middle" fill="${m===SM?"#FFE55C":"#8e9ab0"}" font-size="12">${+m.slice(5)}月</text>`}).join("")}</svg><div class="row mute" style="font-size:13px;justify-content:center"><span style="flex:none"><span class="dot" style="display:inline-block;background:#FFD700"></span> 支出</span><span style="flex:none;margin-left:14px"><span class="dot" style="display:inline-block;background:#6fcf97"></span> 貯金</span></div>`}
 $("t-sum").addEventListener("click",e=>{const el=e.target.closest("[data-sm]");if(el){SM=ymAdd(SM,+el.dataset.sm);rSum()}});
 /* ===== 目標 ===== */
 let GF="すべて";
@@ -321,10 +421,10 @@ function rGoal(){const cy=new Date().getFullYear();$("glAge").textContent=`今�
  const gs=D.goals.filter(g=>GF==="すべて"||g.cat===GF).sort(gSort);
  $("glList").innerHTML=gs.length?gs.map(g=>{const p=gProg(g),dd=g.deadline?daysTo(g.deadline):null,yl=g.targetYear?g.targetYear-cy:null;
   const dl=dd==null?'<span class="dl mute">計画の期限なし</span>':dd<0?`<span class="dl over">⏰ 計画の期限を${-dd}日過ぎています（${fmtD(g.deadline)}）</span>`:`<span class="dl ${dd<=30?"soon":"ok"}">⏳ 計画を立てる期限まで あと${dd}日（${fmtD(g.deadline)}）</span>`;
-  return`<div class="card goal" style="border-left-color:${GCOL[g.cat]||"#d4af37"}"><div class="row" style="align-items:flex-start"><div style="flex:1"><span class="tag" style="color:${GCOL[g.cat]}">${esc(g.cat)}</span><div class="t">${esc(g.title)}</div></div><button class="sm" data-editgl="${g.id}" style="flex:none">編集</button></div>
+  return`<div class="card goal" style="border-left-color:${GCOL[g.cat]||"#FFD700"}"><div class="row" style="align-items:flex-start"><div style="flex:1"><span class="tag" style="color:${GCOL[g.cat]}">${esc(g.cat)}</span><div class="t">${esc(g.title)}</div></div><button class="sm" data-editgl="${g.id}" style="flex:none">編集</button></div>
   <div class="meta">${g.targetYear?`🎯 ${g.targetYear}年に達成${yl>0?`（あと${yl}年）`:yl===0?"（今年）":`（${-yl}年前の目標）`} ・ そのとき <b style="color:var(--gold2)">${g.targetYear-birthY()}歳</b>`:"🎯 達成年は未設定"}</div>
   <div>${dl}</div>
-  <div class="row" style="margin-top:10px"><div class="bar" style="flex:1"><i style="width:${p}%;background:${GCOL[g.cat]||"#d4af37"}"></i></div><b class="num" style="flex:none;width:52px;text-align:right">${p}%</b></div>
+  <div class="row" style="margin-top:10px"><div class="bar" style="flex:1"><i style="width:${p}%;background:${GCOL[g.cat]||"#FFD700"}"></i></div><b class="num" style="flex:none;width:52px;text-align:right">${p}%</b></div>
   ${g.steps.length?`<div style="margin-top:8px">${g.steps.map((s,i)=>`<label class="step${s.d?" done":""}"><input type="checkbox" data-gstep="${g.id}:${i}"${s.d?" checked":""}><span>${esc(s.t)}</span></label>`).join("")}</div>`:""}
   ${g.notes?`<div class="mute" style="margin-top:8px;white-space:pre-wrap">${esc(g.notes)}</div>`:""}</div>`}).join(""):'<div class="card empty">「＋ 目標を追加」から、何年後にどうなりたいかを書いてみよう</div>'}
 $("t-goal").addEventListener("click",e=>{const t=e.target;let el;
@@ -371,16 +471,20 @@ function editMm(id){const m=D.memos.find(x=>x.id===id)||null;const c=m||{title:"
    if(m)Object.assign(m,o);else D.memos.push(Object.assign({id:uid()},o));save();render()},
   onDel:m?()=>{D.memos=D.memos.filter(x=>x!==m);save();render()}:null})}
 /* ===== 設定 ===== */
-function rSet(){$("catList").innerHTML=D.cats.map((c,i)=>{const n=D.expenses.filter(e=>e.cat===c.id).length;return`<div class="it"><span class="dot" style="background:${PAL[i%PAL.length]}"></span><input value="${esc(c.name)}" data-catren="${c.id}" style="flex:1"><button class="sm" data-catup="${i}" ${i?"":"disabled"}>↑</button><button class="sm danger" data-catdel="${c.id}" title="${n}件">削除</button></div>`}).join("");
+function rSet(){$("stList").innerHTML=D.savTypes.map((x,i)=>`<div class="it"><span class="dot" style="background:${SPAL[i%SPAL.length]}"></span><input value="${esc(x.name)}" data-stren="${x.id}" style="flex:1"><button class="sm danger" data-stdel="${x.id}">削除</button></div>`).join("");
+$("catList").innerHTML=D.cats.map((c,i)=>{const n=D.expenses.filter(e=>e.cat===c.id).length;return`<div class="it"><span class="dot" style="background:${PAL[i%PAL.length]}"></span><input value="${esc(c.name)}" data-catren="${c.id}" style="flex:1"><button class="sm" data-catup="${i}" ${i?"":"disabled"}>↑</button><button class="sm danger" data-catdel="${c.id}" title="${n}件">削除</button></div>`}).join("");
  $("birth").value=D.birth||"1980-03-13";$("ver").textContent=VER;$("lastSaved").textContent=D.saved?"最終保存："+new Date(D.saved).toLocaleString("ja-JP"):""}
-$("t-set").addEventListener("change",e=>{const el=e.target.closest("[data-catren]");if(!el)return;const c=D.cats.find(x=>x.id===el.dataset.catren),v=el.value.trim();if(!v){el.value=c.name;return}c.name=v;save();toast("名前を変更しました")});
+$("t-set").addEventListener("change",e=>{const se=e.target.closest("[data-stren]");if(se){const x=D.savTypes.find(y=>y.id===se.dataset.stren),v=se.value.trim();if(!v){se.value=x.name;return}x.name=v;save();toast("名前を変更しました");return}const el=e.target.closest("[data-catren]");if(!el)return;const c=D.cats.find(x=>x.id===el.dataset.catren),v=el.value.trim();if(!v){el.value=c.name;return}c.name=v;save();toast("名前を変更しました")});
 $("t-set").addEventListener("click",e=>{const t=e.target;let el;
+ if(el=t.closest("[data-stdel]")){if(D.savTypes.length<=1){toast("最低1つは必要です");return}const id=el.dataset.stdel,x=D.savTypes.find(y=>y.id===id),rest=D.savTypes.filter(y=>y.id!==id),to=rest.find(y=>y.name==="その他")||rest[rest.length-1],n=D.savings.filter(y=>y.type===id).length;
+  if(!confirm(`「${x.name}」を削除しますか？${n?`\n使われている${n}件は「${to.name}」に移ります。`:""}`))return;D.savings.forEach(y=>{if(y.type===id)y.type=to.id});D.savTypes=rest;save();rSet();return}
  if(el=t.closest("[data-catup]")){const i=+el.dataset.catup;if(i>0){[D.cats[i-1],D.cats[i]]=[D.cats[i],D.cats[i-1]];save();rSet()}return}
  if(el=t.closest("[data-catdel]")){if(D.cats.length<=1){toast("最低1つは必要です");return}const id=el.dataset.catdel,c=D.cats.find(x=>x.id===id);
   const rest=D.cats.filter(x=>x.id!==id),to=rest.find(x=>x.name==="その他")||rest[rest.length-1];const n=D.expenses.filter(x=>x.cat===id).length+D.fixed.filter(x=>x.cat===id).length+D.wants.filter(x=>x.cat===id).length;
   if(!confirm(`「${c.name}」を削除しますか？${n?`\n使われている${n}件は「${to.name}」に移ります。`:""}`))return;
   [D.expenses,D.fixed,D.wants].forEach(a=>a.forEach(x=>{if(x.cat===id)x.cat=to.id}));D.cats=rest;save();rSet();return}});
 $("catAdd").onclick=()=>{const v=$("catNew").value.trim();if(!v)return;if(D.cats.some(c=>c.name===v)){toast("同じ名前があります");return}D.cats.push({id:"c"+uid(),name:v});$("catNew").value="";save();rSet();toast("追加しました")};
+$("stAdd").onclick=()=>{const v=$("stNew").value.trim();if(!v)return;if(D.savTypes.some(x=>x.name===v)){toast("同じ名前があります");return}D.savTypes.push({id:"s"+uid(),name:v});$("stNew").value="";save();rSet();toast("追加しました")};
 $("birth").onchange=()=>{if($("birth").value){D.birth=$("birth").value;save();render()}};
 $("expBtn").onclick=async()=>{const s=JSON.stringify(Object.assign({app:"life-plan-note",exported:new Date().toISOString()},D),null,1);const name="jinsei_sekkei_"+today()+".json";
  try{const f=new File([s],name,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});return}}catch(e){if(e&&e.name==="AbortError")return}
@@ -390,7 +494,7 @@ $("impFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new Fil
  if(!confirm("今のデータを、このバックアップで置き換えますか？"))return;delete j.app;delete j.exported;D=norm(j);save();render();toast("読み込みました")}catch(x){alert("人生設計ノートのバックアップファイルではないようです")}};r.readAsText(f);e.target.value=""};
 $("wipe").onclick=()=>{if(confirm("すべてのデータを削除します。よろしいですか？")&&confirm("本当に削除しますか？元に戻せません。")){D=blank();save();render();toast("削除しました")}};
 /* init */
-$("balDate").value=today();$("exDate").value=today();
+$("balDate").value=today();$("exDate").value=today();$("svDate").value=today();
 idbGet().then(s=>{if(!localStorage.getItem(K)&&s){try{const j=JSON.parse(s);if(j&&j.cats){D=norm(j);localStorage.setItem(K,s);render();toast("バックアップから復元しました")}}catch(e){}}});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){$("balDate").value=$("balDate").value||today();render()}});
 render();
