@@ -294,9 +294,6 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 </section>
 <!-- 設定 -->
 <section class="tab" id="t-set">
- <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
- <div class="card yzSendCard"><h2>💌 ゆずに送る</h2><div class="hint" style="margin-top:-6px">へそくり・買いたいもの・貯金・固定費・生活費・残高を、スクショなしでまとめてエイジのGmailに送れるよ。記録は何も変わりません。</div><button class="gold full" style="margin-top:4px" onclick="lpYuzuSendAll()">💌 ゆずに送る（ぜんぶまとめて）</button><div style="text-align:center;margin-top:8px"><a href="javascript:void 0" onclick="lpYuzuSend()" style="color:var(--gold2,#FFD700);font-size:13px;opacity:.85">送る項目をえらぶ ›</a></div></div>
- <div class="card"><h2>🔑 ロック</h2><div class="hint" style="margin-top:-6px">ログアウトしても、記録・画像・設定は消えません。次にひらくときにパスワードを入れてね。</div><button class="btn" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #FFD700;background:transparent;color:#FFD700;font-weight:700;font-size:15px" onclick="pwLogout()">🔑 パスワードを変更/ログアウト</button></div>
  <div class="card"><h2>🏷 カテゴリの編集</h2><div class="hint" style="margin-top:-6px">名前を変えると過去の記録にも反映されます。</div>
   <div class="list" id="catList"></div>
   <div class="row" style="margin-top:8px"><input id="catNew" placeholder="新しいカテゴリ名"><button class="sm gold" id="catAdd" style="flex:none">追加</button></div>
@@ -331,6 +328,8 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
   <button class="full" id="uaImpBtn">🖼 画像のバックアップを読み込み</button><input type="file" id="uaImp" accept=".json,application/json" style="display:none">
   <div class="hint" id="lastSaved"></div>
  </div>
+ <div class="card yzSendCard"><h2>💌 ゆずに送る・💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">今日の記録が終わったら、ここからゆずに送ってね。へそくり・買いたいもの・貯金・固定費・生活費・残高がまとめてエイジのGmailに届くよ。ゆずからのお届けは「受け取る」で入れてね。記録は何も変わりません。</div><button class="gold full" style="margin-top:4px" onclick="lpYuzuSendAll()">💌 ゆずに送る（ぜんぶまとめて）</button><div style="text-align:center;margin:8px 0 10px"><a href="javascript:void 0" onclick="lpYuzuSend()" style="color:var(--gold2,#FFD700);font-size:13px;opacity:.85">送る項目をえらぶ ›</a></div><button class="gold full" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
+ <div class="card"><h2>🔑 ロック</h2><div class="hint" style="margin-top:-6px">ログアウトしても、記録・画像・設定は消えません。次にひらくときにパスワードを入れてね。</div><button class="btn" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #FFD700;background:transparent;color:#FFD700;font-weight:700;font-size:15px" onclick="pwLogout()">🔑 パスワードを変更/ログアウト</button></div>
  <div class="card"><h2>⚠️ データ</h2><button class="danger full" id="wipe">すべてのデータを削除</button><div class="hint">バージョン <span id="ver"></span></div></div>
 </section>
 </main>
@@ -347,7 +346,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 <div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
 <script>
 "use strict";
-const VER="v9";
+const VER="v10";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
