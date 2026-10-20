@@ -198,6 +198,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
   <div class="list" id="wtList"></div>
   <div class="hint">「取り分け」でへそくりの中から予約しておけるよ。「👛 買った」でへそくりから支払い、買えたものになります。</div>
  </div>
+ <div class="card yzSendCard"><h2>💌 ゆずに送る</h2><div class="hint" style="margin-top:-6px">へそくり・買いたいもの・貯金・固定費・生活費・残高を、スクショなしでまとめてエイジのGmailに送れるよ。記録は何も変わりません。</div><button class="gold full" style="margin-top:4px" onclick="lpYuzuSendAll()">💌 ゆずに送る（ぜんぶまとめて）</button><div style="text-align:center;margin-top:8px"><a href="javascript:void 0" onclick="lpYuzuSend()" style="color:var(--gold2,#FFD700);font-size:13px;opacity:.85">送る項目をえらぶ ›</a></div></div>
  <div class="card"><h2>🐷 貯金へ回した分</h2>
   <div class="kpi" style="margin-top:0"><div><small>今月</small><b class="num" id="mvMon"></b></div><div><small>これまでの合計</small><b class="num" id="mvAll"></b></div></div>
   <div class="list" id="mvList" style="margin-top:8px"></div>
@@ -273,6 +274,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  <div class="card"><h2>📈 残高の推移</h2><div id="balChart"></div></div>
  <div class="card"><h2>🗓 月別の支出と貯金（6か月）</h2><div id="monChart"></div></div>
  <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
+ <div class="card yzSendCard"><h2>💌 ゆずに送る</h2><div class="hint" style="margin-top:-6px">へそくり・買いたいもの・貯金・固定費・生活費・残高を、スクショなしでまとめてエイジのGmailに送れるよ。記録は何も変わりません。</div><button class="gold full" style="margin-top:4px" onclick="lpYuzuSendAll()">💌 ゆずに送る（ぜんぶまとめて）</button><div style="text-align:center;margin-top:8px"><a href="javascript:void 0" onclick="lpYuzuSend()" style="color:var(--gold2,#FFD700);font-size:13px;opacity:.85">送る項目をえらぶ ›</a></div></div>
 </section>
 <!-- 目標 -->
 <section class="tab" id="t-goal">
@@ -293,6 +295,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 <!-- 設定 -->
 <section class="tab" id="t-set">
  <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
+ <div class="card yzSendCard"><h2>💌 ゆずに送る</h2><div class="hint" style="margin-top:-6px">へそくり・買いたいもの・貯金・固定費・生活費・残高を、スクショなしでまとめてエイジのGmailに送れるよ。記録は何も変わりません。</div><button class="gold full" style="margin-top:4px" onclick="lpYuzuSendAll()">💌 ゆずに送る（ぜんぶまとめて）</button><div style="text-align:center;margin-top:8px"><a href="javascript:void 0" onclick="lpYuzuSend()" style="color:var(--gold2,#FFD700);font-size:13px;opacity:.85">送る項目をえらぶ ›</a></div></div>
  <div class="card"><h2>🔑 ロック</h2><div class="hint" style="margin-top:-6px">ログアウトしても、記録・画像・設定は消えません。次にひらくときにパスワードを入れてね。</div><button class="btn" style="width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #FFD700;background:transparent;color:#FFD700;font-weight:700;font-size:15px" onclick="pwLogout()">🔑 パスワードを変更/ログアウト</button></div>
  <div class="card"><h2>🏷 カテゴリの編集</h2><div class="hint" style="margin-top:-6px">名前を変えると過去の記録にも反映されます。</div>
   <div class="list" id="catList"></div>
@@ -344,7 +347,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 <div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
 <script>
 "use strict";
-const VER="v8";
+const VER="v9";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
@@ -817,6 +820,91 @@ function apply(sel){var n=0;sel.forEach(function(it){var x=it.data||{},d=it.date
  if(n){save();render()}return n}
 yzInbox.init({app:"lifeplan",prefix:"lp",base:"data/inbox/",describe:describe,apply:apply,
  theme:{bg:"#0f1830",fg:"#e8ecf5",acc:"#FFD700",btn:"linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%)",btnfg:"#0b1220",sub:"rgba(255,215,0,.12)",rowbg:"rgba(255,255,255,.06)",warn:"#ffb86b",badge:"#0b1220",badgefg:"#FFD700",badgering:"#FFD700",border:"rgba(255,215,0,.45)"}});
+})();
+</script><script>
+/* 💌 ゆずに送る — shared send sheet (mailto primary, navigator.share, copy). No network, no data changes. */
+(function(){
+var TO="k.ke.ea.ab.bm.mo.o@gmail.com",MAX=1800;
+function block(o){return "---YUZU-DATA---\n"+JSON.stringify(o)+"\n---END---"}
+function mailto(sub,body){return "mailto:"+TO+"?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(body)}
+/* opt: {subject, intro(fn(levelNote)->text), levels:[{data,note}] (most complete first), full:{data}, theme:{bg,fg,acc,btn,btnfg,sub}} */
+window.yuzuSend=function(opt){
+  var T=opt.theme,full=opt.intro(opt.fullNote||"")+"\n\n"+block(opt.full),pick=null;
+  for(var i=0;i<opt.levels.length;i++){var b=opt.intro(opt.levels[i].note)+"\n\n"+block(opt.levels[i].data);if(mailto(opt.subject,b).length<=MAX){pick={body:b,note:opt.levels[i].note};break}}
+  var ov=document.createElement("div");ov.id="yzSendOv";
+  ov.style.cssText="position:fixed;inset:0;z-index:2147482000;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center";
+  var bt="display:block;width:100%;padding:14px;border:0;border-radius:16px;font-size:17px;font-weight:800;margin-top:10px;";
+  var mailNote=pick?(pick.note?"メールには "+pick.note+" を入れたよ。":"ぜんぶメールに入ったよ。"):"内容が長いから、メールには短いお知らせだけ入れて、本文はコピーしておくね。メールをひらいたら本文に貼り付けてね📋";
+  ov.innerHTML='<div style="background:'+T.bg+';color:'+T.fg+';width:100%;max-width:560px;border-radius:24px 24px 0 0;padding:18px 16px calc(env(safe-area-inset-bottom) + 20px);max-height:86vh;overflow:auto;font-family:-apple-system,\'Hiragino Sans\',sans-serif">'+
+   '<div style="font-size:20px;font-weight:800;color:'+T.acc+'">💌 ゆずに送る</div>'+
+   '<div style="font-size:14px;line-height:1.6;margin:6px 0 4px;opacity:.9">エイジのGmail（'+TO+'）あてにメールを作るよ。開いたら<b>送信</b>をタップするだけ♡ ゆずが読んで、次の便利ノートに入れるね。</div>'+
+   '<div style="font-size:12.5px;opacity:.75;margin-bottom:6px">件名：'+opt.subject.replace(/</g,"&lt;")+'<br>'+mailNote+'</div>'+
+   '<a id="yzMail" style="'+bt+'text-align:center;text-decoration:none;box-sizing:border-box;background:'+T.btn+';color:'+T.btnfg+'">📧 メールで送る（おすすめ）</a>'+
+   '<button id="yzShare" style="'+bt+'background:'+T.sub+';color:'+T.acc+'">📤 共有で送る（Gmailアプリなど）</button>'+
+   '<button id="yzCopy" style="'+bt+'background:'+T.sub+';color:'+T.acc+'">📋 本文をコピー</button>'+
+   '<details style="margin-top:12px;font-size:12.5px"><summary style="cursor:pointer;opacity:.8">送る内容を見る</summary><pre id="yzPrev" style="white-space:pre-wrap;word-break:break-all;font-size:11.5px;background:rgba(127,127,127,.12);padding:8px;border-radius:10px;max-height:40vh;overflow:auto"></pre></details>'+
+   '<button id="yzClose" style="'+bt+'background:transparent;color:'+T.fg+';opacity:.7;font-weight:600">とじる</button></div>';
+  document.body.appendChild(ov);
+  ov.querySelector("#yzPrev").textContent=full;
+  var shortBody=opt.intro("")+"\n\n（本文が長いのでコピーしてあるよ。ここに貼り付けてから送ってね📋）";
+  var a=ov.querySelector("#yzMail");a.href=mailto(opt.subject,pick?pick.body:shortBody);
+  function copy(t){return (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var x=document.createElement("textarea");x.value=t;x.style.cssText="position:fixed;top:-1000px";document.body.appendChild(x);x.select();try{document.execCommand("copy")}catch(e){}x.remove()})}
+  function say(m){var d=document.createElement("div");d.textContent=m;d.style.cssText="position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 30px);transform:translateX(-50%);z-index:2147483001;background:#333;color:#fff;padding:9px 16px;border-radius:999px;font-size:14px;opacity:.95";document.body.appendChild(d);setTimeout(function(){d.remove()},1800)}
+  a.onclick=function(){if(!pick)copy(full);setTimeout(function(){ov.remove()},400)};
+  ov.querySelector("#yzShare").onclick=function(){if(navigator.share){navigator.share({title:opt.subject,text:opt.subject+"\n\n"+full}).then(function(){ov.remove()}).catch(function(){})}else{copy(opt.subject+"\n\n"+full).then(function(){say("共有が使えないからコピーしたよ📋")})}};
+  ov.querySelector("#yzCopy").onclick=function(){copy(opt.subject+"\n\n"+full).then(function(){say("コピーしたよ📋 メールに貼り付けてね")})};
+  ov.querySelector("#yzClose").onclick=function(){ov.remove()};
+  ov.onclick=function(e){if(e.target===ov)ov.remove()};
+  return {mailBody:pick?pick.body:shortBody,full:full,fits:!!pick,note:pick&&pick.note};
+};
+})();
+
+/* 人生設計ノート → 💌 ゆずに送る (read-only: never writes D / storage) */
+(function(){
+function addD(k,n){var d=new Date(k+"T12:00");d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+var SECS=[["hk","👛","へそくり（残高・今月・最近の記録）"],["wants","🛒","買いたいもの"],["sav","🐷","貯金（種類別・目標）"],["fixed","💼","固定費"],["life","🧾","生活費（今月）"],["bal","💴","口座の残高"]];
+function build(on,cap){var t=today(),ym=ymOf(t),from=addD(t,-7),inR=function(d){return d&&(ymOf(d)===ym||d>=from)};
+ var o={app:"lifeplan",v:1,date:t,ym:ym,sent:t+"T"+new Date().toTimeString().slice(0,5),from:ym+"-01"<from?ym+"-01":from};
+ var srt=function(a){return a.slice().sort(function(x,y){return x.date<y.date?1:x.date>y.date?-1:0})},cut=function(a){return cap==null?a:a.slice(0,cap)};
+ if(on.hk){var hm=hkRecs().filter(function(e){return ymOf(e.date)===ym}),res=D.wants.reduce(function(s,w){return s+wSaved(w)},0),hb=hkBal();
+  o.hk={bal:hb,res:res,free:hb-res,in:hm.filter(function(e){return e.amount>0}).reduce(function(s,e){return s+e.amount},0),out:-hm.filter(function(e){return e.amount<0&&!isMv(e)}).reduce(function(s,e){return s+e.amount},0),mv:-hm.filter(function(e){return isMv(e)&&e.amount<0}).reduce(function(s,e){return s+e.amount},0)};
+  if(cap!==0)o.hk.recs=cut(srt(hkRecs().filter(function(e){return inR(e.date)}))).map(function(e){var w=e.wantId&&D.wants.find(function(x){return x.id===e.wantId});return [e.date,e.amount,isMv(e)?"貯金へ":w?"買った":e.amount<0?"使った":"入れた",(w?w.name:e.memo)||""]})}
+ if(on.wants)o.wants=D.wants.map(function(w){return [w.name,w.price||0,wSaved(w),w.done?1:0,w.target||""]});
+ if(on.sav){var by={};D.savings.forEach(function(e){var n=stName(e.type);by[n]=(by[n]||0)+(+e.amount||0)});o.sav={total:savTotal(),byType:Object.keys(by).map(function(k){return [k,by[k]]}),goals:D.savGoals.map(function(g){return [g.name,g.target||0,sgSaved(g.id),g.deadline||""]})}}
+ if(on.fixed){var act=D.fixed.filter(function(f){return !f.end||f.end>=ym});o.fixed={total:act.reduce(function(s,f){return s+f.amount},0),items:act.slice().sort(function(a,b){return (a.day||1)-(b.day||1)}).map(function(f){return [f.name,f.amount,f.day||1,catName(f.cat)]})}}
+ if(on.life){var ex=monthEx(ym).filter(function(e){return !e.fixedId}),bc={};ex.forEach(function(e){var n=catName(e.cat);bc[n]=(bc[n]||0)+e.amount});
+  o.life={total:sumOf(ex),fixedBooked:sumOf(monthEx(ym).filter(function(e){return e.fixedId})),byCat:Object.keys(bc).sort(function(a,b){return bc[b]-bc[a]}).map(function(k){return [k,bc[k]]})};
+  if(cap!==0)o.life.items=cut(srt(D.expenses.filter(function(e){return !e.fixedId&&inR(e.date)}))).map(function(e){return [e.date,e.amount,catName(e.cat),e.memo||""]})}
+ if(on.bal){var b=latestBal();o.bal=b?[b.date,b.amount]:null}
+ if(cap!=null)o.lite=cap;return o}
+function intro(on,note){var t=today(),L=["ゆずへ💌 エイジの人生設計ノート（お金）だよ（"+fmtD(t)+"）"];if(note)L.push(note);var x=build(on,0);
+ if(x.hk)L.push("👛 へそくり "+yen(x.hk.bal)+"（自由に使える "+yen(x.hk.free)+"）今月 +"+yen(x.hk.in)+" / −"+yen(x.hk.out)+" / 貯金へ "+yen(x.hk.mv));
+ if(x.wants){var r=D.wants.filter(function(w){return !w.done});L.push("🛒 買いたいもの 未購入"+r.length+"件 "+yen(r.reduce(function(s,w){return s+(w.price||0)},0)))}
+ if(x.sav)L.push("🐷 貯金 合計 "+yen(x.sav.total));
+ if(x.fixed)L.push("💼 固定費 月 "+yen(x.fixed.total)+"（"+x.fixed.items.length+"件）");
+ if(x.life)L.push("🧾 今月の生活費 "+yen(x.life.total));
+ if(x.bal)L.push("💴 残高 "+yen(x.bal[1])+"（"+fmtD(x.bal[0])+"）");
+ return L.join("\n")}
+function go(on){var sub="【ゆずに送る】人生設計ノート "+today();
+ var lv=[{data:build(on),note:""},{data:build(on,10),note:"最近の記録は10件まで"},{data:build(on,5),note:"最近の記録は5件まで"},{data:build(on,0),note:"合計と一覧だけ（最近の記録はなし）"}];
+ if(on.wants||on.fixed||on.sav){var o2=Object.assign({},on,{wants:0,fixed:0,sav:0}),m=build(o2,0);if(on.sav)m.sav={total:savTotal()};lv.push({data:m,note:"数字だけ"})}
+ var tiny={app:"lifeplan",v:1,date:today(),lite:"min"},b0=build(on,0);if(b0.hk)tiny.hk={bal:b0.hk.bal,free:b0.hk.free,in:b0.hk.in,out:b0.hk.out,mv:b0.hk.mv};if(b0.sav)tiny.sav={total:b0.sav.total};if(b0.fixed)tiny.fixed={total:b0.fixed.total};if(b0.life)tiny.life={total:b0.life.total};if(b0.bal)tiny.bal=b0.bal;lv.push({data:tiny,note:"合計だけ（くわしくは共有かコピーで）"});
+ return yuzuSend({subject:sub,intro:function(n){return n==="__full"?intro(on,""):"ゆずへ💌 人生設計ノート（お金）"+fmtD(today())+(n?"\n"+n:"")},levels:lv,full:build(on),fullNote:"__full",
+  theme:{bg:"#0f1830",fg:"#e8ecf5",acc:"#FFD700",btn:"linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%)",btnfg:"#0b1220",sub:"rgba(255,215,0,.12)"}})}
+window.lpYuzuSendGo=go;window.lpYuzuSendAll=function(){var o={};SECS.forEach(function(s){o[s[0]]=1});return go(o)};
+window.lpYuzuSend=function(){var on={};SECS.forEach(function(s){on[s[0]]=1});var x=build(on,0);
+ var cnt={hk:yen(x.hk.bal),wants:D.wants.length+"件",sav:yen(x.sav.total),fixed:x.fixed.items.length+"件・"+yen(x.fixed.total),life:yen(x.life.total),bal:x.bal?yen(x.bal[1]):"未記録"};
+ var ov=document.createElement("div");ov.id="lpSendPick";ov.style.cssText="position:fixed;inset:0;z-index:2147481000;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center";
+ ov.innerHTML='<div style="background:#0f1830;color:#e8ecf5;width:100%;max-width:560px;border-radius:24px 24px 0 0;border-top:1px solid rgba(255,215,0,.45);padding:18px 16px calc(env(safe-area-inset-bottom) + 20px);max-height:86vh;overflow:auto;font-family:-apple-system,\'Hiragino Sans\',sans-serif">'+
+  '<div style="font-size:20px;font-weight:800;color:#FFD700">💌 ゆずに送る</div><div style="font-size:14px;line-height:1.6;margin:6px 0 10px;opacity:.9">送りたいものにチェックしてね。今月の分と最近7日の記録をまとめるよ♡</div>'+
+  SECS.map(function(s){return '<label style="display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:8px;border-radius:14px;background:rgba(255,255,255,.06)"><input type="checkbox" data-sec="'+s[0]+'" checked style="width:22px;height:22px;accent-color:#FFD700"><span style="font-size:20px">'+s[1]+'</span><span style="flex:1;font-weight:700">'+s[2]+'</span><span style="color:#FFD700;font-variant-numeric:tabular-nums;font-size:14px">'+cnt[s[0]]+'</span></label>'}).join("")+
+  '<button id="lpSpGo" style="display:block;width:100%;padding:14px;border:0;border-radius:16px;font-size:17px;font-weight:800;margin-top:6px;background:linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%);color:#0b1220">💌 この内容で送る</button>'+
+  '<button id="lpSpX" style="display:block;width:100%;padding:12px;border:0;border-radius:16px;font-size:16px;margin-top:8px;background:transparent;color:#e8ecf5;opacity:.7">とじる</button></div>';
+ document.body.appendChild(ov);
+ var go_=ov.querySelector("#lpSpGo");function upd(){var n=ov.querySelectorAll("[data-sec]:checked").length;go_.disabled=!n;go_.style.opacity=n?1:.4}
+ ov.querySelectorAll("[data-sec]").forEach(function(c){c.onchange=upd});
+ go_.onclick=function(){var o={};ov.querySelectorAll("[data-sec]").forEach(function(c){if(c.checked)o[c.dataset.sec]=1});ov.remove();go(o)};
+ ov.querySelector("#lpSpX").onclick=function(){ov.remove()};ov.onclick=function(e){if(e.target===ov)ov.remove()}};
 })();
 </script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));</script>
