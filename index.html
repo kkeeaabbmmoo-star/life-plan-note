@@ -199,6 +199,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
   <div class="list" id="wtList"></div>
   <div class="hint">「取り分け」でへそくりの中から予約しておけるよ。「👛 買った」でへそくりから支払い、買えたものになります。</div>
  </div>
+ <div data-gy></div>
  <div class="card yzSendCard"><h2>💌 ゆずに送る</h2><div class="hint" style="margin-top:-6px">へそくり・買いたいもの・貯金・固定費・生活費・残高を、スクショなしでまとめてエイジのGmailに送れるよ。記録は何も変わりません。</div><button class="gold full" style="margin-top:4px" onclick="lpYuzuSendAll()">💌 ゆずに送る（ぜんぶまとめて）</button><div style="text-align:center;margin-top:8px"><a href="javascript:void 0" onclick="lpYuzuSend()" style="color:var(--gold2,#FFD700);font-size:13px;opacity:.85">送る項目をえらぶ ›</a></div></div>
  <div class="card"><h2>🐷 貯金へ回した分</h2>
   <div class="kpi" style="margin-top:0"><div><small>今月</small><b class="num" id="mvMon"></b></div><div><small>これまでの合計</small><b class="num" id="mvAll"></b></div></div>
@@ -275,6 +276,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  <div class="card"><h2>📈 残高の推移</h2><div id="balChart"></div></div>
  <div class="card"><h2>🗓 月別の支出と貯金（6か月）</h2><div id="monChart"></div></div>
  <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
+ <div data-gy></div>
  <div class="card yzSendCard"><h2>💌 ゆずに送る</h2><div class="hint" style="margin-top:-6px">へそくり・買いたいもの・貯金・固定費・生活費・残高を、スクショなしでまとめてエイジのGmailに送れるよ。記録は何も変わりません。</div><button class="gold full" style="margin-top:4px" onclick="lpYuzuSendAll()">💌 ゆずに送る（ぜんぶまとめて）</button><div style="text-align:center;margin-top:8px"><a href="javascript:void 0" onclick="lpYuzuSend()" style="color:var(--gold2,#FFD700);font-size:13px;opacity:.85">送る項目をえらぶ ›</a></div></div>
 </section>
 <!-- 目標 -->
@@ -915,4 +917,5 @@ window.lpYuzuSend=function(){var on={};SECS.forEach(function(s){on[s[0]]=1});var
  function show(){const i=((day()*7+st.off)%TIPS.length+TIPS.length)%TIPS.length;document.getElementById("fsTip").textContent=TIPS[i];document.getElementById("fsNo").textContent=(i+1)+" / "+TIPS.length}
  document.getElementById("fsNext").onclick=()=>{st.off++;localStorage.setItem(FK,JSON.stringify(st));show()};show()})();</script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));</script>
+<script>window.GY_CFG={key:"lp_grok_yuzu",theme:{bg:"linear-gradient(135deg,#2a1830,#1b2640)",fg:"#f6e7ef",acc:"#ff8fb8",bd:"#ff8fb880",in:"#0f1729",ebg:"#151e31",sbg:"#2a1830",btn:"linear-gradient(90deg,#ff8fb8,#FFD700)"}};</script><script src="grok-yuzu.js"></script>
 </body></html>
