@@ -193,6 +193,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
   <div class="kpi k3"><div><small>今月 入った</small><b class="num plus" id="hkIn"></b></div><div><small>今月 使った</small><b class="num up" id="hkOut"></b></div><div><small>今月 貯金へ</small><b class="num" id="hkMv" style="color:var(--gold2)"></b></div></div>
   <div class="qa"><button data-hq="in"><b>＋</b>入れる</button><button data-hq="out"><b>−</b>使った</button><button data-hq="mv" class="gold"><b>🐷</b>貯金へ</button></div>
  </div>
+<div class="card fsc"><h2>🧧 風水・金運アップのヒント<span class="r mute" id="fsNo" style="font-weight:400;font-size:13px"></span></h2><div id="fsTip" style="font-size:16px;line-height:1.6;padding:6px 2px"></div><div class="row" style="margin-top:8px"><button class="sm gold" id="fsNext">🔄 次のヒント</button></div><div class="hint" style="margin-top:6px">よく言われている風水・金運の言い伝えを、参考情報として毎日ひとつ紹介するよ。取り入れるかどうかはエイジが決めてね。</div></div>
  <div class="card"><h2>🛒 買いたいもの<span class="r"><button class="sm" id="wtAdd">＋ 追加</button></span></h2>
   <div class="mute" id="wtSum"></div>
   <div class="list" id="wtList"></div>
@@ -319,6 +320,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  </div>
  <div class="card"><h2>💎 内蔵カード</h2><div class="gal" id="artGal"></div></div>
  <div class="card"><h2>👤 プロフィール</h2><label class="f">生年月日（目標の年齢計算に使います）</label><input type="date" id="birth"></div>
+<div class="card"><h2>🎵 音楽</h2><div class="hint" style="margin-top:-6px">ゆずが作ったオリジナル曲だよ♡ 2曲から選べて、日替わりにもできるよ（右上の🎵でもON/OFFできるよ）</div><div id="ymCard"></div></div>
  <div class="card"><h2>💾 バックアップ</h2>
   <div class="hint" style="margin-top:-6px">データはこのiPhoneの中（localStorage＋IndexedDB）に保存されています。ときどき書き出して「ファイル」に保存しておくと安心です。</div>
   <button class="gold full" id="expBtn">JSONで書き出し</button>
@@ -346,7 +348,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 <div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
 <script>
 "use strict";
-const VER="v11";
+const VER="v12";
 const $=id=>document.getElementById(id);
 const K="lp_data";
 const DEF_CATS=["通信費","家賃","光熱費","食費","車","保険","趣味","その他"];
@@ -906,5 +908,11 @@ window.lpYuzuSend=function(){var on={};SECS.forEach(function(s){on[s[0]]=1});var
  ov.querySelector("#lpSpX").onclick=function(){ov.remove()};ov.onclick=function(e){if(e.target===ov)ov.remove()}};
 })();
 </script>
+<style>header{padding-right:62px!important}.ymfab{top:calc(env(safe-area-inset-top) + 6px)}</style><script>window.YM_CFG={onKey:"lp_music_on",trackKey:"lp_music_track",defTrack:"orgel",fab:true,tracks:{orgel:{len:48},love:{f:"song.mp3",len:50.52630385487528}},locked:()=>{const l=document.getElementById("pwLock");return!!l&&l.style.display!=="none"&&!l.hidden}};</script><script src="yuzu-music.js"></script><script>document.getElementById("ymCard").innerHTML=YuzuMusic.cardHTML();YuzuMusic.ui()</script>
+<script>/* 🧧 風水・金運アップのヒント（参考情報） v12 */
+(function(){const TIPS=["財布は「春財布」など、新しくするなら黄色や金色が金運カラーとよく言われるよ", "お金は西の方角と関係が深いとされるよ。西側をきれいにしておくのがおすすめ", "玄関は運の入り口と言われるよ。靴を出しっぱなしにせず、たたきを水拭きしてみよう", "財布の中のレシートは、こまめに出すと「お金が居心地よくなる」と言われるよ", "お札は向きをそろえて入れると、お金を大切にする習慣になると言われるよ", "トイレをきれいに保つと金運に良いと、風水ではよく言われるよ", "黄色い花や果物を西側に飾ると金運アップにつながると言われるよ", "水回り（キッチン・お風呂）の汚れは運気を下げるとされるよ。ぬめりを取ってスッキリ", "財布はお尻のポケットより、バッグに入れて大切に扱うのが良いとされるよ", "いらない物を手放すと、新しい運が入るスペースができると言われるよ", "寝室は休む場所。枕元をすっきりさせると運気が整うと言われるよ", "西日の当たる場所に黄色いカーテンやクッションを置く人も多いよ", "観葉植物は気の流れを良くすると言われるよ。玄関やリビングにひとつ", "窓を開けて空気を入れ替えると、よどんだ気が流れると言われるよ", "財布にはお金とカード以外をあまり入れないのが良いとされるよ", "小銭とお札を分けて入れると、お金の整理がしやすくなるよ", "キッチンのコンロ（火）とシンク（水）は近すぎないほうが良いと言われるよ", "鏡はいつもピカピカに。くもりのない鏡は運気を映すと言われるよ", "玄関マットは定期的に洗うか、新しくすると良いとされるよ", "財布は約1000日（3年くらい）が替えどきと言われることが多いよ", "新しい財布を使う前に、しばらくお札を入れて「寝かせる」習慣もあるよ", "金運の日として「一粒万倍日」「天赦日」に財布を新しくする人もいるよ", "陶器の貯金箱を西や北西に置くと良いと言われることもあるよ", "黄色だけでなく、白やベージュも金運を落ち着かせる色と言われるよ", "寝る前に財布をバッグから出して、静かな場所で休ませる人もいるよ", "ゴミ箱はふた付きにして、こまめに捨てると気が整うと言われるよ", "時計は止まったままにせず、正しい時間に合わせておくと良いとされるよ", "お金を払うときに「ありがとう」と気持ちよく払うのも金運アップの心がけと言われるよ", "北は「貯める」方角と言われるよ。北側に通帳や貯金箱を置く人もいるよ", "丸い形の小物は「円（縁）」に通じて、お金が回るイメージと言われるよ", "財布にほつれや汚れがあったら、手入れや買い替えを考えるきっかけに", "家計簿をつけてお金の流れを見える化するのは、風水に関係なく金運の基本だね", "照明は明るめに。暗い部屋より明るい部屋のほうが気が良いと言われるよ", "水晶やパワーストーンを飾る人もいるよ。気に入ったものをひとつだけ", "財布を床に直接置かないのが良いとされるよ"],FK="lp_fusui";let st={off:0};try{Object.assign(st,JSON.parse(localStorage.getItem(FK)||"{}"))}catch(e){}
+ const day=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*6e4)/864e5)};
+ function show(){const i=((day()*7+st.off)%TIPS.length+TIPS.length)%TIPS.length;document.getElementById("fsTip").textContent=TIPS[i];document.getElementById("fsNo").textContent=(i+1)+" / "+TIPS.length}
+ document.getElementById("fsNext").onclick=()=>{st.off++;localStorage.setItem(FK,JSON.stringify(st));show()};show()})();</script>
 <script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));</script>
 </body></html>
