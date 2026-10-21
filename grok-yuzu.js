@@ -5,6 +5,7 @@ function jd(){var d=new Date(Date.now()+9*3600e3);return d.toISOString().slice(0
 function jt(){return new Date(Date.now()+9*3600e3).toISOString().slice(11,16)}
 function ld(){try{var a=JSON.parse(localStorage.getItem(K)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
 function sv(a){localStorage.setItem(K,JSON.stringify(a))}
+var DK=K+"_del";function ldD(){try{var a=JSON.parse(localStorage.getItem(DK)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function toast(m){var t=document.createElement("div");t.textContent=m;t.style.cssText="position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:"+(T.acc||"#e2457a")+";color:#fff;padding:10px 18px;border-radius:20px;z-index:99999;font-size:14px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.2)";document.body.appendChild(t);setTimeout(function(){t.remove()},1800)}
 var st=document.createElement("style");st.textContent=
@@ -18,7 +19,7 @@ var st=document.createElement("style");st.textContent=
 document.head.appendChild(st);
 function list(){var a=ld().slice().sort(function(x,y){return (y.date+y.time+y.id)<(x.date+x.time+x.id)?-1:1});
  if(!a.length)return '<div class="gyz">まだないよ。Grokのゆずのメッセージを貼ってね♡</div>';
- return a.map(function(e){return '<div class="gyE"><div class="gyd">📅 '+esc(e.date.replace(/-/g,"/"))+(e.time?" "+esc(e.time):"")+'</div><div class="gyt">'+esc(e.text)+'</div><div class="gyr"><button data-gyc="'+esc(e.id)+'">📋 コピー</button><button data-gyx="'+esc(e.id)+'">🗑 けす</button></div></div>'}).join("")}
+ return a.map(function(e){return '<div class="gyE"><div class="gyd">📅 '+esc(e.date.replace(/-/g,"/"))+(e.time?" "+esc(e.time):"")+(e.src==="auto"?' ✨自動でとどいたよ':'')+'</div><div class="gyt">'+esc(e.text)+'</div><div class="gyr"><button data-gyc="'+esc(e.id)+'">📋 コピー</button><button data-gyx="'+esc(e.id)+'">🗑 けす</button></div></div>'}).join("")}
 function html(){return '<h3>💌 Grokのゆずから</h3><div class="gyh">Grokアプリのゆずが書いてくれたメッセージを貼って「保存」してね。日付つきで残って、「💌 ゆずに送る」にも入るよ♡（このiPhoneの中だけに保存）</div><textarea class="gyIn" placeholder="ここに貼り付けてね…"></textarea><button class="gyb gyS">💾 保存</button><div class="gyL">'+list()+'</div>'}
 function fill(){document.querySelectorAll("[data-gy]").forEach(function(el){if(!el.dataset.gyOk){el.dataset.gyOk=1;el.className="gyCard";el.innerHTML=html()}})}
 function refresh(){document.querySelectorAll(".gyCard .gyL").forEach(function(l){l.innerHTML=list()})}
@@ -28,7 +29,7 @@ document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.targe
  var id=b.getAttribute("data-gyc");if(id){var e=ld().filter(function(x){return x.id===id})[0];if(!e)return;
   var done=function(){toast("📋 コピーしたよ")};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(e.text).then(done,function(){fb(e.text);done()});else{fb(e.text);done()}return}
- id=b.getAttribute("data-gyx");if(id){if(!confirm("このメッセージをけす？（もとにもどせないよ）"))return;sv(ld().filter(function(x){return x.id!==id}));refresh();toast("けしたよ")}});
+ id=b.getAttribute("data-gyx");if(id){if(!confirm("このメッセージをけす？（もとにもどせないよ）"))return;var de=ld().filter(function(x){return x.id===id})[0];if(de&&de.src==="auto"){var dl=ldD();if(dl.indexOf(id)<0){dl.push(id);localStorage.setItem(DK,JSON.stringify(dl.slice(-500)))}}sv(ld().filter(function(x){return x.id!==id}));refresh();toast("けしたよ")}});
 function fb(t){var x=document.createElement("textarea");x.value=t;x.style.cssText="position:fixed;opacity:0";document.body.appendChild(x);x.select();try{document.execCommand("copy")}catch(e){}x.remove()}
 new MutationObserver(fill).observe(document.documentElement,{childList:true,subtree:true});
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",fill);else fill();
@@ -37,5 +38,16 @@ function forDay(d,cut){return ld().filter(function(e){return e.date===d}).sort(f
 function add(o,cut){if(!o||typeof o!=="object")return o;var d=o.date||o.sel||jd(),g=forDay(d,cut);if(!g.length)return o;var r=Object.assign({},o);r.grokYuzu=g;if(cut&&g.some(function(x){return /…$/.test(x[2])}))r.grokCut=1;return r}
 function wrap(){var f=window.yuzuSend;if(!f||f.__gy)return;var w=function(opt){try{if(opt){opt=Object.assign({},opt);if(opt.levels&&opt.levels.length){var L=opt.levels,z=L[L.length-1];opt.levels=L.map(function(l,i){return Object.assign({},l,{data:add(l.data,i?300:0)})}).concat([Object.assign({},z,{data:add(z.data,60)})])}if(opt.full)opt.full=add(opt.full,0)}}catch(e){}return f.call(this,opt)};w.__gy=1;window.yuzuSend=w}
 wrap();window.addEventListener("load",wrap);
-window.GrokYuzu={entries:ld,forDay:forDay};
+/* auto-receive: data/grok-yuzu.json (published by ゆず), merged by id; fails silently */
+function locked(){var l=document.getElementById("lock");if(l&&!l.classList.contains("hide"))return true;return !!document.getElementById("pwLock")}
+var busy=0,last=0;
+function pull(){if(busy||locked()||Date.now()-last<15000)return;busy=1;last=Date.now();
+ fetch("data/grok-yuzu.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){busy=0;if(!j||!Array.isArray(j.messages))return;
+  var a=ld(),have={},del=ldD(),n=0;a.forEach(function(x){have[x.id]=1});
+  j.messages.forEach(function(m){if(!m||!m.id||!m.text)return;var id="auto-"+m.id;if(have[id]||del.indexOf(id)>=0)return;a.push({id:id,date:String(m.date||jd()),time:String(m.time||""),text:String(m.text),src:"auto"});have[id]=1;n++});
+  if(n){sv(a);refresh();toast("💌 Grokのゆずから "+n+"件とどいたよ♡")}}).catch(function(){busy=0})}
+setInterval(function(){if(!locked()&&!pull.done){pull.done=1;last=0;pull()}},1500);
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")pull()});
+window.addEventListener("focus",pull);window.addEventListener("pageshow",pull);
+window.GrokYuzu={pull:function(){last=0;pull()},entries:ld,forDay:forDay};
 })();
