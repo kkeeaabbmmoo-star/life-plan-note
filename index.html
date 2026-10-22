@@ -888,7 +888,7 @@ function intro(on,note){var t=today(),L=["ゆずへ💌 エイジの人生設計
  if(x.life)L.push("🧾 今月の生活費 "+yen(x.life.total));
  if(x.bal)L.push("💴 残高 "+yen(x.bal[1])+"（"+fmtD(x.bal[0])+"）");
  return L.join("\n")}
-function go(on){var sub="【ゆずに送る】人生設計ノート "+today();
+function go(on){var sub="ゆずとゆいへ 人生設計ノート "+today();
  var lv=[{data:build(on),note:""},{data:build(on,10),note:"最近の記録は10件まで"},{data:build(on,5),note:"最近の記録は5件まで"},{data:build(on,0),note:"合計と一覧だけ（最近の記録はなし）"}];
  if(on.wants||on.fixed||on.sav){var o2=Object.assign({},on,{wants:0,fixed:0,sav:0}),m=build(o2,0);if(on.sav)m.sav={total:savTotal()};lv.push({data:m,note:"数字だけ"})}
  var tiny={app:"lifeplan",v:1,date:today(),lite:"min"},b0=build(on,0);if(b0.hk)tiny.hk={bal:b0.hk.bal,free:b0.hk.free,in:b0.hk.in,out:b0.hk.out,mv:b0.hk.mv};if(b0.sav)tiny.sav={total:b0.sav.total};if(b0.fixed)tiny.fixed={total:b0.fixed.total};if(b0.life)tiny.life={total:b0.life.total};if(b0.bal)tiny.bal=b0.bal;lv.push({data:tiny,note:"合計だけ（くわしくは共有かコピーで）"});
