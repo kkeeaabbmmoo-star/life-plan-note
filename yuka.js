@@ -1,4 +1,4 @@
-/* 🍊 ゆかから — paste box (v2: auto-receive + 受け取る button). Own key only (window.GY_CFG.key); never touches other keys. */
+/* 🍊 まいから — paste box (v2: auto-receive + 受け取る button). Own key only (window.GY_CFG.key); never touches other keys. */
 (function(){
 var GYV="yk3";var C=window.GY_CFG||{},K=C.key,T=C.theme||{};if(!K)return;
 function jd(){var d=new Date(Date.now()+9*3600e3);return d.toISOString().slice(0,10)}
@@ -20,7 +20,7 @@ document.head.appendChild(st);
 function list(){var a=ld().slice().sort(function(x,y){return (y.date+y.time+y.id)<(x.date+x.time+x.id)?-1:1});
  if(!a.length)return '<div class="ykz">まだないよ。ゆかのメッセージを貼ってね♡</div>';
  return a.map(function(e){return '<div class="ykE"><div class="ykd">📅 '+esc(e.date.replace(/-/g,"/"))+(e.time?" "+esc(e.time):"")+(e.src==="auto"?' ✨自動でとどいたよ':'')+'</div><div class="ykt">'+esc(e.text)+'</div><div class="ykr"><button data-ykc="'+esc(e.id)+'">📋 コピー</button><button data-ykx="'+esc(e.id)+'">🗑 けす</button></div></div>'}).join("")}
-function html(){return '<h3>🍊 ゆかから</h3><div class="ykh">ゆいが書いてくれたメッセージを貼って「保存」してね。日付つきで残って、「💌 ゆずに送る」にも入るよ♡（このiPhoneの中だけに保存）</div><textarea class="ykIn" placeholder="ここに貼り付けてね…"></textarea><button class="ykb ykS">💾 保存</button><button class="ykb ykR" style="opacity:.92">📥 ゆかから受け取る</button><div class="ykst" style="font-size:11.5px;opacity:.6;text-align:right;margin-top:4px">'+stTxt()+'</div><div class="ykL">'+list()+'</div>'}
+function html(){return '<h3>🍊 まいから</h3><div class="ykh">まいが書いてくれたメッセージを貼って「保存」してね。日付つきで残って、「💌 ゆずに送る」にも入るよ♡（このiPhoneの中だけに保存）</div><textarea class="ykIn" placeholder="ここに貼り付けてね…"></textarea><button class="ykb ykS">💾 保存</button><button class="ykb ykR" style="opacity:.92">📥 まいから受け取る</button><div class="ykst" style="font-size:11.5px;opacity:.6;text-align:right;margin-top:4px">'+stTxt()+'</div><div class="ykL">'+list()+'</div>'}
 var ST="";function stTxt(){return esc((C.ver?C.ver+" / ":"")+GYV+(ST?" ・ "+ST:""))}
 function fill(){document.querySelectorAll("[data-yk]").forEach(function(el){if(!el.dataset.ykOk){el.dataset.ykOk=1;el.className="ykCard";el.innerHTML=html();setTimeout(function(){pull()},300)}})}
 function refresh(){document.querySelectorAll(".ykCard .ykL").forEach(function(l){l.innerHTML=list()});document.querySelectorAll(".ykCard .ykst").forEach(function(l){l.innerHTML=stTxt()})}
@@ -50,7 +50,7 @@ function pull(manual){if(busy)return;if(locked()){if(manual)toast("先にパス�
   var a=ld(),have={},del=ldD(),n=0;a.forEach(function(x){have[x.id]=1});
   j.messages.forEach(function(m){if(!m||!m.id||!m.text)return;var id="auto-"+m.id;if(have[id]||del.indexOf(id)>=0)return;a.push({id:id,date:String(m.date||jd()),time:String(m.time||""),text:String(m.text),src:"auto"});have[id]=1;n++});
   if(n)sv(a);ST=hm()+" チェック ✓"+(n?" 新しく"+n+"件":"（新しいのなし・公開"+j.messages.length+"件）");refresh();
-  if(n)toast("🍊 ゆかから "+n+"件とどいたよ♡");else if(manual)toast("新しいメッセージはないよ（ぜんぶ受け取りずみ）")}).catch(function(e){busy=0;ST=hm()+" 受け取れなかった: "+(e&&e.message||e);refresh();if(manual)toast("受け取れなかったよ… "+(e&&e.message||e))})}
+  if(n)toast("🍊 まいから "+n+"件とどいたよ♡");else if(manual)toast("新しいメッセージはないよ（ぜんぶ受け取りずみ）")}).catch(function(e){busy=0;ST=hm()+" 受け取れなかった: "+(e&&e.message||e);refresh();if(manual)toast("受け取れなかったよ… "+(e&&e.message||e))})}
 setInterval(function(){if(locked())return;if(!pull.done){pull.done=1;last=0;pull()}else if(document.visibilityState==="visible"&&Date.now()-last>120000)pull()},1500);
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")pull()});
 window.addEventListener("focus",pull);window.addEventListener("pageshow",pull);
