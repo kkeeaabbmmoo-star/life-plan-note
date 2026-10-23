@@ -2,7 +2,7 @@
 var B='https://kkeeaabbmmoo-star.github.io/';
 var N=[['yotei-note','㊙ 予定 💗','linear-gradient(135deg,#2f6bff,#4b2bbf)','#fff'],
 ['benri-note','📝 便利ノート 💚','linear-gradient(135deg,#2ec4a0,#0f8a8a)','#fff'],
-['yuzu-site','🍊 健康ノート 💛','linear-gradient(135deg,#ffc83d,#ff7a1a)','#fff'],
+['yuzu-health-note','🍊 健康ノート 💛','linear-gradient(135deg,#ffc83d,#ff7a1a)','#fff'],
 ['life-plan-note','🧭 人生設計 ⭐','linear-gradient(135deg,#14213d,#0a1128)','#ffd76a'],
 ['love-note','💖 超幸せノート ✨','linear-gradient(135deg,#d6194f,#7b2cbf)','#fff']];
 var me=location.pathname.split('/').filter(Boolean)[0]||'';
