@@ -16,14 +16,26 @@ function exportJSON(){var f=file();if(canFiles(f))navigator.share({files:[f],tit
 function isObj(x){return x&&typeof x==='object'&&!Array.isArray(x)}
 function idOf(x){return isObj(x)?(x.id!=null?'id:'+x.id:x.key!=null?'key:'+x.key:null):null}
 var added=0;
-function union(ex,inc){var have={};ex.forEach(function(x){have[idOf(x)||JSON.stringify(x)]=1});inc.forEach(function(x){var k=idOf(x)||JSON.stringify(x);if(!have[k]){ex.push(x);have[k]=1;added++}});return ex}
+function ckey(x){if(!isObj(x))return null;if(x.name!=null&&x.amount==null&&x.price==null)return 'n:'+x.name;if(x.text!=null||x.title!=null)return 't:'+(x.date||'')+'|'+(x.title||'')+'|'+(x.text||'');return null}
+function union(ex,inc){var have={};function ks(x){var a=[idOf(x),ckey(x)].filter(Boolean);if(!a.length)a.push(JSON.stringify(x));return a}
+ ex.forEach(function(x){ks(x).forEach(function(k){have[k]=1})});
+ inc.forEach(function(x){var a=ks(x);if(a.some(function(k){return have[k]}))return;ex.push(x);a.forEach(function(k){have[k]=1});added++});return ex}
+function legacy(j){if(!j||typeof j!=='object'||j.data)return j;
+ if(j.app==='life-plan-note-art'||Array.isArray(j.images)){alert('これは画像のバックアップだよ🖼️\n設定の「画像の読み込み」から入れてね');return null}
+ var d={};
+ if(APP==='health'&&(isObj(j.days)||j.settings||j.plans)){for(var k in (j.days||{})){var o=j.days[k];if(o&&((o.foods||[]).length||o.steps||o.exMin||(o.exList||[]).length||o.wt!=null||o.sleep!=null||o.poo!=null||o.mood!=null||o.rest))d['yz_day_'+k]=JSON.stringify(o)}
+  if(isObj(j.plans)){var p={};for(var q in j.plans)if(Array.isArray(j.plans[q])&&j.plans[q].length)p[q]=j.plans[q];d.yuzu_plans=JSON.stringify(p)}
+  if(isObj(j.settings))d.yz_settings=JSON.stringify(j.settings);return {app:'health',data:d}}
+ if(APP==='lifeplan'&&(Array.isArray(j.cats)||j.app==='life-plan-note')){var c={};for(var k2 in j)if(k2!=='app'&&k2!=='exported')c[k2]=j[k2];return {app:'lifeplan',data:{lp_data:JSON.stringify(c)}}}
+ if(APP==='love'&&(Array.isArray(j.entries)||isObj(j.likes))){var l={};for(var k3 in j)if(k3!=='app'&&k3!=='exported')l[k3]=j[k3];return {app:'love',data:{ln_data:JSON.stringify(l)}}}
+ return j}
 function merge(ex,inc,depth){if(ex===undefined||ex===null){if(inc!==undefined&&inc!==null)added++;return inc}
  if(Array.isArray(ex)&&Array.isArray(inc))return union(ex,inc);
  if(isObj(ex)&&isObj(inc)&&depth<2){for(var k in inc)ex[k]=merge(ex[k],inc[k],depth+1);return ex}
  return ex}
 function importText(txt,name){var j;try{j=JSON.parse(txt)}catch(e){alert('JSONファイルが読めなかったよ🥺');return}
- var data=j&&j.data;if(!data||typeof data!=='object'){alert('このノートのバックアップではないみたい');return}
- if(j.app&&j.app!==APP&&j.app!=='benri-note'){alert('これは「'+j.app+'」のバックアップだよ。このノートには読み込めないよ');return}
+ j=legacy(j);if(!j)return;var data=j&&j.data;if(!data||typeof data!=='object'){alert('このノートのバックアップではないみたい');return}
+ if(j.app&&j.app!==APP&&!({'benri-note':'benri','life-plan-note':'lifeplan','love-note':'love','yuzu-health-note':'health','yotei-note':'yotei'}[j.app]===APP)){alert('これは「'+j.app+'」のバックアップだよ。このノートには読み込めないよ');return}
  var ks=Object.keys(data).filter(function(k){return own(k)&&!skip(k)});
  if(!ks.length){alert('読み込めるデータが入ってなかったよ');return}
  if(!confirm('「'+name+'」を読み込む？\n今のデータは消さずに、足りない分だけ追加するよ（同じ日・同じ項目は今のものを残すよ）'))return;
