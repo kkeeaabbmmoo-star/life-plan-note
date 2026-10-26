@@ -91,5 +91,6 @@ function addAttach(opt){var ov=document.getElementById('yzSendOv');if(!ov||ov.qu
  var n=document.createElement('div');n.style.cssText='font-size:12px;margin-top:6px;opacity:.85';n.textContent='共有メニューで「メール」か「Gmail」をえらんでね。宛先は '+'自分のアドレス'+'、件名は「'+opt.subject+'」にしてね（本文はそのまま入るよ）';
  b.onclick=function(){navigator.share({files:[f],title:opt.subject,text:opt.subject+'\n\n'+body}).catch(function(){})};
  var t=box.children[0];if(t&&t.nextSibling)box.insertBefore(n,t.nextSibling);else box.appendChild(n);box.insertBefore(b,n)}
+window.yzImportText=importText;window.yzOwnCount=function(){return keys().length};
 wrap();document.addEventListener('DOMContentLoaded',wrap);window.addEventListener('load',wrap);[500,2000].forEach(function(t){setTimeout(wrap,t)});
 })();
