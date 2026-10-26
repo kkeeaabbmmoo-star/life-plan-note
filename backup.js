@@ -3,7 +3,7 @@
 var A={'yotei-note':['yotei','yt_'],'benri-note':['benri','bn_'],'yuzu-health-note':['health','yz_','yuzu_plans'],'life-plan-note':['lifeplan','lp_'],'love-note':['love','ln_']};
 var seg=location.pathname.split('/').filter(Boolean)[0]||'';var cfg=A[seg];
 if(!cfg){var t=document.title||'';cfg=/予定/.test(t)?A['yotei-note']:/便利/.test(t)?A['benri-note']:/健康/.test(t)?A['yuzu-health-note']:/人生/.test(t)?A['life-plan-note']:A['love-note']}
-var BKV='backup v4';var APP=cfg[0],PRES=cfg.slice(1);function own(k){return PRES.some(function(p){return k.indexOf(p)===0})}
+var BKV='backup v5';var APP=cfg[0],PRES=cfg.slice(1);function own(k){return PRES.some(function(p){return k.indexOf(p)===0})}
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 function skip(k){return /_pw$|_lock/.test(k)}
 function keys(){var o=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&own(k)&&!skip(k))o.push(k)}return o.sort()}
@@ -49,9 +49,9 @@ function merge(ex,inc,depth){if(ex===undefined||ex===null){if(inc!==undefined&&i
  if(Array.isArray(ex)&&Array.isArray(inc))return union(ex,inc);
  if(isObj(ex)&&isObj(inc)&&depth<2){for(var k in inc)ex[k]=merge(ex[k],inc[k],depth+1);return ex}
  return ex}
-function parseLoose(txt){txt=String(txt||'').replace(/^\uFEFF/,'').trim();var j=JSON.parse(txt);for(var i=0;i<3&&typeof j==='string';i++){try{j=JSON.parse(j.replace(/^\uFEFF/,'').trim())}catch(e){break}}return j}
+function parseLoose(txt){txt=String(txt||'').replace(/^\uFEFF/,'').replace(/[\u201C\u201D]/g,'"').replace(/\u00A0/g,' ').trim();var j;try{j=JSON.parse(txt)}catch(e0){var a=txt.indexOf('{'),b=txt.lastIndexOf('}');if(a<0||b<=a)throw e0;j=JSON.parse(txt.slice(a,b+1))}for(var i=0;i<3&&typeof j==='string';i++){try{j=JSON.parse(j.replace(/^\uFEFF/,'').trim())}catch(e){break}}return j}
 function topKeys(j){try{return Array.isArray(j)?'[配列 '+j.length+'件]':(j&&typeof j==='object')?Object.keys(j).slice(0,12).join(', ')||'(空)':typeof j}catch(e){return '?'}}
-function importText(txt,name){var j;try{j=parseLoose(txt)}catch(e){alert('JSONファイルが読めなかったよ🥺');return}var _tk=topKeys(j);
+function importText(txt,name){var j;try{j=parseLoose(txt)}catch(e){alert('JSONファイルが読めなかったよ🥺\n理由: 中にJSONが見つからない／形式がちがう\nファイル: '+(name||'?'));return}var _tk=topKeys(j);
  j=legacy(j);if(!j)return;var data=j&&j.data;if(!data||typeof data!=='object'){alert('このノートのバックアップではないみたい\n（ファイルの中身: '+_tk+'）\n'+BKV);return}
  if(j.app&&j.app!==APP&&!({'benri-note':'benri','life-plan-note':'lifeplan','love-note':'love','yuzu-health-note':'health','yotei-note':'yotei'}[j.app]===APP)){alert('これは「'+j.app+'」のバックアップだよ。このノートには読み込めないよ');return}
  var imgKeys={};Object.keys(data).forEach(function(k){if(/^idb:slots:/.test(k)&&APP==='health')imgKeys[k]=data[k]});var ks=Object.keys(data).filter(function(k){return own(k)&&!skip(k)});if(!ks.length&&Object.keys(imgKeys).length)ks=[];
@@ -66,7 +66,7 @@ function importText(txt,name){var j;try{j=parseLoose(txt)}catch(e){alert('JSON�
   if(k==='yz_presets'&&Array.isArray(a)&&Array.isArray(b)){var have={};a.forEach(function(q){if(q&&q.name)have[q.name]=1});b.forEach(function(q){if(!q||!q.name||have[q.name])return;for(var i=0;i<a.length;i++)if(!a[i]||!a[i].name){a[i]=q;have[q.name]=1;added++;return}if(a.length<7){a.push(q);have[q.name]=1;added++}});if(added>before)localStorage.setItem(k,JSON.stringify(a));return}
   var m=merge(a,b,0);if(added>before)localStorage.setItem(k,JSON.stringify(m))});
  putImgs(imgKeys).then(function(ni){alert('読み込んだよ♡\n新しく追加：'+newKeys+'件のデータ'+(added?'＋'+added+'件の項目':'')+(ni?'＋写真'+ni+'枚':'')+'\n今あったデータはそのまま残してるよ');location.reload()})}
-function pick(){var i=document.createElement('input');i.type='file';i.accept='.json,application/json,text/plain';i.style.display='none';document.body.appendChild(i);
+function pick(){var i=document.createElement('input');i.type='file';i.style.display='none';document.body.appendChild(i);
  i.onchange=function(){var f=i.files[0];i.remove();if(!f)return;var r=new FileReader();r.onload=function(){importText(r.result,f.name)};r.readAsText(f)};i.click()}
 function defAv(){if(APP!=='health')return;try{if(!localStorage.getItem('yz_avatar_couple')){var el=document.getElementById('av_couple');if(el&&el.tagName!=='IMG'){var i=document.createElement('img');i.id='av_couple';i.src='img/twoshot.svg';i.alt='ふたり';i.dataset.def='1';el.replaceWith(i)}}}catch(e){}}
 setTimeout(defAv,300);setTimeout(defAv,2500);
