@@ -14,9 +14,11 @@ function build(){
  document.head.appendChild(s);
  var d=document.createElement('nav');d.id='yz-nav';
  var h='<h3>💖 ほかのノートへ 💖</h3><div class="g">';
- N.forEach(function(n){if(n[0]!==me)h+='<a href="'+B+n[0]+'/" style="background:'+n[2]+';color:'+n[3]+'">'+n[1]+'</a>';});
+ N.forEach(function(n){if(n[0]!==me)h+='<a href="'+B+n[0]+'/" data-n="'+n[0]+'" style="background:'+n[2]+';color:'+n[3]+'">'+n[1]+'</a>';});
  d.innerHTML=h+'</div>';return d;}
 function put(){var d=build();if(document.body.lastElementChild!==d)document.body.appendChild(d);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',put);else put();
 window.addEventListener('load',put);[800,2500,6000].forEach(function(t){setTimeout(put,t)});
+/* 💞 みんなの思い出: 最新の投稿日をボタンに小さく（公開の data/latest.json を読むだけ） */
+setTimeout(function(){if(me==='omoide-benri')return;fetch(B+'omoide-benri/data/latest.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!j.latest)return;var a=document.querySelector('#yz-nav a[data-n="omoide-benri"]');if(!a||a.querySelector('small'))return;var t=new Date(Date.now()+9*36e5).toISOString().slice(0,10),d=j.latest;var sm=document.createElement('small');sm.style.cssText='display:block;font-size:11px;font-weight:700;opacity:.95';sm.textContent=(d===t?'🆕 今日 ':'最新 ')+(+d.slice(5,7))+'/'+(+d.slice(8,10))+(j.who?' '+j.who:'');a.style.flexDirection='column';a.appendChild(sm)}).catch(function(){})},1200);
 })();
