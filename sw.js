@@ -1,4 +1,4 @@
-const C='lifeplan-v32';
+const C='lifeplan-v33';
 const ASSETS=['./','index.html','yuzu-inbox.js','yuzu-music.js','nav.js?v=nv4','sent-status.js?v=ss1','backup.js?v=bk4','orgel.mp3','song.mp3','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','art/whale.webp','art/owl.webp','art/phoenix.webp','art/dragon.webp','art/crab.webp'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(ASSETS)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
