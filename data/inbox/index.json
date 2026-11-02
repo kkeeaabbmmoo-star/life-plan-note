@@ -5,6 +5,72 @@
   "iter": 200000,
   "salt": "ue+CWA+plWy/zlFqbiJBuQ=="
  },
- "items": [],
- "updated": "2026-10-20T06:18:59+09:00"
+ "items": [
+  {
+   "id": "5276d503d8f441cc",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:22+09:00"
+  },
+  {
+   "id": "798809fa35dc02d2",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "9b11af16e5f87680",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "e386c3aceff644cf",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "c1cb0d9664dec2a5",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "85de1a8264d93205",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "0afaf6cd9581327e",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "cacb130d64ccd29c",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "0fec2606e689198b",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "368eba222bea249c",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "886556754f6e8837",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "b49d2e7c22769eae",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  },
+  {
+   "id": "445ff75d23c41a26",
+   "app": "lifeplan",
+   "added": "2026-11-02T12:13:23+09:00"
+  }
+ ],
+ "updated": "2026-11-02T12:13:23+09:00"
 }
