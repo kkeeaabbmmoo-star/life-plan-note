@@ -61,8 +61,8 @@ function preview(){var T=C.theme,h="";
  document.getElementById("yzInSkip").onclick=function(){var ids=cbs.filter(function(c){return !c.checked}).map(function(c){return ITEMS[+c.dataset.i].id});
   if(!ids.length){say("チェックしてないものはないよ");return}if(!confirm(ids.length+"件を受け取らないでおく？（ノートには何も入らないよ）"))return;markDone(ids);badge();close();say("わかった、見送ったよ😊")};
  document.getElementById("yzInGo").onclick=function(){var sel=cbs.filter(function(c){return c.checked}).map(function(c){return ITEMS[+c.dataset.i]});if(!sel.length)return;
-  var r;try{r=C.apply(sel)}catch(e){console.error(e);say("ごめんね、うまく入らなかった🥺");return}
+  var r;try{r=C.apply(sel)}catch(e){console.error(e);say("取り込めなかったよ。残高は変えていないよ。"+(e.message||""));return}
   var same=ITEMS.filter(function(it){return it._d&&it._d.same&&sel.indexOf(it)<0}).map(function(it){return it.id});
-  markDone(sel.map(function(x){return x.id}).concat(same));badge();close();say("💝 "+(r||sel.length)+"件取り込んだよ♡")}}
+  markDone(sel.map(function(x){return x.id}).concat(same));badge();close();say("💝 "+(typeof r==="number"?r:sel.length)+"件取り込んだよ♡")}}
 window.yzInbox={init:function(cfg){C=cfg;css();loadIndex().then(badge);document.addEventListener("visibilitychange",function(){if(!document.hidden)loadIndex().then(badge)})},open:open,_reload:function(){return loadIndex().then(badge)}};
 })();
