@@ -295,7 +295,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  <div class="card"><h2>📊 前月との比較</h2><div class="list" id="cmpList"></div></div>
  <div class="card"><h2>📈 残高の推移</h2><div id="balChart"></div></div>
  <div class="card"><h2>🗓 月別の支出と貯金（6か月）</h2><div id="monChart"></div></div>
- <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
+ <div class="card"><h2>💝 ゆずから受け取る</h2><div class="hint" style="margin-top:-6px">ゆずがメールから見つけた財布の支出・経費・貯金・予定・メモを、ボタンひとつでノートに入れられるよ。今までの記録は消えたり上書きされたりしません。</div><button class="gold full" style="margin-top:4px" onclick="yzInbox.open()">💝 ゆずから受け取る<span class="yzInBadge"></span></button></div>
  <!-- 由依・まい corners hidden (UI only); LS keys left untouched -->
 </section>
 <!-- 目標 -->
@@ -862,22 +862,27 @@ idbGet().then(s=>{if(!localStorage.getItem(K)&&s){try{const j=JSON.parse(s);if(j
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){_artKey="";$("balDate").value=$("balDate").value||today();render()}});
 render();uaLoad();
 </script>
-<script src="yuzu-inbox.js"></script><script>
+<script src="wallet-inbox.js?v=1"></script><script src="yuzu-inbox.js?v=wallet1"></script><script>
 /* 人生設計ノート → 💝 ゆずから受け取る adapter (append only; never edits existing records) */
 (function(){
-var SEC={expense:["🧾","経費"],saving:["🐷","貯金"],balance:["💴","残高"],memo:["📝","メモ"],goal:["🧭","目標"],want:["🛒","買いたいもの"]};
+var SEC={wallet:["👛","財布"],expense:["🧾","経費"],saving:["🐷","貯金"],balance:["💴","残高"],memo:["📝","メモ"],goal:["🧭","目標"],want:["🛒","買いたいもの"]};
 function byName(arr,n,fb){var f=arr.find(function(c){return c.name===n});return f?f.id:(arr.find(function(c){return c.name===fb})||arr[arr.length-1]||{}).id}
 function ensureCat(name){var n=String(name||"").trim()||"その他";var f=D.cats.find(function(c){return c.name===n});if(f)return f.id;var id="c"+uid();D.cats.push({id:id,name:n});return id}
 function describe(it){var x=it.data||{},d=it.date,s=SEC[it.kind];if(!s)return{ok:0,icon:"❔",label:it.title||"?",section:"?",why:"人生設計ノートには入れられない内容だよ"};
  if(!d||!/^\d{4}-\d\d-\d\d$/.test(d))return{ok:0,icon:s[0],label:it.title||s[1],section:s[1],why:"日付がないよ"};
  var a=Math.round(+x.amount||0),m=String(x.memo||it.title||"");
+ if(it.kind=="wallet"){var valid=LPWalletInbox.valid(it),known=LPWalletInbox.known(D,it);return{ok:valid&&!known,icon:s[0],label:(x.kind==="in"?"財布へ入金 ":"財布から支出 ")+yen(a)+(m?"・"+m:""),section:s[1],why:known?"このレシートは取り込み済みだよ":"財布の金額・種類を確認してね",same:known?"同じレシートはもう入っているよ":0,conflict:valid&&!known&&LPWalletInbox.match(D,it)?"同じ日・金額の財布記録があるよ。手入力済みならチェックしないでね":0}}
  if(it.kind=="expense"){var c=x.cat||"その他";return{ok:a>0,icon:s[0],label:yen(a)+" "+c+(m?"・"+m:""),section:s[1],why:"金額がないよ",same:D.expenses.some(function(e){return e.date==d&&e.amount==a&&(e.memo||"")==m})?"同じ日に同じ金額・メモの経費があるよ":0}}
  if(it.kind=="saving"){var sv=a*(x.dir==-1?-1:1);return{ok:a>0,icon:s[0],label:(sv<0?"取り崩し ":"")+yen(Math.abs(sv))+" "+(x.type||"その他")+(m?"・"+m:""),section:s[1],why:"金額がないよ",same:D.savings.some(function(e){return e.date==d&&e.amount==sv&&(e.memo||"")==m})?"同じ日に同じ貯金があるよ":0}}
  if(it.kind=="balance"){return{ok:isFinite(+x.amount),icon:s[0],label:"残高 "+yen(+x.amount)+(m?"・"+m:""),section:s[1],same:D.balances.some(function(e){return e.date==d&&e.amount==+x.amount})?"同じ日に同じ残高があるよ":0}}
  if(it.kind=="memo"){var t=String(x.title||it.title||"");return{ok:!!(t||x.body),icon:s[0],label:t||"（無題）",section:s[1],same:D.memos.some(function(e){return e.title==t&&e.body==(x.body||"")})?"同じメモがあるよ":0}}
  if(it.kind=="goal"){var g=String(x.title||it.title||"");return{ok:!!g,icon:s[0],label:g+(x.targetYear?"（"+x.targetYear+"年）":""),section:s[1],same:D.goals.some(function(e){return e.title==g})?"同じ名前の目標があるよ":0}}
  if(it.kind=="want"){var w=String(x.name||it.title||"");return{ok:!!w,icon:s[0],label:w+(a?" "+yen(a):""),section:s[1],same:D.wants.some(function(e){return e.name==w})?"同じ買いたいものがあるよ":0}}}
-function apply(sel){var n=0;sel.forEach(function(it){var x=it.data||{},d=it.date,a=Math.round(+x.amount||0),m=String(x.memo||it.title||""),ds=it._d||describe(it);if(!ds.ok)return;
+function apply(sel){
+ var original=D, before=JSON.parse(JSON.stringify(D));D=JSON.parse(JSON.stringify(D));
+ var n=0,text;
+ try{sel.forEach(function(it){var x=it.data||{},d=it.date,a=Math.round(+x.amount||0),m=String(x.memo||it.title||""),ds=describe(it);if(!ds.ok)return;
+  if(it.kind=="wallet"){n+=LPWalletInbox.append(D,it,uid());return}
   if(it.kind=="expense")D.expenses.push({id:uid(),date:d,amount:a,cat:ensureCat(x.cat||"その他"),memo:m,from:"yuzu",order:x.order||null});
   else if(it.kind=="saving")D.savings.push({id:uid(),date:d,amount:a*(x.dir==-1?-1:1),type:byName(D.savTypes,x.type,"その他"),goalId:null,purpose:String(x.purpose||""),memo:m,from:"yuzu"});
   else if(it.kind=="balance")D.balances.push({id:uid(),date:d,amount:Math.round(+x.amount),memo:m,from:"yuzu"});
@@ -885,7 +890,10 @@ function apply(sel){var n=0;sel.forEach(function(it){var x=it.data||{},d=it.date
   else if(it.kind=="goal")D.goals.push({id:uid(),created:today(),title:String(x.title||it.title),cat:GCATS.indexOf(x.cat)>=0?x.cat:"その他",targetYear:+x.targetYear||null,deadline:x.deadline||"",steps:(x.steps||[]).map(function(t){return{t:String(t),d:false}}),autoP:true,progress:0,notes:String(x.notes||""),from:"yuzu"});
   else if(it.kind=="want")D.wants.push({id:uid(),done:false,name:String(x.name||it.title),price:a,prio:+x.prio||2,target:String(x.target||""),cat:byName(D.cats,x.cat,"その他"),memo:m,from:"yuzu"});
   else return;n++});
- if(n){save();render()}return n}
+ if(n)text=LPWalletInbox.persist(localStorage,before,D);
+ }catch(e){D=original;throw e}
+ if(n){idbPut(text);try{render()}catch(e){console.error(e)}}else D=original;
+ return n}
 yzInbox.init({app:"lifeplan",prefix:"lp",base:"data/inbox/",describe:describe,apply:apply,
  theme:{bg:"#0f1830",fg:"#e8ecf5",acc:"#FFD700",btn:"linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%)",btnfg:"#0b1220",sub:"rgba(255,215,0,.12)",rowbg:"rgba(255,255,255,.06)",warn:"#ffb86b",badge:"#0b1220",badgefg:"#FFD700",badgering:"#FFD700",border:"rgba(255,215,0,.45)"}});
 })();
