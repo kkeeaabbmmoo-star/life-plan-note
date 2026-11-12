@@ -45,24 +45,31 @@ async function open(){css();msg("確認してるよ…💝");await loadIndex();b
  var P=pending();if(!P.length){msg("いまは新しいお届けはないよ😊<br>ゆずがメールからノートに入れたいものを見つけたら、ボタンに<b>数字</b>がつくからね♡");return}
  var key=await getKey();if(!key){askPw();return}
  try{ITEMS=[];for(var j=0;j<P.length;j++){try{ITEMS.push(await decryptOne(key,P[j]))}catch(e){if(e&&e.name==="OperationError"){try{localStorage.removeItem(C.prefix+"_inbox_k")}catch(x){}KEY=null;askPw("パスワードが変わったみたい。もう一回入れてね🔑");return}}}}catch(e){msg("読み込めなかったよ🥺 もう一回ためしてね");return}
- ITEMS.sort(function(a,b){return (a.date||"")<(b.date||"")?-1:1});preview()}
+ ITEMS.sort(function(a,b){return (a.date||"")<(b.date||"")?-1:1});if(C.order)ITEMS=C.order(ITEMS);preview()}
+function dethtml(d){return d&&d.detail?[].concat(d.detail).map(esc).join("<br>"):""}
 function preview(){var T=C.theme,h="";
- ITEMS.forEach(function(it,i){var d=C.describe(it);it._d=d;var chk=d.ok&&!d.conflict&&!d.same;
+ /* Items checked by default give context (e.g. 残高合わせ applies these receipts first). */
+ var sel0=ITEMS.filter(function(it){var d=C.describe(it,null);return d.ok&&!d.conflict&&!d.same});
+ ITEMS.forEach(function(it,i){var d=C.describe(it,sel0);it._d=d;var chk=d.ok&&!d.conflict&&!d.same;
   h+='<label class="row'+(d.ok?"":" off")+'"><input type="checkbox" data-i="'+i+'"'+(chk?" checked":"")+(d.ok?"":" disabled")+'><span class="ic">'+esc(d.icon)+'</span><span class="tx"><div class="tt">'+esc(d.label)+'</div>'+
   '<div class="mt"><span class="sec">'+esc(d.section)+'</span>📅 '+esc(md(it.date))+(it.src&&it.src.subject?' ・ ✉️ '+esc(it.src.subject):"")+(it.src&&it.src.date?'（'+esc(md(it.src.date))+'）':"")+'</div>'+
-  (it.note?'<div class="mt">💬 '+esc(it.note)+'</div>':"")+
+  (it.note?'<div class="mt">💬 '+esc(it.note)+'</div>':"")+(d.detail?'<div class="cf yzInDet" data-di="'+i+'" style="color:inherit">'+dethtml(d)+'</div>':"")+
   (d.conflict?'<div class="cf">⚠️ '+esc(d.conflict)+'</div>':"")+(d.same?'<div class="ok">✓ '+esc(d.same)+'</div>':"")+(!d.ok?'<div class="cf">'+esc(d.why||"このノートでは取り込めない内容だよ")+'</div>':"")+'</span></label>'});
  sheet('<div style="font-size:14px;line-height:1.6;margin:6px 0 2px">ゆずがメールから見つけた内容だよ♡ 入れたいものにチェックして「取り込む」を押してね。<b>今までの記録は消えたり上書きされたりしないよ。</b></div>'+h+
   '<button id="yzInGo" style="'+BT+'background:'+T.btn+';color:'+T.btnfg+'"></button><button id="yzInSkip" style="'+BT+'background:'+T.sub+';color:'+T.acc+';font-size:14.5px">チェックしていないものは受け取らない</button><button id="yzInX" style="'+BT+'background:transparent;color:'+T.fg+';opacity:.7;font-weight:600">あとで</button>');
  var ov=document.getElementById("yzInOv"),cbs=[].slice.call(ov.querySelectorAll("input[data-i]"));
  function cnt(){var n=cbs.filter(function(c){return c.checked}).length,g=document.getElementById("yzInGo");g.textContent=n?"💝 取り込む（"+n+"件）":"チェックがないよ";g.disabled=!n;g.style.opacity=n?1:.5}
- cbs.forEach(function(c){c.onchange=cnt});cnt();
+ function live(){var on=cbs.filter(function(c){return c.checked}).map(function(c){return ITEMS[+c.dataset.i]});
+  ITEMS.forEach(function(it,i){if(!it._d||!it._d.live)return;var d=C.describe(it,on),el=ov.querySelector('.yzInDet[data-di="'+i+'"]');if(el)el.innerHTML=dethtml(d)})}
+ cbs.forEach(function(c){c.onchange=function(){cnt();live()}});cnt();
  document.getElementById("yzInX").onclick=close;
  document.getElementById("yzInSkip").onclick=function(){var ids=cbs.filter(function(c){return !c.checked}).map(function(c){return ITEMS[+c.dataset.i].id});
   if(!ids.length){say("チェックしてないものはないよ");return}if(!confirm(ids.length+"件を受け取らないでおく？（ノートには何も入らないよ）"))return;markDone(ids);badge();close();say("わかった、見送ったよ😊")};
  document.getElementById("yzInGo").onclick=function(){var sel=cbs.filter(function(c){return c.checked}).map(function(c){return ITEMS[+c.dataset.i]});if(!sel.length)return;
   var r;try{r=C.apply(sel)}catch(e){console.error(e);say("取り込めなかったよ。残高は変えていないよ。"+(e.message||""));return}
   var same=ITEMS.filter(function(it){return it._d&&it._d.same&&sel.indexOf(it)<0}).map(function(it){return it.id});
-  markDone(sel.map(function(x){return x.id}).concat(same));badge();close();say("💝 "+(typeof r==="number"?r:sel.length)+"件取り込んだよ♡")}}
+  markDone(sel.map(function(x){return x.id}).concat(same));badge();
+  if(r&&typeof r==="object"&&r.note){msg("💝 "+r.n+"件取り込んだよ♡<br>"+[].concat(r.note).map(esc).join("<br>"));return}
+  close();say("💝 "+(typeof r==="number"?r:sel.length)+"件取り込んだよ♡")}}
 window.yzInbox={init:function(cfg){C=cfg;css();loadIndex().then(badge);document.addEventListener("visibilitychange",function(){if(!document.hidden)loadIndex().then(badge)})},open:open,_reload:function(){return loadIndex().then(badge)}};
 })();
