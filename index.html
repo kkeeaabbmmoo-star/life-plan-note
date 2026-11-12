@@ -194,7 +194,8 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  <div class="card walc"><h2>👛 財布（生活費）</h2>
   <div class="mute">いまの財布の中身</div><div class="big hero num shine" id="wfBal">¥0</div>
   <div class="wfrow" style="margin-top:8px"><div><label class="f">残高を自分で入力・修正</label><input class="yen neg" inputmode="numeric" id="wfAmt" placeholder="例：10000"></div><button type="button" class="gold" id="wfSet">反映</button></div>
-  <div class="hint">コンビニなどの日々の買い物は、この財布から足し引きするよ。へそくりには触れないよ。</div>
+  <div class="hint">コンビニなどの日々の買い物は、この財布から足し引きするよ。へそくりには触れないよ。実際の残高を「反映」すると、合わない分は雑費（不明金）として残るよ。</div>
+  <div id="wfZatsu"></div>
  </div>
  <div class="card"><h2>✍️ 財布の出入り</h2>
   <div class="chips" id="wfDir"><button class="chip on" data-wfdir="-1">− 使った</button><button class="chip" data-wfdir="1">＋ 入れた</button></div>
@@ -256,6 +257,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
  <div class="card"><div class="msw"><button class="icon" data-mm="-1">‹</button><b id="mmLbl"></b><button class="icon" data-mm="1">›</button></div>
   <div class="row" style="align-items:baseline"><span class="mute">この月の生活費</span><span class="num" style="text-align:right;font-size:22px;font-weight:800" id="mmTot"></span></div>
   <div class="list legend" id="lfCats" style="margin-top:6px"></div>
+  <div id="mmZatsu"></div>
   <div class="list" id="exList" style="margin-top:6px"></div>
   <div class="hint" id="mmFix"></div>
  </div>
@@ -367,6 +369,7 @@ document.getElementById("pwGo").onclick=go;inp.addEventListener("keydown",functi
 <div class="ov hide" id="ov"><div class="sheet"><h3 id="shT"></h3><div id="shB"></div><div class="acts"><button id="shX">キャンセル</button><button class="danger" id="shDel">削除</button><button class="gold" id="shOk">保存</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div id="vw" class="hide" aria-modal="true"><div class="vt"><b id="vwName"></b><span id="vwIdx"></span><button class="vx" id="vwX" aria-label="閉じる">✕</button></div><div class="vs" id="vwStage"><button class="vn l" id="vwP" aria-label="前へ">‹</button><img id="vwImg" alt="" draggable="false"><button class="vn r" id="vwN" aria-label="次へ">›</button></div><div class="vh">左右にスワイプで切りかえ ・ 2本指で拡大 ・ ダブルタップで2倍</div></div>
+<script src="wallet-inbox.js?v=2"></script>
 <script>
 "use strict";
 const VER="v14";
@@ -541,7 +544,7 @@ let MM=ymOf(today()),exCat=null;
 function latestBal(upTo){const b=D.balances.filter(x=>!upTo||x.date<=upTo).sort((a,b)=>a.date<b.date?1:-1);return b[0]}
 /* ===== へそくり + 財布 (v13): walletBal/walletRecs; へそくり = savings type へそくり ===== */
 let MV=(()=>{try{return sessionStorage.getItem("lp_mv")||"hk"}catch(e){return"hk"}})();
-const WAL_CATS=["コンビニ","食費","飲み物","交通","日用品"];
+const WAL_CATS=["コンビニ","食費","飲み物","交通","日用品","雑費"];
 let wfCat=WAL_CATS[0],wfDir=-1;
 const hkType=()=>{const t=D.savTypes.find(x=>/へそくり/.test(x.name));return t?t.id:null};
 const hkTypeEnsure=()=>{let id=hkType();if(!id){id="s"+uid();D.savTypes.push({id,name:"へそくり"})}return id};
@@ -550,18 +553,24 @@ const hkBal=()=>hkRecs().reduce((s,e)=>s+(+e.amount||0),0);
 const isMv=e=>e.hk==="mv";
 const wSaved=w=>w.done?0:Math.max(0,+w.saved||0);
 const wfDelta=r=>r.kind==="set"?(+r.amount||0):(r.kind==="in"?(+r.amount||0):-(+r.amount||0));
+/* 雑費（財布の不明金）: 生活費のカテゴリ割合とは別の行で、雑収入・差し引きと一緒に表示 */
+function zatsuHtml(ym){const z=LPWalletInbox.zatsu(D,ym);if(!z.outCount&&!z.inCount)return"";
+ return`<div class="list" style="margin-top:8px;border-top:1px dashed rgba(255,215,0,.35);padding-top:6px"><div class="it"><div class="m"><b>👛 雑費（不明金）</b><div class="s">財布・${z.outCount}件 ・ カテゴリ割合には入れていないよ</div></div><b class="num up">−${yen(z.out)}</b></div>`+
+ (z.inCount?`<div class="it"><div class="m"><b>👛 雑収入（不明金）</b><div class="s">${z.inCount}件 ・ 収入の合計には入れていないよ</div></div><b class="num plus">+${yen(z.in)}</b></div>`:"")+
+ `<div class="it"><div class="m"><b>差し引き</b></div><b class="num ${z.net<0?"up":"plus"}">${z.net>=0?"+":"−"}${yen(Math.abs(z.net))}</b></div></div>`+
+ (z.hint?'<div class="hint">レシートのもらい忘れがあるかも🧾</div>':"")}
 function rMoney(){
  document.querySelectorAll("#mSeg button").forEach(b=>b.classList.toggle("on",b.dataset.mv===MV));
  ["hk","pay","life"].forEach(v=>$("mv-"+v).hidden=v!==MV);
  const ym=ymOf(today());
  /* 財布 */
  if(!$("wfDate").value)$("wfDate").value=today();
- $("wfBal").textContent=yen(D.walletBal||0);$("wfBal").style.color=(D.walletBal||0)<0?"var(--red)":"";
+ $("wfBal").textContent=yen(D.walletBal||0);$("wfZatsu").innerHTML=zatsuHtml(ymOf(today()));$("wfBal").style.color=(D.walletBal||0)<0?"var(--red)":"";
  $("wfDir").querySelectorAll(".chip").forEach(b=>b.classList.toggle("on",+b.dataset.wfdir===wfDir));
  $("wfCats").innerHTML=WAL_CATS.map(c=>`<button class="chip${c===wfCat?" on":""}" data-wfcat="${esc(c)}">${esc(c)}</button>`).join("");
  $("wfAdd").textContent=wfDir<0?"財布から使った":"財布に入れた";
  const wl=D.walletRecs.slice().sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0).slice(0,20);
- $("wfList").innerHTML=wl.length?wl.map(r=>{const lb=r.kind==="set"?"調整":r.kind==="in"?"入れた":esc(r.cat||"使った");const signed=wfDelta(r);return`<div class="it" data-editwf="${r.id}"><div class="m"><b>${lb}</b><div class="s">${fmtD(r.date)}${r.memo?" ・ "+esc(r.memo):""}${r.kind!=="set"&&r.cat?" ・ "+esc(r.cat):""}</div></div><b class="num ${signed<0?"up":"plus"}">${signed>=0?"+":""}${yen(signed)}</b></div>`}).join(""):'<div class="empty">まだ記録がありません。残高を入力するか、「財布に記録」から始めよう</div>';
+ $("wfList").innerHTML=wl.length?wl.map(r=>{const lb=r.kind==="set"?"調整":r.kind==="in"?(r.cat==="雑収入"?"雑収入":"入れた"):esc(r.cat||"使った");const signed=wfDelta(r);return`<div class="it" data-editwf="${r.id}"><div class="m"><b>${lb}</b><div class="s">${fmtD(r.date)}${r.memo?" ・ "+esc(r.memo):""}${r.kind!=="set"&&r.cat?" ・ "+esc(r.cat):""}</div></div><b class="num ${signed<0?"up":"plus"}">${signed>=0?"+":""}${yen(signed)}</b></div>`}).join(""):'<div class="empty">まだ記録がありません。残高を入力するか、「財布に記録」から始めよう</div>';
  /* へそくり */
  const hb=hkBal(),res=D.wants.reduce((s,w)=>s+wSaved(w),0),hm=hkRecs().filter(e=>ymOf(e.date)===ym);
  $("hkYm").textContent=ymLbl(ym);$("hkBal").textContent=yen(hb);$("hkRes").textContent=yen(res);$("hkFree").textContent=yen(hb-res);$("hkFree").style.color=hb-res<0?"var(--red)":"";
@@ -597,6 +606,7 @@ function rMoney(){
  const all=monthEx(MM),ex=all.filter(e=>!e.fixedId).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0),tot=sumOf(ex);
  $("mmTot").textContent=yen(tot);
  const bc=byCat(ex),ent=Object.entries(bc).sort((a,b)=>b[1]-a[1]);
+ $("mmZatsu").innerHTML=zatsuHtml(MM);
  $("lfCats").innerHTML=ent.map(([c,v])=>`<div class="it"><span class="dot" style="background:${catCol(c)}"></span><div class="m"><b>${esc(catName(c))}</b><div class="bar" style="margin-top:5px"><i style="width:${ent[0][1]?v/ent[0][1]*100:0}%;background:${catCol(c)}"></i></div></div><b class="num">${yen(v)}</b></div>`).join("");
  $("exList").innerHTML=ex.length?ex.map(e=>`<div class="it" data-editex="${e.id}"><span class="dot" style="background:${catCol(e.cat)}"></span><div class="m"><b>${esc(catName(e.cat))}</b>${e.wantId?' <span class="tag">買いたいもの</span>':""}<div class="s">${fmtD(e.date)}${e.memo?" ・ "+esc(e.memo):""}</div></div><b class="num">${yen(e.amount)}</b></div>`).join(""):'<div class="empty">この月の生活費はまだありません</div>';
  const fx=sumOf(all.filter(e=>e.fixedId));$("mmFix").textContent=fx?`※ 固定費 ${yen(fx)} は「💼 給料・固定費」にあります（合計 ${yen(tot+fx)}）`:""}
@@ -619,7 +629,7 @@ function hkSheet(kind,wid){const hk=hkBal(),w=wid&&D.wants.find(x=>x.id===wid);
    else if(kind==="buy"){const id=uid();D.savings.push({id,date:d,amount:-a,type:t,goalId:null,purpose:"",memo:w.name+(m?"・"+m:""),hk:"buy",wantId:w.id});w.done=true;w.doneDate=d;w.hkSvId=id}
    save();toast({in:"へそくりに入れたよ 🏦",out:"出金を記録したよ",mv:"貯金へ回したよ 🐷",buy:"買えたね！🎉"}[kind]);render()}})}
 function editWf(id){const r=D.walletRecs.find(x=>x.id===id);if(!r)return;
- sheet({title:"財布の記録を編集",body:`<label class="f">日付</label><input type="date" id="wD" value="${r.date}"><label class="f">金額（円）</label><input class="yen" inputmode="numeric" id="wA" value="${fmtIn(Math.abs(+r.amount||0))}"><label class="f">向き</label><select id="wK"><option value="out"${r.kind==="out"?" selected":""}>使った</option><option value="in"${r.kind==="in"?" selected":""}>入れた</option><option value="set"${r.kind==="set"?" selected":""}>調整</option></select><label class="f">カテゴリ</label><select id="wC">${WAL_CATS.map(c=>`<option${c===r.cat?" selected":""}>${esc(c)}</option>`).join("")}<option value="調整"${r.cat==="調整"?" selected":""}>調整</option></select><label class="f">メモ</label><input id="wM" value="${esc(r.memo||"")}">`,
+ sheet({title:"財布の記録を編集",body:`<label class="f">日付</label><input type="date" id="wD" value="${r.date}"><label class="f">金額（円）</label><input class="yen" inputmode="numeric" id="wA" value="${fmtIn(Math.abs(+r.amount||0))}"><label class="f">向き</label><select id="wK"><option value="out"${r.kind==="out"?" selected":""}>使った</option><option value="in"${r.kind==="in"?" selected":""}>入れた</option><option value="set"${r.kind==="set"?" selected":""}>調整</option></select><label class="f">カテゴリ</label><select id="wC">${[...WAL_CATS,"雑収入",...(r.cat&&![...WAL_CATS,"雑収入","調整"].includes(r.cat)?[r.cat]:[])].map(c=>`<option${c===r.cat?" selected":""}>${esc(c)}</option>`).join("")}<option value="調整"${r.cat==="調整"?" selected":""}>調整</option></select><label class="f">メモ</label><input id="wM" value="${esc(r.memo||"")}">`,
   onOk(){const a=num($("wA").value);if(a<=0&&$("wK").value!=="set"){toast("金額を入力してください");return false}
    const old=wfDelta(r);const kind=$("wK").value;const amount=kind==="set"?($("wA").value.trim().startsWith("-")?-a:a):a;
    Object.assign(r,{date:$("wD").value||r.date,amount,kind,cat:$("wC").value,memo:$("wM").value.trim()});
@@ -631,8 +641,12 @@ $("balAdd").onclick=()=>{const d=$("balDate").value||today(),a=num($("balAmt").v
 $("exAdd").onclick=()=>{const a=num($("exAmt").value);if(a<=0){toast("金額を入力してください");return}
  const d=$("exDate").value||today();D.expenses.push({id:uid(),date:d,amount:a,cat:exCat,memo:$("exMemo").value.trim()});save();$("exAmt").value="";$("exMemo").value="";MM=ymOf(d);toast("経費を記録しました");render()};
 $("wfSet").onclick=()=>{if(!$("wfAmt").value.trim()){toast("残高を入力してください");return}const a=num($("wfAmt").value),old=+D.walletBal||0;
- D.walletBal=a;if(a!==old)D.walletRecs.push({id:uid(),date:today(),amount:a-old,cat:"調整",memo:"残高を修正",kind:"set"});
- save();$("wfAmt").value="";toast("財布の残高を反映したよ");render()};
+ const first=!D.walletRecs.length&&old===0,df=a-old,td=today(),at=new Date().toISOString();
+ D.walletBal=a;
+ if(df!==0&&first)D.walletRecs.push({id:uid(),date:td,amount:df,cat:"調整",memo:"残高を修正",kind:"set"});
+ else if(df!==0)D.walletRecs.push({id:uid(),date:td,amount:Math.abs(df),kind:df<0?"out":"in",cat:df<0?"雑費":"雑収入",memo:"不明金（残高合わせ "+(+td.slice(5,7))+"/"+(+td.slice(8,10))+"）",adjust:{asOf:at,target:a,before:old}});
+ if(!first)D.walletAsOf=at;
+ save();$("wfAmt").value="";toast(df===0?"ぴったり👍":df<0&&!first?"財布の残高を反映したよ（雑費 "+yen(-df)+"）":"財布の残高を反映したよ");render()};
 $("wfAdd").onclick=()=>{const a=num($("wfTxAmt").value);if(a<=0){toast("金額を入力してください");return}
  const d=$("wfDate").value||today(),kind=wfDir<0?"out":"in";
  D.walletRecs.push({id:uid(),date:d,amount:a,cat:wfCat,memo:$("wfMemo").value.trim(),kind});
@@ -862,16 +876,22 @@ idbGet().then(s=>{if(!localStorage.getItem(K)&&s){try{const j=JSON.parse(s);if(j
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){_artKey="";$("balDate").value=$("balDate").value||today();render()}});
 render();uaLoad();
 </script>
-<script src="wallet-inbox.js?v=1"></script><script src="yuzu-inbox.js?v=wallet1"></script><script>
+<script src="yuzu-inbox.js?v=wallet2"></script><script>
 /* 人生設計ノート → 💝 ゆずから受け取る adapter (append only; never edits existing records) */
 (function(){
 var SEC={wallet:["👛","財布"],expense:["🧾","経費"],saving:["🐷","貯金"],balance:["💴","残高"],memo:["📝","メモ"],goal:["🧭","目標"],want:["🛒","買いたいもの"]};
 function byName(arr,n,fb){var f=arr.find(function(c){return c.name===n});return f?f.id:(arr.find(function(c){return c.name===fb})||arr[arr.length-1]||{}).id}
 function ensureCat(name){var n=String(name||"").trim()||"その他";var f=D.cats.find(function(c){return c.name===n});if(f)return f.id;var id="c"+uid();D.cats.push({id:id,name:n});return id}
-function describe(it){var x=it.data||{},d=it.date,s=SEC[it.kind];if(!s)return{ok:0,icon:"❔",label:it.title||"?",section:"?",why:"人生設計ノートには入れられない内容だよ"};
+function describe(it,ctx){var x=it.data||{},d=it.date,s=SEC[it.kind];if(!s)return{ok:0,icon:"❔",label:it.title||"?",section:"?",why:"人生設計ノートには入れられない内容だよ"};
  if(!d||!/^\d{4}-\d\d-\d\d$/.test(d))return{ok:0,icon:s[0],label:it.title||s[1],section:s[1],why:"日付がないよ"};
  var a=Math.round(+x.amount||0),m=String(x.memo||it.title||"");
- if(it.kind=="wallet"){var valid=LPWalletInbox.valid(it),known=LPWalletInbox.known(D,it);return{ok:valid&&!known,icon:s[0],label:(x.kind==="in"?"財布へ入金 ":"財布から支出 ")+yen(a)+(m?"・"+m:""),section:s[1],why:known?"このレシートは取り込み済みだよ":"財布の金額・種類を確認してね",same:known?"同じレシートはもう入っているよ":0,conflict:valid&&!known&&LPWalletInbox.match(D,it)?"同じ日・金額の財布記録があるよ。手入力済みならチェックしないでね":0}}
+ if(it.kind=="wallet"&&LPWalletInbox.isTrueUp(it)){var tv=LPWalletInbox.valid(it),tk=LPWalletInbox.known(D,it),det=[];
+  if(tv&&!tk){var P=LPWalletInbox.trueUpPlan(D,it,ctx||[]);
+   P.first.forEach(function(o){var om=String((o.data||{}).memo||o.title||"").split(" ")[0];det.push("先に反映するレシート："+(om||"レシート")+" "+(o.data.kind==="in"?"+":"−")+yen(o.data.amount))});
+   det.push("今の残高 "+yen(P.now)+(P.first.length?"（レシート反映後 "+yen(P.afterReceipts)+"）":"")+" → 実際 "+yen(P.target)+" → "+(P.diff===0?"ぴったり👍 記録はしないよ":"差額 "+(P.diff>0?"+":"−")+yen(Math.abs(P.diff))+(P.diff<0?"（雑費として記録）":"（雑収入として記録）")));
+   det.push("※取り込む瞬間の残高で計算するから、最後は必ず "+yen(P.target)+" になるよ")}
+  return{ok:tv&&!tk,live:1,icon:"⚖️",label:"残高合わせ：実際の財布 "+yen(+x.target||0)+(m?"・"+m:""),section:s[1],detail:det,why:tk?"この残高合わせは取り込み済みだよ":"残高合わせの内容を確認してね",same:tk?"この残高合わせはもう入っているよ":0}}
+ if(it.kind=="wallet"){var valid=LPWalletInbox.valid(it),known=LPWalletInbox.known(D,it),old=valid&&!known&&LPWalletInbox.beforeTrueUp(D,it);return{ok:valid&&!known,icon:s[0],label:(x.kind==="in"?"財布へ入金 ":"財布から支出 ")+yen(a)+(m?"・"+m:""),section:s[1],why:known?"このレシートは取り込み済みだよ":"財布の金額・種類を確認してね",same:known?"同じレシートはもう入っているよ":0,conflict:old?"残高合わせより前のレシートです。もう財布の残高に入っているから、ふつうはチェックしないでね":(valid&&!known&&LPWalletInbox.match(D,it)?"同じ日・金額の財布記録があるよ。手入力済みならチェックしないでね":0)}}
  if(it.kind=="expense"){var c=x.cat||"その他";return{ok:a>0,icon:s[0],label:yen(a)+" "+c+(m?"・"+m:""),section:s[1],why:"金額がないよ",same:D.expenses.some(function(e){return e.date==d&&e.amount==a&&(e.memo||"")==m})?"同じ日に同じ金額・メモの経費があるよ":0}}
  if(it.kind=="saving"){var sv=a*(x.dir==-1?-1:1);return{ok:a>0,icon:s[0],label:(sv<0?"取り崩し ":"")+yen(Math.abs(sv))+" "+(x.type||"その他")+(m?"・"+m:""),section:s[1],why:"金額がないよ",same:D.savings.some(function(e){return e.date==d&&e.amount==sv&&(e.memo||"")==m})?"同じ日に同じ貯金があるよ":0}}
  if(it.kind=="balance"){return{ok:isFinite(+x.amount),icon:s[0],label:"残高 "+yen(+x.amount)+(m?"・"+m:""),section:s[1],same:D.balances.some(function(e){return e.date==d&&e.amount==+x.amount})?"同じ日に同じ残高があるよ":0}}
@@ -880,8 +900,10 @@ function describe(it){var x=it.data||{},d=it.date,s=SEC[it.kind];if(!s)return{ok
  if(it.kind=="want"){var w=String(x.name||it.title||"");return{ok:!!w,icon:s[0],label:w+(a?" "+yen(a):""),section:s[1],same:D.wants.some(function(e){return e.name==w})?"同じ買いたいものがあるよ":0}}}
 function apply(sel){
  var original=D, before=JSON.parse(JSON.stringify(D));D=JSON.parse(JSON.stringify(D));
- var n=0,text;
- try{sel.forEach(function(it){var x=it.data||{},d=it.date,a=Math.round(+x.amount||0),m=String(x.memo||it.title||""),ds=describe(it);if(!ds.ok)return;
+ var n=0,text,notes=[];
+ try{LPWalletInbox.order(sel).forEach(function(it){var x=it.data||{},d=it.date,a=Math.round(+x.amount||0),m=String(x.memo||it.title||""),ds=describe(it);if(!ds.ok)return;
+  if(it.kind=="wallet"&&LPWalletInbox.isTrueUp(it)){var b0=D.walletBal,k=LPWalletInbox.append(D,it,uid());n+=k;
+   if(k){var df=D.walletBal-b0;notes.push("⚖️ 残高合わせ："+yen(b0)+" → "+yen(D.walletBal)+(df===0?"（ぴったり👍 記録なし）":df<0?"（雑費 "+yen(-df)+" を記録）":"（雑収入 "+yen(df)+" を記録）"))}return}
   if(it.kind=="wallet"){n+=LPWalletInbox.append(D,it,uid());return}
   if(it.kind=="expense")D.expenses.push({id:uid(),date:d,amount:a,cat:ensureCat(x.cat||"その他"),memo:m,from:"yuzu",order:x.order||null});
   else if(it.kind=="saving")D.savings.push({id:uid(),date:d,amount:a*(x.dir==-1?-1:1),type:byName(D.savTypes,x.type,"その他"),goalId:null,purpose:String(x.purpose||""),memo:m,from:"yuzu"});
@@ -893,8 +915,8 @@ function apply(sel){
  if(n)text=LPWalletInbox.persist(localStorage,before,D);
  }catch(e){D=original;throw e}
  if(n){idbPut(text);try{render()}catch(e){console.error(e)}}else D=original;
- return n}
-yzInbox.init({app:"lifeplan",prefix:"lp",base:"data/inbox/",describe:describe,apply:apply,
+ return notes.length?{n:n,note:notes}:n}
+yzInbox.init({app:"lifeplan",prefix:"lp",base:"data/inbox/",describe:describe,apply:apply,order:LPWalletInbox.order,
  theme:{bg:"#0f1830",fg:"#e8ecf5",acc:"#FFD700",btn:"linear-gradient(180deg,#FFE55C 0%,#FFD700 45%,#FFC300 100%)",btnfg:"#0b1220",sub:"rgba(255,215,0,.12)",rowbg:"rgba(255,255,255,.06)",warn:"#ffb86b",badge:"#0b1220",badgefg:"#FFD700",badgering:"#FFD700",border:"rgba(255,215,0,.45)"}});
 })();
 </script><script>
